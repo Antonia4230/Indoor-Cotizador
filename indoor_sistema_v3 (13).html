@@ -1,0 +1,2789 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InDooR · Sistema Comercial 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@600;700;800&display=swap');
+:root{
+  --bg:#0d1b3e;--bg2:#152447;--bg3:#1c2e58;--bg4:#243568;
+  --bdr:rgba(255,255,255,0.08);--bdr2:rgba(255,255,255,0.15);
+  --gold:#F5A623;--gold-d:#d4891a;--gold-l:#F5A623;--gold-xl:#ffc04a;
+  --gold-bg:rgba(245,166,35,0.10);--gold-bg2:rgba(245,166,35,0.18);
+  --gold-grd:linear-gradient(135deg,#f7b84a 0%,#F5A623 50%,#d4891a 100%);
+  --txt:#ffffff;--txt2:#c0d0f0;--txt3:#7a90bb;
+  --green:#1a6e30;--green-l:#3DAF76;
+  --red:#c0392b;--red-l:#ff8080;
+  --blue:#1a4e8a;--blue-l:#7ab0f5;
+  --r:8px;--rl:10px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI','Inter',sans-serif;background:var(--bg);min-height:100vh;color:var(--txt);font-size:14px;line-height:1.5;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--bg2);}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
+.nav{position:sticky;top:0;z-index:300;background:linear-gradient(90deg,#0d1b3e 0%,#152447 100%);border-bottom:2px solid var(--gold);backdrop-filter:blur(16px);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:58px;flex-wrap:wrap;}
+.nav-logo{display:flex;align-items:center;gap:11px;}
+.nav-logo img{height:32px;filter:brightness(1.1);}
+.nav-logo-fb{font-family:Space Grotesk;font-weight:800;font-size:20px;display:none;}
+.nav-logo-fb .i{color:var(--gold-l);}.nav-logo-fb .d{color:var(--txt);}.nav-logo-fb .o{color:var(--txt2);}
+.nav-sub{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--txt3);border-left:1px solid var(--bdr2);padding-left:11px;line-height:1.3;}
+.nav-tabs{display:flex;gap:4px;}
+.nav-tab{padding:7px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;color:#c0d0f0;border:none;background:transparent;font-family:inherit;transition:all .15s;white-space:nowrap;}
+.nav-tab:hover{color:var(--gold-l);background:var(--gold-bg);}
+.nav-tab.on{background:rgba(245,166,35,.18);color:var(--gold-xl);border:1px solid rgba(245,166,35,.35);}
+.nav-right{display:flex;gap:8px;align-items:center;}
+.hero{background:linear-gradient(135deg,#0d1b3e 0%,#1a2f6a 50%,#1e3580 100%);border-bottom:2px solid var(--gold);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.hero-left{min-width:150px;}
+.hero-exec-lbl{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--txt3);margin-bottom:3px;}
+.hero-exec{font-family:Space Grotesk;font-size:15px;font-weight:800;color:#FFF;text-shadow:0 0 8px rgba(255,255,255,.9),0 0 20px rgba(255,255,255,.4);}
+.hero-exec-co{font-size:10px;color:var(--gold);font-weight:500;margin-top:2px;}
+.hero-center{flex:1;text-align:center;padding:0 12px;}
+.hero-eyebrow{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;}
+.hero-title{font-family:Space Grotesk;font-size:24px;font-weight:800;letter-spacing:-.03em;color:#FFF;text-shadow:0 0 10px rgba(255,255,255,.95),0 0 25px rgba(255,255,255,.55),0 0 50px rgba(200,220,255,.3);}
+.hero-badge{display:flex;align-items:center;gap:7px;justify-content:center;margin-top:5px;flex-wrap:wrap;}
+.hero-badge span{font-size:9px;font-weight:600;letter-spacing:.06em;color:var(--txt3);text-transform:uppercase;}
+.hero-badge .dot{width:3px;height:3px;border-radius:50%;background:var(--gold);opacity:.5;}
+.hero-right{min-width:120px;display:flex;flex-direction:column;align-items:flex-end;gap:3px;}
+.hero-right img{height:36px;filter:brightness(1.1);}
+.wrap{max-width:960px;margin:0 auto;padding:22px 18px 100px;}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:var(--r);font-weight:600;cursor:pointer;font-size:13px;border:none;font-family:inherit;transition:all .18s;white-space:nowrap;}
+.btn-p{background:var(--gold-grd);color:#ffffff;box-shadow:0 2px 10px rgba(245,166,35,.25);}
+.btn-p:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(191,136,64,.4);}
+.btn-p:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-g{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.2);color:#ffffff;}
+.btn-g:hover{border-color:var(--gold);color:var(--gold-xl);}
+.btn-red{background:rgba(184,48,48,.15);border:1px solid rgba(184,48,48,.3);color:var(--red-l);}
+.btn-green{background:rgba(42,122,82,.2);border:1px solid rgba(42,122,82,.35);color:var(--green-l);}
+.btn-sm{padding:6px 12px;font-size:12px;}
+.card{background:linear-gradient(135deg,var(--bg2) 0%,var(--bg3) 100%);border:1px solid var(--bdr);border-radius:var(--rl);padding:16px 18px;margin-bottom:12px;transition:border-color .2s;}
+.card:hover{border-color:var(--bdr2);}
+.step-title{font-family:Space Grotesk;font-size:19px;font-weight:800;letter-spacing:-.02em;margin-bottom:3px;color:#FFF;text-shadow:0 0 8px rgba(255,255,255,.9),0 0 20px rgba(255,255,255,.5),0 0 40px rgba(200,220,255,.25);}
+.step-sub{font-size:12px;color:var(--txt3);margin-bottom:14px;}
+.label{display:block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--txt3);margin-bottom:7px;}
+input,select{width:100%;background:var(--bg4);border:1px solid rgba(255,255,255,.12);color:#ffffff;padding:9px 12px;border-radius:var(--r);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s;}
+input:focus,select:focus{border-color:var(--gold);}
+select option{background:var(--bg3);}
+input[type=number]{-moz-appearance:textfield;}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+@media(max-width:600px){.g2,.g3,.g4{grid-template-columns:1fr 1fr;}}
+@media(max-width:380px){.g2,.g3,.g4{grid-template-columns:1fr;}}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:20px;border:1.5px solid rgba(255,255,255,.09);cursor:pointer;font-size:12px;font-weight:500;background:transparent;color:var(--txt2);transition:all .15s;font-family:inherit;}
+.chip:hover{border-color:var(--gold-l);color:var(--gold-l);}
+.chip.on{border-color:var(--gold);background:var(--gold-bg2);color:var(--gold-xl);}
+.srow{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:var(--r);border:1px solid var(--bg3);cursor:pointer;margin-bottom:5px;transition:all .15s;}
+.srow:hover{border-color:var(--bdr2);background:rgba(255,255,255,.02);}
+.srow.on{border-color:var(--gold);background:var(--gold-bg);}
+.badge{background:var(--gold-bg2);color:var(--gold-l);padding:3px 9px;border-radius:11px;font-size:11px;font-weight:700;white-space:nowrap;}
+.badge-green{background:rgba(42,122,82,.2);color:var(--green-l);padding:3px 9px;border-radius:11px;font-size:11px;font-weight:700;}
+.badge-blue{background:rgba(42,92,170,.2);color:var(--blue-l);padding:3px 9px;border-radius:11px;font-size:11px;font-weight:700;}
+.badge-red{background:rgba(184,48,48,.2);color:var(--red-l);padding:3px 9px;border-radius:11px;font-size:11px;font-weight:700;}
+.price-bar{background:linear-gradient(135deg,rgba(245,166,35,.1),rgba(245,166,35,.04));border:1px solid rgba(245,166,35,.3);border-radius:var(--rl);padding:14px 18px;margin-bottom:12px;}
+.stepper{display:flex;align-items:center;margin-bottom:18px;overflow-x:auto;padding-bottom:4px;gap:0;}
+.s-item{display:flex;align-items:center;gap:5px;cursor:pointer;}
+.s-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;border:1.5px solid var(--bdr2);color:var(--txt3);transition:all .2s;flex-shrink:0;}
+.s-num.act{background:var(--gold-grd);border:none;color:#fff;box-shadow:0 0 10px rgba(191,136,64,.4);}
+.s-num.done{background:var(--green);border:none;color:#fff;}
+.s-lbl{font-size:10px;color:var(--txt3);white-space:nowrap;}
+.s-lbl.act{color:var(--gold-l);font-weight:700;}
+.s-lbl.done{color:var(--green-l);}
+.s-line{flex:1;height:1px;background:var(--bdr);margin:0 5px;min-width:10px;}
+.s-line.done{background:var(--green);}
+.sticky-bar{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);width:calc(100% - 28px);max-width:960px;background:linear-gradient(90deg,#0d1b3e 0%,#152447 100%);border:1px solid rgba(245,166,35,.25);border-radius:var(--rl);padding:11px 16px;backdrop-filter:blur(14px);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;z-index:100;}
+.puerta-item{background:var(--bg3);border:1px solid var(--bdr2);border-radius:var(--r);padding:11px 14px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+.puerta-num{width:26px;height:26px;border-radius:50%;background:var(--gold-grd);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;flex-shrink:0;}
+.totals-card{background:linear-gradient(135deg,#1a3070 0%,#152660 50%,#0f1e50 100%);border:1px solid rgba(255,255,255,.15);border-radius:var(--rl);padding:18px 20px;}
+.total-line{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.total-final{border-top:1px solid rgba(191,136,64,.28);padding-top:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.big-price{font-family:Space Grotesk;font-size:30px;font-weight:800;color:#FFF;text-shadow:0 0 10px rgba(255,255,255,.9),0 0 25px rgba(255,255,255,.5),0 0 50px rgba(200,220,255,.25);}
+.hist-row{background:linear-gradient(135deg,var(--bg2) 0%,var(--bg3) 100%);border:1px solid var(--bdr);border-radius:var(--r);padding:13px 15px;margin-bottom:8px;cursor:pointer;transition:all .15s;}
+.hist-row:hover{border-color:rgba(245,166,35,.3);background:var(--bg4);}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;}
+@media(max-width:700px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
+.kpi-card{background:linear-gradient(135deg,var(--bg3) 0%,var(--bg2) 100%);border:1px solid var(--bdr);border-radius:var(--rl);padding:14px 16px;}
+.kpi-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--txt3);margin-bottom:5px;}
+.kpi-value{font-family:Space Grotesk;font-size:20px;font-weight:800;color:#FFF;text-shadow:0 0 8px rgba(255,255,255,.8),0 0 18px rgba(255,255,255,.3);}
+.kpi-sub{font-size:11px;color:var(--txt3);margin-top:3px;}
+.chart-wrap{background:linear-gradient(135deg,var(--bg2) 0%,var(--bg3) 100%);border:1px solid var(--bdr);border-radius:var(--rl);padding:14px 16px;margin-bottom:12px;}
+.chart-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--txt2);margin-bottom:7px;}
+.charts-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:680px){.charts-2col{grid-template-columns:1fr;}}
+.flete-list{max-height:260px;overflow-y:auto;border:1px solid var(--bdr2);border-radius:var(--r);background:var(--bg3);}
+.flete-row{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-bottom:1px solid var(--bdr);cursor:pointer;transition:background .12s;}
+.flete-row:hover{background:var(--bg4);}
+.flete-row.on{background:var(--gold-bg);border-color:rgba(191,136,64,.25);}
+.flete-row:last-child{border-bottom:none;}
+.grp-title{font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--txt2);margin-bottom:8px;text-transform:uppercase;}
+.qty-ctrl{display:flex;gap:7px;align-items:center;margin-top:6px;}
+.qty-btn{width:32px;height:32px;border-radius:var(--r);background:var(--bg3);border:1px solid var(--bdr2);color:var(--txt);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.qty-btn:hover{border-color:var(--gold);color:var(--gold);}
+.qty-inp{width:65px;text-align:center;font-weight:700;}
+.warn{padding:10px 14px;border-radius:var(--r);background:rgba(184,48,48,.1);border:1px solid rgba(184,48,48,.3);color:#e08080;font-size:13px;margin-bottom:12px;}
+.nota{font-size:11px;color:var(--txt3);line-height:1.8;margin-top:14px;padding-top:12px;border-top:1px solid var(--bdr);}
+.ncot-badge{background:var(--gold-bg);border:1px solid rgba(191,136,64,.22);border-radius:6px;padding:4px 11px;font-size:11px;font-weight:700;color:var(--gold-l);font-family:Space Grotesk;}
+.empty-state{text-align:center;padding:40px 20px;color:var(--txt3);}
+.section-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
+
+.estado-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:700;cursor:pointer;border:none;font-family:inherit;}
+.est-enviada{background:rgba(26,78,138,.35);color:#7ab0f5;}
+.est-revision{background:rgba(245,158,11,.2);color:#F59E0B;}
+.est-aprobada{background:rgba(42,122,82,.2);color:#3DAF76;}
+.est-rechazada{background:rgba(184,48,48,.2);color:#E05050;}
+.est-produccion{background:rgba(139,92,246,.2);color:#A78BFA;}
+.est-pendiente{background:rgba(92,86,80,.2);color:#A09890;}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;display:flex;align-items:center;justify-content:center;padding:16px;}
+.modal{background:var(--bg2);border:1px solid var(--bdr2);border-radius:var(--rl);padding:22px;max-width:500px;width:100%;max-height:92vh;overflow-y:auto;}
+.modal-title{font-family:Space Grotesk;font-size:17px;font-weight:800;color:#FFF;text-shadow:0 0 8px rgba(255,255,255,.7);margin-bottom:14px;}
+.plantilla-item{background:var(--bg3);border:1px solid var(--bdr2);border-radius:var(--r);padding:11px 14px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer;transition:all .15s;}
+.plantilla-item:hover{border-color:rgba(191,136,64,.4);background:var(--bg4);}
+.upload-zone{border:2px dashed var(--bdr2);border-radius:var(--rl);padding:28px;text-align:center;cursor:pointer;transition:all .2s;position:relative;}
+.upload-zone:hover{border-color:var(--gold);background:var(--gold-bg);}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.pipeline-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+
+@media print{.nav,.hero,.stepper,.sticky-bar,.no-print{display:none!important;}body{background:#fff!important;color:#111!important;}.wrap{padding:10px!important;max-width:100%!important;}.card,.totals-card,.price-bar{border:1px solid #e0d5c0!important;background:#faf8f4!important;break-inside:avoid;}.step-title,.big-price,.kpi-value{text-shadow:none!important;color:#1a1a1a!important;}.badge{background:#fef3c7!important;color:#92400e!important;}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-logo">
+    <div style="width:38px;height:38px;background:#1a2f6a;border:1px solid rgba(255,255,255,.2);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+      <svg width="15" height="19" viewBox="0 0 22 28" fill="none">
+        <rect x="1" y="1" width="20" height="26" rx="1" stroke="#c87830" stroke-width="2" fill="none"/>
+        <rect x="4" y="4" width="14" height="20" rx="1" fill="#c87830"/>
+        <circle cx="16" cy="14" r="1.5" fill="#ffd080"/>
+      </svg>
+    </div>
+    <div id="nlfb" class="nav-logo-fb"><span class="i">In</span><span class="d">D</span><span class="o">oor</span></div>
+    <div class="nav-sub">Sistema Comercial<br>2026</div>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab on" id="tab-cot" onclick="setTab('cotizador',this)">🚪 Cotizador</button>
+    <button class="nav-tab" id="tab-hist" onclick="setTab('historial',this)">📋 Historial</button>
+    <button class="nav-tab" id="tab-dash" onclick="setTab('dashboard',this)">📊 Dashboard</button>
+    <button class="nav-tab" id="tab-prec" onclick="setTab('precios',this)">💰 Precios</button>
+    <button class="nav-tab" id="tab-ia" onclick="setTab('asistente',this)">🤖 Asistente IA</button>
+  </div>
+  <div class="nav-right">
+    <span class="ncot-badge" id="nav-ncot"></span>
+    <button class="btn btn-g btn-sm no-print" onclick="resetCot()">+ Nueva</button>
+  </div>
+</nav>
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-exec-lbl">Ejecutivo Comercial</div>
+    <div class="hero-exec">Claudio Uribe</div>
+    <div class="hero-exec-co">InDooR SpA</div>
+  </div>
+  <div class="hero-center">
+    <div class="hero-eyebrow">InDooR SpA · Fábrica de Puertas</div>
+    <div class="hero-title">Módulo de Cotización</div>
+    <div class="hero-badge">
+      <span>Lista 2026</span><div class="dot"></div>
+      <span>Constructoras &amp; Inmobiliarias</span><div class="dot"></div>
+      <span>Cabrero · Biobío</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img src="https://indoor-spa.cl/assets/img/logo-indoor.png" alt="InDooR" onerror="this.style.display='none'">
+    <div style="font-size:9px;color:var(--txt3);margin-top:3px;">indoor-spa.cl</div>
+  </div>
+</div>
+<div class="wrap" id="app"></div>
+<script>
+// ═══ DATOS BASE ═══
+const RECINTOS=[{id:"acceso",n:"Acceso Principal",ico:"🏠"},{id:"bano",n:"Baño",ico:"🚿"},{id:"dormitorio",n:"Dormitorio",ico:"🛏"},{id:"terraza",n:"Terraza",ico:"🌿"},{id:"logia",n:"Logia",ico:"🧺"},{id:"interior",n:"Interior",ico:"🚪"},{id:"exterior",n:"Exterior",ico:"🔐"}];
+const TIPOS=["MDF","MDF HR","F30","F60","Enchapada","Acero","MDF MC","MDF HR MC"];
+const RELLENOS={"MDF":["Carton Honey","Aislapol"],"MDF HR":["Carton Honey","Aislapol"],"F30":["F30 · Aglomerado Tubular"],"F60":["F60 · Aglomerado Sólido"],"Enchapada":["Carton Honey","Aislapol"],"Acero":["Poliuretano Inyectado"],"MDF MC":["Carton Honey","Aislapol"],"MDF HR MC":["Carton Honey","Aislapol"]};
+const MODELOS={
+  "MDF":["Lisa","Antuco II","Copahue","Lonquimay","Calbuco","Llaima"],
+  "MDF HR":["Lisa","Antuco II","Copahue","Lonquimay","Calbuco"],
+  "F30":["Lisa"],
+  "F60":["Lisa"],
+  "Enchapada":["Antuco","Antuco II","Copahue","Calbuco","Mara Clara"],
+  "Acero":["4 Líneas Horizontal","3 Líneas Vertical","Diamante","Tronador","Lisa"],"MDF MC":["Lisa"],"MDF HR MC":["Lisa"]
+};
+// Costo adicional modelo Llaima (cajeado frontal + refuerzo)
+const LLAIMA_EXTRA={600:0,650:0,700:32232,750:32232,800:32232,850:32232,900:64464,950:64464,1000:64464,1050:64464,1100:64464};
+const ANCHOS=[600,650,700,750,800,850,900,950,1000,1050,1100];
+const ALTOS=[2000,2100,2200,2400];
+const PP={"MDF":{
+    2000:{600:[23421,26074],650:[23789,26547],700:[23989,26842],750:[24484,28589],800:[25021,29021],850:[25537,29653],900:[26337,30558],950:[27021,31337],1000:[28968,33389],1050:[29011,33537],1100:[29379,34021]},
+    2100:{600:[24789,27295],650:[25179,27789],700:[25389,28105],750:[25905,29926],800:[26463,30379],850:[27021,31042],900:[27863,31989],950:[28579,32811],1000:[30621,34937],1050:[30663,35095],1100:[31063,35600]},
+    2200:{600:[26053,27968],650:[26442,28474],700:[26653,28800],750:[27179,30611],800:[27842,31084],850:[28400,31747],900:[29242,32705],950:[29958,33526],1000:[32011,35674],1050:[32053,35832],1100:[32442,36347]},
+    2400:{600:[27832,29968],650:[28253,30526],700:[28474,30895],750:[29042,32842],800:[29758,33358],850:[30347,34084],900:[31253,35116],950:[32021,36011],1000:[34211,38305],1050:[34263,38495],1100:[34684,39063]}
+  },"MDF HR":{2000:{600:[27516,30232],650:[27968,30789],700:[28253,31179],750:[28916,33126],800:[29611,33716],850:[30305,34516],900:[31516,35832],950:[32411,36832],1000:[35368,39905],1050:[35411,40053],1100:[35789,40547]},2100:{600:[27063,29768],650:[27516,30326],700:[27789,30716],750:[28442,32621],800:[29126,33211],850:[29800,34000],900:[30989,35295],950:[31853,36274],1000:[34747,39284],1050:[34789,39432],1100:[35168,39916]},2200:{600:[28274,30421],650:[28716,30989],700:[29000,31379],750:[29653,33295],800:[30432,33884],850:[31116,34684],900:[32305,35979],950:[33168,36968],1000:[36074,39989],1050:[36116,40147],1100:[36495,40632]},2400:{650:[30095,32505],700:[30579,33126],750:[30884,33558],800:[31579,35600],850:[32411,36253],900:[33147,37116],950:[34400,38505],1000:[35337,39579],1050:[38421,42789],1100:[38463,42979]}},"F30":{2000:{600:[59032,null],650:[59568,null],700:[60232,null],750:[60716,null],800:[61453,null],850:[61947,null],900:[63242,null],950:[63800,null],1000:[68632,null],1050:[73495,null],1100:[78368,null]},2100:{600:[63421,null],650:[64000,null],700:[64716,null],750:[65242,null],800:[66042,null],850:[66568,null],900:[67958,null],950:[68558,null],1000:[73726,null],1050:[79053,null],1100:[84389,null]},2200:{600:[66463,null],650:[67074,null],700:[67811,null],750:[68358,null],800:[69189,null],850:[69737,null],900:[71179,null],950:[71811,null],1000:[77116,null],1050:[82600,null],1100:[88074,null]}},"F60":{2000:{600:[93726,null],650:[95242,null],700:[96695,null],750:[98189,null],800:[99747,null],850:[101137,null],900:[102821,null],950:[107674,null],1000:[113758,null],1050:[119842,null],1100:[125926,null]},2100:{600:[93726,null],650:[95242,null],700:[96695,null],750:[98189,null],800:[99747,null],850:[101137,null],900:[102821,null],950:[107674,null],1000:[113758,null],1050:[119842,null],1100:[125926,null]}},"Enchapada":{2000:{600:[61021,70200],650:[63811,73389],700:[66411,76379],750:[69337,81084],800:[72305,84232],850:[75263,87600],900:[78526,91316],950:[81653,94874],1000:[86158,99958],1050:[88589,102747],1100:[91389,105947]},2100:{600:[67000,72126],650:[70105,75453],700:[73011,78568],750:[76263,83421],800:[79568,86705],850:[82853,90211],900:[86474,94063],950:[89937,97768],1000:[94884,102979],1050:[97611,105916],1100:[100726,109253]},2200:{600:[69968,77800],650:[73200,81411],700:[76232,84821],750:[79621,90021],800:[83168,93600],850:[86589,97411],900:[90326,101568],950:[93926,105579],1000:[99000,111168],1050:[101853,114379],1100:[105095,118011]},2400:{600:[78547,87832],650:[82295,92053],700:[85832,96042],750:[89737,101968],800:[93821,106137],850:[97768,110568],900:[102053,115368],950:[106200,120011],1000:[111916,126358],1050:[115263,130137],1100:[119011,134358]}}};
+const MS={"60-70":{2100:{"Pino Desnudo":8474,"Pino Prepintado":10184,"P.Desnudo+Rebaje":9321,"P.Prepintado+Rebaje":11203,"Mara Clara":20146,"Mara Clara+Rebaje":22161},2200:{"Pino Desnudo":8895,"Pino Prepintado":10658,"P.Desnudo+Rebaje":9784,"P.Prepintado+Rebaje":11724,"Mara Clara":21105,"Mara Clara+Rebaje":23216},2400:{"Pino Desnudo":9684,"Pino Prepintado":11632,"P.Desnudo+Rebaje":10653,"P.Prepintado+Rebaje":12795,"Mara Clara":23000,"Mara Clara+Rebaje":25300}},"75-90":{2100:{"Pino Desnudo":11840,"Pino Prepintado":13579,"P.Desnudo+Rebaje":12447,"P.Prepintado+Rebaje":14937,"Mara Clara":26853,"Mara Clara+Rebaje":29538},2200:{"Pino Desnudo":11842,"Pino Prepintado":14211,"P.Desnudo+Rebaje":13026,"P.Prepintado+Rebaje":15632,"Mara Clara":28132,"Mara Clara+Rebaje":30945},2400:{"Pino Desnudo":12921,"Pino Prepintado":15526,"P.Desnudo+Rebaje":14213,"P.Prepintado+Rebaje":17079,"Mara Clara":30684,"Mara Clara+Rebaje":33753}},"95-120":{2100:{"Pino Desnudo":14132,"Pino Prepintado":15553,"P.Desnudo+Rebaje":15545,"P.Prepintado+Rebaje":17108},2200:{"Pino Desnudo":14816,"Pino Prepintado":17789,"P.Desnudo+Rebaje":16297,"P.Prepintado+Rebaje":19568},2400:{"Pino Desnudo":16158,"Pino Prepintado":19395,"P.Desnudo+Rebaje":17774,"P.Prepintado+Rebaje":21334}}};
+const MF30={2200:{"Pino Desnudo":15789,"Pino Prepintado":18974,"Mara Clara":37500},2400:{"Pino Desnudo":17237,"Pino Prepintado":20684,"Mara Clara":40921},2500:{"Pino Desnudo":17955,"Pino Prepintado":21546,"Mara Clara":42626}};
+const MF60={2200:{"Pino Desnudo":53579,"Pino Prepintado":64289,"Mara Clara":88605},2400:{"Pino Desnudo":58447,"Pino Prepintado":70132,"Mara Clara":96658},2500:{"Pino Desnudo":60883,"Pino Prepintado":73054,"Mara Clara":100685}};
+const BISAGRAS=[{id:"b1",n:"Cromo Satín Canto Redondo 3.5×3.5",p:720},{id:"b2",n:"Cromo Satín Canto Redondo 3×3",p:700},{id:"b3",n:"Acero Níquel 3.5×3.5 (Italinea 469)",p:1370},{id:"b4",n:"Acero Inox 3.5×3.5",p:2660},{id:"b5",n:"Acero Inox 3×3 (Italinea 479)",p:2870},{id:"b6",n:"Acero Inox 3×3 (Lioi)",p:2060}];
+const SERVICIOS=[
+  {g:"🔧 Precolgado",items:[
+    {id:"pc1",n:"Precolgado Normal",p:3827},
+    {id:"pc2",n:"Precolgado 1 Pierna",p:2296},
+    {id:"pc3",n:"Precolgado 1 Pierna F30/F60",p:5123},
+    {id:"pc4",n:"Precolgado con Imposta / Armado Cajón",p:5122},
+    {id:"pc5",n:"Precolgado Normal + Perforación Pomo",p:4520},
+    {id:"pc6",n:"Precolgado Acero",p:5123},
+    {id:"pc7",n:"Precolgado 1 Pierna Acero",p:3074}
+  ]},
+  {g:"🔩 Perforación",items:[
+    {id:"pf1",n:"Perforación Pomo (lateral + frontal, sin rebaje)",p:1708},
+    {id:"pf2",n:"Perforación Embutida (rebaje canto curvo)",p:5635},
+    {id:"pf3",n:"Perforación Pomo Acero",p:2109},
+    {id:"pf4",n:"Perforación Embutida Acero",p:5635},
+    {id:"pf5",n:"Perforación Celosía (con bastidor, sin celosía)",p:3730}
+  ]},
+  {g:"✂️ Canterías y Terminaciones",items:[
+    {id:"ca1",n:"Canterías Copahue 2V5H / Lonquimay 1V5H",p:2254},
+    {id:"ca2",n:"Canterías Calbuco 5H / Antuco II 2V",p:2049},
+    {id:"ca3",n:"Canterías F30 / F60",p:5738},
+    {id:"ca4",n:"Canterías Enchapadas F30/F60",p:6762},
+    {id:"ca5",n:"Canterías Enchapadas Normal",p:4303},
+    {id:"ca6",n:"Prepintado Cantos 4 lados",p:2869},
+    {id:"ca7",n:"Cantos Trabajados + Prepintados 4 lados",p:5397},
+    {id:"ca8",n:"Empastado + Prepintado de Canterías",p:5174}
+  ]},
+  {g:"🔥 Accesorios F30 / F60",items:[
+    {id:"fi1",n:"Cinta Intumescente (por juego marco)",p:0,manual:true,mult:6},
+    {id:"fi2",n:"Tapajunta Intumescente (por juego)",p:0,manual:true}
+  ]},
+  {g:"➕ Accesorios y Extras",items:[
+    {id:"ex1",n:"Doble Cabezal",p:750},
+    {id:"ex2",n:"Doble Bastidor",p:4540},
+    {id:"ex3",n:"Triple Bastidor",p:9070},
+    {id:"ex4",n:"Doble Batiente",p:3030},
+    {id:"ex5",n:"Doble Chapero",p:470},
+    {id:"ex5b",n:"Chapero 300mm",p:0,manual:true},
+    {id:"ex5c",n:"Chapero 500mm",p:0,manual:true},
+    {id:"ex6",n:"Burlete de Marco + Instalación (juego)",p:9316},
+    {id:"ex7",n:"Burlete de Marco m/l",p:1110},
+    {id:"ex8",n:"Barredera 908mm + Ranurado + Instalación",p:3780},
+    {id:"ex9",n:"Barredera 908mm sin instalación",p:1650},
+    {id:"ex10",n:"Celosía PVC 12.5×35cm + Instalación",p:5619},
+    {id:"ex11",n:"Celosía PVC 20×30cm + Instalación",p:6569},
+    {id:"ex12",n:"Celosía PVC 455×90mm + Instalación",p:6544},
+    {id:"ex13",n:"Celosía PVC 12.5×35cm Acero + Inst.",p:6698},
+    {id:"ex14",n:"Celosía PVC 455×90mm Acero + Inst.",p:7623},
+    {id:"ex15",n:"Refuerzo Perillón / Ojo Mágico",p:470},
+    {id:"ex16",n:"Refuerzo Celosía Aislapol",p:1250},
+    {id:"ex17",n:"Tapacanto Mara Clara 0.7×55mm (m/l)",p:340}
+  ]}
+];
+const AS=SERVICIOS.flatMap(g=>g.items);
+// ── PRECIOS PUERTAS MEDIO CUERPO ──
+// Fuente: hoja "Puertas Medio Cuerpo" - Precios_Indoor_24042026.xlsx
+// Formato: {ancho:[precio_carton, precio_aislapol]}
+// Costo adicional vidrio (Termo/PDA) para puertas Medio Cuerpo
+// Fuente: hoja "Puertas Medio Cuerpo" - columna PUERTA CON TERMO (PDA)
+// Ancho >= 800: Termo 600x800mm = $23.920 + Instalación = $6.880 → total +$30.800
+// Ancho <  800: Termo 480x793mm = $20.140 + Instalación = $6.880 → total +$27.020
+const MC_VIDRIO={
+  grande: 30800,  // ancho >= 800mm
+  chico:  27020   // ancho < 800mm (700, 750)
+};
+
+const PP_MC={
+  "MDF MC":{
+    2000:{700:[36923,39776],750:[37418,41523],800:[37955,41955],850:[38471,42587],900:[39271,43492]},
+    2100:{700:[38323,41039],750:[38839,42860],800:[39397,43313],850:[39955,43976],900:[40797,44923]},
+    2200:{700:[39587,41734],750:[40113,43545],800:[40776,44018],850:[41334,44681],900:[42176,45639]},
+    2400:{700:[41408,43829],750:[41976,45776],800:[42692,46292],850:[43281,47018],900:[44187,48050]}
+  },
+  "MDF HR MC":{
+    2000:{700:[41187,44113],750:[41850,46060],800:[42545,46650],850:[43239,47450],900:[44450,48766]},
+    2100:{700:[40723,43650],750:[41376,45555],800:[42060,46145],850:[42734,46934],900:[43923,48229]},
+    2200:{700:[41934,44313],750:[42587,46229],800:[43366,46818],850:[44050,47618],900:[45239,48913]},
+    2400:{700:[43513,46060],750:[43818,46492],800:[44513,48534],850:[45345,49187],900:[46081,50050]}
+  }
+};
+
+
+// Cantería recomendada según modelo de puerta
+const CANTERIA_MODELO={
+  "Copahue": {id:"ca1", desc:"Copahue 2V5H"},
+  "Lonquimay":{id:"ca1", desc:"Lonquimay 1V5H"},
+  "Calbuco":  {id:"ca2", desc:"Calbuco 5H"},
+  "Antuco II":{id:"ca2", desc:"Antuco II 2V"},
+  "Antuco":   {id:"ca5", desc:"Enchapada Normal"},
+  "Llaima":   {id:"ca2", desc:"Llaima / Calbuco 5H"},
+  "Mara Clara":{id:"ca5",desc:"Enchapada Normal"}
+};
+const FLETES=[{d:"Alto Hospicio",rbm:4148000,alv:0,ind:2392820},{d:"Iquique",rbm:4148000,alv:0,ind:2334824},{d:"Calama",rbm:3904000,alv:0,ind:2122169},{d:"Antofagasta",rbm:3477000,alv:0,ind:1928846},{d:"Caldera",rbm:2257000,alv:0,ind:1789145},{d:"Copiapó",rbm:2257000,alv:0,ind:1721482},{d:"La Serena",rbm:1647000,alv:0,ind:1377087},{d:"Coquimbo",rbm:1464000,alv:0,ind:1352588},{d:"Ovalle",rbm:1342000,alv:0,ind:1227424},{d:"Quillota",rbm:1024000,alv:0,ind:880537},{d:"Viña del Mar",rbm:854000,alv:0,ind:844989},{d:"Valparaíso",rbm:854000,alv:0,ind:837256},{d:"Villa Alemana",rbm:854000,alv:0,ind:797205},{d:"Los Andes",rbm:854000,alv:0,ind:765167},{d:"Santiago IDA",rbm:610000,alv:725000,ind:678172},{d:"Santiago RETORNO",rbm:610000,alv:609000,ind:392321},{d:"Melipilla",rbm:671000,alv:739500,ind:697504},{d:"El Tabo",rbm:890600,alv:0,ind:730668},{d:"Rancagua",rbm:610000,alv:681500,ind:550137},{d:"Machalí",rbm:610000,alv:0,ind:559803},{d:"Requinoa",rbm:610000,alv:652500,ind:535638},{d:"Rengo",rbm:610000,alv:652500,ind:521138},{d:"San Fernando",rbm:610000,alv:638000,ind:491806},{d:"Placilla",rbm:793000,alv:0,ind:476060},{d:"Chimbarongo",rbm:610000,alv:0,ind:451895},{d:"Romeral",rbm:549000,alv:0,ind:422897},{d:"Curicó",rbm:549000,alv:623500,ind:413231},{d:"Lontue",rbm:585600,alv:0,ind:403564},{d:"Molina",rbm:511700,alv:580000,ind:403437},{d:"Talca",rbm:488000,alv:507500,ind:359940},{d:"San Javier",rbm:451400,alv:493000,ind:315196},{d:"Linares",rbm:366000,alv:449500,ind:286197},{d:"Cauquenes",rbm:488000,alv:0,ind:285402},{d:"Longaví",rbm:427000,alv:464000,ind:256404},{d:"Retiro",rbm:427000,alv:464000,ind:246738},{d:"Parral",rbm:427000,alv:435000,ind:211660},{d:"San Carlos",rbm:280600,alv:406000,ind:162407},{d:"Chillán",rbm:244000,alv:391500,ind:137275},{d:"Concepción",rbm:292800,alv:362500,ind:152741},{d:"Hualpén",rbm:305000,alv:377000,ind:167240},{d:"Talcahuano",rbm:305000,alv:391500,ind:167240},{d:"San Pedro de la Paz",rbm:305000,alv:406000,ind:162407},{d:"Hualqui",rbm:305000,alv:0,ind:162407},{d:"Interno Cabrero",rbm:109800,alv:145000,ind:44833},{d:"Los Ángeles",rbm:207400,alv:174000,ind:118909},{d:"Quilleco",rbm:305000,alv:232000,ind:150219},{d:"Negrete",rbm:305000,alv:261000,ind:157574},{d:"Collipulli",rbm:305000,alv:333500,ind:196238},{d:"Victoria",rbm:305000,alv:362500,ind:228137},{d:"Angol",rbm:353800,alv:377000,ind:181739},{d:"Lautaro",rbm:402600,alv:536500,ind:266801},{d:"Curacautín",rbm:549000,alv:594500,ind:283234},{d:"Lonquimay",rbm:610000,alv:652500,ind:346064},{d:"Temuco",rbm:451400,alv:609000,ind:324067},{d:"Padre Las Casas",rbm:610000,alv:638000,ind:333733},{d:"Freire",rbm:610000,alv:681500,ind:353065},{d:"Cunco",rbm:549000,alv:681500,ind:382064},{d:"Villarrica",rbm:671000,alv:797500,ind:401396},{d:"Pucón",rbm:732000,alv:826500,ind:452906},{d:"Pitrufquén",rbm:610000,alv:725500,ind:378477},{d:"Loncoche",rbm:695400,alv:783000,ind:447396},{d:"Lanco",rbm:695400,alv:870000,ind:466728},{d:"San José de Mariquina",rbm:695400,alv:913500,ind:490893},{d:"Valdivia",rbm:793000,alv:942500,ind:559803},{d:"Los Lagos",rbm:732000,alv:986000,ind:570725},{d:"Paillaco",rbm:732000,alv:986000,ind:599723},{d:"Futrono",rbm:793000,alv:1000500,ind:623889},{d:"Río Bueno",rbm:793000,alv:1058500,ind:654134},{d:"Osorno",rbm:793000,alv:1015000,ind:693720},{d:"Purranque",rbm:732000,alv:1087500,ind:732385},{d:"Puerto Octay",rbm:951600,alv:1116500,ind:742051},{d:"Frutillar",rbm:915000,alv:1087500,ind:756550},{d:"Llanquihue",rbm:915000,alv:1087500,ind:771049},{d:"Puerto Varas",rbm:915000,alv:1116500,ind:790715},{d:"Puerto Montt",rbm:915000,alv:1160000,ind:805215},{d:"Ancud",rbm:1464000,alv:1667500,ind:958219},{d:"Castro",rbm:1586000,alv:1885000,ind:1025882},{d:"Quellón",rbm:1708000,alv:1957500,ind:1108045}];
+
+// ═══ UTILS ═══
+const fmt=n=>(!n&&n!==0)||n===0?"-":"$"+Math.round(n).toLocaleString("es-CL");
+const genN=()=>"COT-"+new Date().getFullYear()+"-"+String(Math.floor(Math.random()*9000)+1000);
+const hoy=()=>new Date().toLocaleDateString("es-CL",{day:"2-digit",month:"long",year:"numeric"});
+const mesK=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");};
+const LS="indoor_cot_2026";
+const loadH=()=>{try{return JSON.parse(localStorage.getItem(LS)||"[]");}catch{return[];}};
+const saveH=h=>localStorage.setItem(LS,JSON.stringify(h));
+const saveCot=c=>{const h=loadH();const i=h.findIndex(x=>x.ncot===c.ncot);if(i>-1)h[i]=c;else h.unshift(c);saveH(h);};
+let _ch={};
+
+// ═══ ESTADO ═══
+let TAB="cotizador";
+let C=newC();
+function newC(){return{ncot:genN(),fecha:hoy(),cliente:"",empresa:"",fono:"",email:"",proyecto:"",puertas:[],flete:null,descuento:0,iva:false,paso:1,fw:"",ft:"RBM",resumen:false,pw:{recinto:"",cant:1,tipo:"",relleno:"",ancho:"",alto:"",tm:"",am:"",altm:"",matm:"",bis:"",cbis:3,servs:[]}};}
+function resetCot(){C=newC();renderApp();}
+
+// ═══ CÁLCULOS ═══
+function pBase(pw){
+  if(!pw.tipo||!pw.alto)return 0;
+  // Acero: precio ingresado manualmente
+  if(pw.tipo==="Acero") return pw.precioAcero||0;
+  if(!pw.ancho)return 0;
+  var r=null;
+  // Medio Cuerpo: usar tabla PP_MC
+  if(pw.tipo==="MDF MC"||pw.tipo==="MDF HR MC"){
+    r=PP_MC[pw.tipo]&&PP_MC[pw.tipo][+pw.alto]&&PP_MC[pw.tipo][+pw.alto][+pw.ancho]?PP_MC[pw.tipo][+pw.alto][+pw.ancho]:null;
+  } else {
+    var src=window.PP_CUSTOM||PP;
+    r=src[pw.tipo]&&src[pw.tipo][+pw.alto]&&src[pw.tipo][+pw.alto][+pw.ancho]?src[pw.tipo][+pw.alto][+pw.ancho]:null;
+  }
+  if(!r)return 0;
+  var ai=pw.relleno&&pw.relleno.includes("Aislapol");
+  var base=(ai&&r[1]!=null)?r[1]:(r[0]||0);
+  // Agregar extra Llaima si corresponde
+  if(pw.modelo==="Llaima"&&LLAIMA_EXTRA[+pw.ancho])base+=LLAIMA_EXTRA[+pw.ancho];
+  // Agregar vidrio (Termo PDA) si es Medio Cuerpo con vidrio
+  if((pw.tipo==="MDF MC"||pw.tipo==="MDF HR MC")&&pw.conVidrio===true){
+    base+=(+pw.ancho>=800)?MC_VIDRIO.grande:MC_VIDRIO.chico;
+  }
+  return base;
+}
+function pMarco(pw){if(!pw.tm||!pw.altm||!pw.matm)return 0;let t;if(pw.tm==="F30")t=MF30;else if(pw.tm==="F60")t=MF60;else{if(!pw.am)return 0;t=MS[pw.am];}return t?.[+pw.altm]?.[pw.matm]||0;}
+function pBisag(pw){if(!pw.bis)return 0;const b=BISAGRAS.find(x=>x.id===pw.bis);return b?b.p*pw.cbis:0;}
+function pServs(pw){
+  return(pw.servs||[]).reduce(function(a,id){
+    var s=AS.find(function(x){return x.id===id;});
+    if(!s)return a;
+    if(s.manual){
+      var mk="spx_"+id;
+      var val=pw[mk]||0;
+      // Cinta intumescente: mult define cuántas unidades por puerta (ej: 6 tiras)
+      var mult=s.mult||1;
+      return a+val*mult;
+    }
+    return a+s.p;
+  },0);
+}
+function unitPW(pw){return pBase(pw)+pMarco(pw)+pBisag(pw)+pServs(pw);}
+function desglosePW(pw){
+  if(!pw||!pw.tipo)return{pb:0,ma:0,bi:0,se:0,unit:0,total:0,pbT:0,maT:0,biT:0,seT:0};
+  var cnt=pw.cant||1;
+  var pb=pBase(pw)||0, ma=pMarco(pw)||0, bi=pBisag(pw)||0, se=pServs(pw)||0;
+  var unit=pb+ma+bi+se;
+  return{pb:pb,ma:ma,bi:bi,se:se,unit:unit,total:unit*cnt,pbT:pb*cnt,maT:ma*cnt,biT:bi*cnt,seT:se*cnt};
+}
+function totPuertas(){return C.puertas.reduce((a,p)=>a+unitPW(p)*p.cant,0);}
+function totFlete(){return C.flete?C.flete.monto*C.flete.viajes:0;}
+function totales(){const s=totPuertas()+totFlete();const d=s*(C.descuento/100);const sd=s-d;const iv=C.iva?sd*0.19:0;return{s,d,sd,iv,total:sd+iv};}
+// ══════════════════════════════════════════
+// REGLAS AUTOMÁTICAS POR TIPO Y RECINTO
+// ══════════════════════════════════════════
+var RECINTOS_EXTERIOR=["acceso","exterior","logia","terraza"];
+var RECINTOS_COCINA=["cocina","interior"]; // cocina mapeada a interior
+
+function aplicarReglasAuto(){
+  var pw=C.pw;
+  var rec=pw.recinto;
+  var tipo=pw.tipo;
+
+  // REGLA 1: Acceso/Exterior + MDF → forzar MDF HR + Aislapol
+  if(RECINTOS_EXTERIOR.indexOf(rec)>-1 && tipo==="MDF"){
+    C.pw.tipo="MDF HR";
+    C.pw.relleno="Aislapol";
+    return "⚠️ Recinto exterior detectado: se cambió a MDF HR + Aislapol automáticamente.";
+  }
+
+  // REGLA 3: Acero → bisagra Cromo Satín Canto Redondo 3x3 + Poliuretano
+  if(tipo==="Acero"){
+    if(!pw.bis){C.pw.bis="b2";C.pw.cbis=3;}
+    C.pw.relleno="Poliuretano Inyectado";
+  }
+
+  return null;
+}
+
+function canNext(){
+  if(C.paso===1)return datosCompletos()&&!!C.pw.recinto;
+  if(C.paso===2)return C.pw.cant>=1;
+  if(C.paso===3){
+    var pw=C.pw;
+    if(!pw.tipo)return false;
+    if(pw.tipo!=="Acero"&&MODELOS[pw.tipo]&&MODELOS[pw.tipo].length>1&&!pw.modelo)return false;
+    if(!pw.relleno)return false;
+    if(pw.tipo==="Acero")return (pw.precioAcero||0)>0;
+    if((pw.tipo==="MDF MC"||pw.tipo==="MDF HR MC")&&pw.conVidrio===null)return false;
+    return pw.ancho&&pw.alto&&pBase(pw)>0;
+  }
+  return true;
+}
+function pasoMsg(){
+  if(C.paso!==3)return "";
+  var pw=C.pw;
+  var esAcero=pw.tipo==="Acero";
+  var esMC=pw.tipo==="MDF MC"||pw.tipo==="MDF HR MC";
+  var falta=[];
+  if(!pw.tipo)falta.push("materialidad");
+  else if(!esAcero&&MODELOS[pw.tipo]&&MODELOS[pw.tipo].length>1&&!pw.modelo)falta.push("modelo");
+  else if(!pw.relleno)falta.push("relleno");
+  else if(esAcero&&!(pw.precioAcero>0))falta.push("precio (ingresa manualmente)");
+  else if(esMC&&pw.conVidrio===null)falta.push("indicar si lleva vidrio Termo PDA");
+  else if(!esAcero&&!pw.ancho&&!pw.alto)falta.push("ancho y alto");
+  else if(!esAcero&&!pw.ancho)falta.push("ancho");
+  else if(!esAcero&&!pw.alto)falta.push("alto ← selecciona el alto de la puerta");
+  if(!falta.length)return "";
+  return '<div style="display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:8px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);margin-top:10px;">'
+    +'<span style="font-size:14px;">👆</span>'
+    +'<span style="font-size:12px;color:#F59E0B;">Falta seleccionar: <strong>'+falta.join(", ")+'</strong> para continuar</span>'
+    +'</div>';
+}
+
+// ═══ TABS ═══
+function setTab(t,el){TAB=t;document.querySelectorAll(".nav-tab").forEach(b=>b.classList.remove("on"));el.classList.add("on");renderApp();}
+
+// ═══ RENDER ═══
+function renderApp(){
+  document.getElementById("nav-ncot").textContent=C.ncot;
+  const app=document.getElementById("app");
+  if(TAB==="cotizador")app.innerHTML=C.resumen?renderResumen():renderCotizador();
+  else if(TAB==="historial")app.innerHTML=renderHistorial();
+  else if(TAB==="precios"){app.innerHTML=renderPrecios();}
+  else if(TAB==="asistente"){app.innerHTML=renderAsistente();setTimeout(initAsistente,100);}
+  else{app.innerHTML=renderDashboard();setTimeout(initCharts,100);}
+}
+
+// ═══ COTIZADOR ═══
+function renderCotizador(){
+  const PASOS=["Recinto","Cantidad","Puerta","Marco","Bisagras","Servicios","¿+Puertas?","Flete","Final"];
+  let h=renderDatos()+renderStep(PASOS);
+  if(C.puertas.length>0)h+=renderAcum();
+  if(C.paso===1)h+=rP1();
+  else if(C.paso===2)h+=rP2();
+  else if(C.paso===3)h+=rP3();
+  else if(C.paso===4)h+=rP4();
+  else if(C.paso===5)h+=rP5();
+  else if(C.paso===6)h+=rP6();
+  else if(C.paso===7)h+=rP7();
+  else if(C.paso===8)h+=rP8();
+  const T=totales();
+  const glow="font-family:Space Grotesk;font-size:18px;font-weight:800;color:#FFF;text-shadow:0 0 8px rgba(255,255,255,.85);";
+  h+=`<div class="sticky-bar no-print">
+    <div>${C.puertas.length>0?`<div style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;">Total acumulado</div><div style="${glow}">${fmt(T.s)}</div>`:`<div style="font-size:11px;color:var(--txt3);">Paso ${C.paso} / ${PASOS.length}</div>`}</div>
+    ${C.paso>=3&&C.paso<=6&&unitPW(C.pw)>0?`<div style="font-size:11px;color:var(--txt2);">Puerta actual: <strong style="color:var(--gold-l);">${fmt(unitPW(C.pw))}</strong> × ${C.pw.cant}</div>`:""}
+    <div style="display:flex;gap:8px;">
+      ${C.paso>1&&C.paso<=6?`<button class="btn btn-g btn-sm" onclick="C.paso--;renderApp()">← Atrás</button>`:""}
+      ${C.paso<=6?`<button class="btn btn-p btn-sm" ${canNext()?"":"disabled"} onclick="${canNext()?"avanzar()":""}">Siguiente →</button>`:""}
+    </div>
+  </div>`;
+  return h;
+}
+
+function avanzar(){
+  if(C.paso===6){guardarPW();C.paso=7;}
+  else C.paso++;
+  renderApp();
+}
+function guardarPW(){C.puertas.push(Object.assign({},C.pw));C.pw={recinto:"",cant:1,tipo:"",modelo:"",relleno:"",ancho:"",alto:"",precioAcero:0,prepintada:null,conVidrio:null,chapero:null,tm:"",am:"",altm:"",matm:"",bis:"",cbis:3,servs:[]};}
+function masP(){C.pw={recinto:"",cant:1,tipo:"",modelo:"",relleno:"",ancho:"",alto:"",precioAcero:0,prepintada:null,conVidrio:null,chapero:null,tm:"",am:"",altm:"",matm:"",bis:"",cbis:3,servs:[]};C.paso=1;renderApp();}
+function irFlete(){C.paso=8;renderApp();}
+function irFinal(){
+  if(!C.puertas.length){alert("Agrega al menos una puerta.");return;}
+  try{
+    C.resumen=true;
+    renderApp();
+  }catch(e){
+    console.error("Error en irFinal:",e);
+    alert("Error al generar cotizacion: "+e.message);
+    C.resumen=false;
+  }
+}
+function quitarP(i){C.puertas.splice(i,1);renderApp();}
+
+function renderDatos(){
+  return`<div class="card" style="margin-bottom:12px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:11px;flex-wrap:wrap;gap:8px;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--txt3);">Cotizacion</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <div style="display:flex;align-items:center;gap:6px;"><span style="font-size:10px;color:var(--txt3);">N°</span>
+          <input style="width:145px;font-family:Space Grotesk;font-weight:700;font-size:12px;color:var(--gold);border-color:rgba(191,136,64,.25);" value="${C.ncot}" oninput="C.ncot=this.value"></div>
+        <div style="display:flex;align-items:center;gap:6px;"><span style="font-size:10px;color:var(--txt3);">Fecha</span>
+          <input style="width:162px;" value="${C.fecha}" oninput="C.fecha=this.value"></div>
+      </div>
+    </div>
+    <div class="g3" style="margin-bottom:10px;">
+      <div><span class="label">Cliente</span><input placeholder="Nombre contacto" value="${C.cliente}" oninput="C.cliente=this.value" onblur="renderApp()"></div>
+      <div><span class="label">Empresa</span><input placeholder="Razón social" value="${C.empresa}" oninput="C.empresa=this.value" onblur="renderApp()"></div>
+      <div><span class="label">Fono / WhatsApp</span><input placeholder="+56 9 XXXX XXXX" value="${C.fono}" oninput="C.fono=this.value" onblur="renderApp()"></div>
+    </div>
+    <div class="g2">
+      <div><span class="label">Proyecto / Obra</span><input placeholder="Nombre proyecto" value="${C.proyecto}" oninput="C.proyecto=this.value" onblur="renderApp()"></div>
+      <div><span class="label">Email</span><input placeholder="correo@empresa.cl" value="${C.email}" oninput="C.email=this.value"></div>
+    </div>
+  </div>`;
+}
+
+function renderStep(P){
+  let h=`<div class="stepper no-print">`;
+  P.forEach((p,i)=>{const n=i+1,ac=n===C.paso,dn=n<C.paso;h+=`<div class="s-item" ${dn?`onclick="C.paso=${n};renderApp()"`:""} style="gap:5px;"><div class="s-num ${ac?"act":dn?"done":""}">${dn?"✓":n}</div><span class="s-lbl ${ac?"act":dn?"done":""}">${p}</span></div>`;if(i<P.length-1)h+=`<div class="s-line ${dn?"done":""}"></div>`;});
+  return h+`</div>`;
+}
+
+function renderAcum(){
+  let h=`<div class="card" style="margin-bottom:12px;"><div class="section-hdr"><div style="font-size:12px;font-weight:700;color:var(--gold-l);">🚪 Puertas cotizadas (${C.puertas.length})</div><div style="font-size:12px;color:var(--txt2);">Subtotal: <strong style="color:#FFF;">${fmt(totPuertas())}</strong></div></div>`;
+  C.puertas.forEach((p,i)=>{const rec=RECINTOS.find(r=>r.id===p.recinto);const u=unitPW(p);h+=`<div class="puerta-item"><div style="display:flex;align-items:center;gap:9px;"><div class="puerta-num">${i+1}</div><div><div style="font-size:13px;font-weight:600;">${rec?rec.ico+" "+rec.n:""} - ${p.tipo} ${p.ancho}×${p.alto}mm</div><div style="font-size:11px;color:var(--txt3);">${p.relleno}${p.tm?" · Marco "+p.tm:""}${p.bis?" · Bisagras":""}</div></div></div><div style="display:flex;align-items:center;gap:10px;"><div style="text-align:right;"><div style="font-size:13px;font-weight:700;color:var(--gold-l);">${fmt(u)} c/u</div><div style="font-size:11px;color:var(--txt3);">× ${p.cant} = ${fmt(u*p.cant)}</div></div><button class="btn btn-red btn-sm" onclick="quitarP(${i})">✕</button></div></div>`;});
+  return h+`</div>`;
+}
+
+// Pasos 1-6
+function datosCompletos(){
+  return C.cliente.trim()&&C.empresa.trim()&&C.fono.trim()&&C.proyecto.trim();
+}
+
+function rP1(){
+  // Validar datos antes de mostrar recintos
+  if(!datosCompletos()){
+    return `<div class="step-title">① Recinto</div>
+    <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;background:var(--bg3);border:1px solid rgba(245,158,11,.3);margin-bottom:12px;">
+      <span style="font-size:14px;">⚠️</span>
+      <span style="font-size:13px;color:#F59E0B;font-weight:500;">Faltan datos por completar en el encabezado</span>
+    </div>`;
+  }
+  let h=`<div class="step-title">① Recinto</div><div class="step-sub">¿Para qué espacio es esta puerta?</div><div class="card"><div class="chips">`;
+  RECINTOS.forEach(r=>{h+=`<button class="chip ${C.pw.recinto===r.id?"on":""}" style="padding:9px 15px;font-size:13px;" onclick="C.pw.recinto='${r.id}';aplicarReglasAuto();renderApp()"><span style="font-size:15px;">${r.ico}</span>${r.n}</button>`;});
+  h+=`</div></div>`;
+  const plts=loadPlt();
+  if(plts.length>0){
+    h+=`<div class="card" style="border-color:rgba(191,136,64,.2);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div style="font-size:12px;font-weight:700;color:var(--gold-l);">⭐ Plantillas guardadas (${plts.length})</div>
+        <button class="btn btn-g btn-sm" onclick="modalPlantillas()">Ver todas</button>
+      </div>`;
+    plts.slice(0,3).forEach(p=>{
+      const nP=p.puertas.reduce((a,pw)=>a+pw.cant,0);
+      h+=`<div class="plantilla-item" onclick="aplicarPlantilla(${p.id})">
+        <div><div style="font-size:13px;font-weight:600;">⭐ ${p.nombre}</div>
+        <div style="font-size:11px;color:var(--txt3);">${nP} puerta${nP>1?"s":""} · ${p.fecha}</div></div>
+        <span class="badge-green">Usar →</span></div>`;
+    });
+    h+=`</div>`;
+  }
+  return h;
+}
+function rP2(){
+  const rec=RECINTOS.find(r=>r.id===C.pw.recinto);
+  return`<div class="step-title">② Cantidad</div><div class="step-sub">${rec?rec.ico+" "+rec.n+" · ":""}¿Cuántas puertas de este tipo?</div>
+  <div class="card"><span class="label">Número de Unidades</span>
+    <div class="qty-ctrl"><button class="qty-btn" onclick="C.pw.cant=Math.max(1,C.pw.cant-1);renderApp()">−</button>
+    <input class="qty-inp" type="number" min="1" value="${C.pw.cant}" oninput="C.pw.cant=Math.max(1,parseInt(this.value)||1)" onblur="renderApp()">
+    <button class="qty-btn" onclick="C.pw.cant++;renderApp()">+</button><span style="font-size:13px;color:var(--txt2);">unidades</span></div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;">${[1,2,5,10,20,50].map(n=>`<button class="chip ${C.pw.cant===n?"on":""}" style="padding:6px 12px;font-size:12px;" onclick="C.pw.cant=${n};renderApp()">${n}</button>`).join("")}</div>
+  </div>`;
+}
+function rP3(){
+  const pw=C.pw;
+  const esAcero=pw.tipo==="Acero";
+  const anchoAcero=[700,750,800,850,900,950,1000];
+  const altoAcero=[2000,2100];
+
+  let h=`<div class="step-title">③ Tipo de Puerta</div><div class="step-sub">Materialidad, modelo y medidas.</div>
+  <div class="card"><span class="label">Materialidad</span><div class="chips">`;
+  TIPOS.forEach(t=>{
+    const labels={"MDF MC":"MDF ½ Cuerpo","MDF HR MC":"MDF HR ½ Cuerpo"};
+    const displayT=labels[t]||t;
+    const colores={"MDF":"","MDF HR":"","F30":"color:var(--gold-l)","F60":"color:#E05050","Enchapada":"color:#3DAF76","Acero":"color:#5B8DD9","MDF MC":"color:#60B0D4","MDF HR MC":"color:#60B0D4"};
+    h+=`<button class="chip ${pw.tipo===t?"on":""}" onclick="C.pw.tipo='${t}';C.pw.relleno='';C.pw.ancho='';C.pw.alto='';C.pw.modelo='';C.pw.bis='';C.pw.servs=[];aplicarReglasAuto();renderApp()">${displayT}</button>`;
+  });
+  h+=`</div></div>`;
+
+  // Modelo
+  if(pw.tipo&&MODELOS[pw.tipo]&&MODELOS[pw.tipo].length>1){
+    h+=`<div class="card"><span class="label">Modelo / Diseño</span><div class="chips">`;
+    MODELOS[pw.tipo].forEach(m=>{
+      h+=`<button class="chip ${pw.modelo===m?"on":""}" onclick="C.pw.modelo='${m}';renderApp()">${m}</button>`;
+    });
+    h+=`</div></div>`;
+  } else if(pw.tipo) {
+    // Auto-seleccionar único modelo
+    if(!pw.modelo&&MODELOS[pw.tipo]&&MODELOS[pw.tipo].length===1) C.pw.modelo=MODELOS[pw.tipo][0];
+  }
+
+  // Relleno
+  if(pw.tipo&&(pw.modelo||!MODELOS[pw.tipo]||MODELOS[pw.tipo].length===1)){
+    h+=`<div class="card"><span class="label">Relleno / Tipo</span><div class="chips">`;
+    (RELLENOS[pw.tipo]||[]).forEach(r=>{h+=`<button class="chip ${pw.relleno===r?"on":""}" onclick="C.pw.relleno='${r}';renderApp()">${r}</button>`;});
+    h+=`</div></div>`;
+  }
+
+  // Medidas
+  // Vidrio (Termo PDA) - solo Medio Cuerpo
+  if(pw.relleno&&(pw.tipo==="MDF MC"||pw.tipo==="MDF HR MC")){
+    const extraVidrio=(+pw.ancho>=800)?MC_VIDRIO.grande:MC_VIDRIO.chico;
+    h+=`<div class="card" style="border-color:rgba(91,141,217,.3);">
+      <span class="label">🔲 ¿Puerta con Vidrio (Termo PDA)?</span>
+      <div class="chips">
+        <button class="chip ${pw.conVidrio===true?"on":""}" onclick="C.pw.conVidrio=true;renderApp()">🪟 Sí - Con vidrio Termo PDA</button>
+        <button class="chip ${pw.conVidrio===false?"on":""}" onclick="C.pw.conVidrio=false;renderApp()">🚫 No - Sin vidrio</button>
+      </div>
+      ${pw.conVidrio===true&&pw.ancho?`<div style="font-size:11px;color:var(--blue-l);margin-top:8px;">
+        + Termo panel ${+pw.ancho>=800?"600×800":"480×793"}mm + instalación = <strong>+${fmt(extraVidrio)}</strong>
+      </div>`:""}
+      ${pw.conVidrio===false?'<div style="font-size:11px;color:var(--txt3);margin-top:8px;">Puerta base ½ cuerpo · 1 luz · sin vidrio</div>':""}
+    </div>`;
+  }
+
+  // Prepintada - solo MDF y MDF HR (no enchapada, no F30, no F60)
+  if(pw.relleno&&["MDF","MDF HR","MDF MC","MDF HR MC"].includes(pw.tipo)){
+    h+=`<div class="card"><span class="label">¿Puerta Prepintada?</span>
+      <div class="chips">
+        <button class="chip ${pw.prepintada===true?"on":""}" onclick="C.pw.prepintada=true;renderApp()">✅ Sí - Prepintada</button>
+        <button class="chip ${pw.prepintada===false?"on":""}" onclick="C.pw.prepintada=false;renderApp()">🔲 No - Desnuda</button>
+      </div>
+      ${pw.prepintada===true?'<div style="font-size:11px;color:var(--green-l);margin-top:8px;">Se aplica tarifa prepintada. Incluye acabado color estándar.</div>':""}
+      ${pw.prepintada===false?'<div style="font-size:11px;color:var(--txt3);margin-top:8px;">Nota: No se garantizan puertas MDF desnudo para todos los modelos.</div>':""}
+    </div>`;
+  }
+
+  if(pw.relleno){
+    const esMC=pw.tipo==="MDF MC"||pw.tipo==="MDF HR MC";
+  const anchoMC=[700,750,800,850,900];
+  const altoMC=[2000,2100,2200,2400];
+  const anchosDisp=esAcero?anchoAcero:esMC?anchoMC:ANCHOS;
+  const altosDisp=esAcero?altoAcero:esMC?altoMC:ALTOS;
+    h+=`<div class="card"><div class="g2">
+      <div><span class="label">Ancho (mm)</span><div class="chips">`;
+    anchosDisp.forEach(a=>{h+=`<button class="chip ${pw.ancho==a?"on":""}" onclick="C.pw.ancho=${a};renderApp()">${a}</button>`;});
+    h+=`</div></div><div><span class="label" style="${pw.ancho&&!pw.alto?'color:var(--gold);font-weight:800;':''}">${pw.ancho&&!pw.alto?'⬇ ':''}Alto (mm)</span><div class="chips">`;
+    altosDisp.forEach(a=>{h+=`<button class="chip ${pw.alto==a?"on":""}" onclick="C.pw.alto=${a};renderApp()">${a}</button>`;});
+    h+=`</div></div></div></div>`;
+  }
+
+  // Precio Acero - ingreso manual
+  if(esAcero&&pw.ancho&&pw.alto){
+    h+=`<div class="card" style="border-color:rgba(91,141,217,.3);">
+      <span class="label">💰 Precio Acero (neto c/u) - ingreso manual</span>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
+        <span style="font-size:15px;color:var(--txt2);font-weight:600;">$</span>
+        <input type="number" min="0" step="1000"
+          style="font-family:Space Grotesk;font-weight:700;font-size:16px;color:#5B8DD9;border-color:rgba(91,141,217,.3);max-width:200px;"
+          placeholder="0" value="${pw.precioAcero||""}"
+          oninput="C.pw.precioAcero=parseInt(this.value)||0" onblur="renderApp()">
+        <span style="font-size:12px;color:var(--txt3);">Precio varía - consultar lista vigente</span>
+      </div>
+    </div>`;
+  }
+
+  // Precio resultante
+  // Chapero - preguntar tipo cuando ya tiene medidas
+  if(pw.ancho&&pw.alto&&pw.tipo&&pw.relleno&&!["F30","F60","Acero"].includes(pw.tipo)){
+    h+=`<div class="card" style="border-color:rgba(255,255,255,.1);">
+      <span class="label">🔩 Chapero (opcional)</span>
+      <div class="chips">
+        <button class="chip ${!pw.chapero?"on":""}" onclick="C.pw.chapero=null;renderApp()">Sin chapero</button>
+        <button class="chip ${pw.chapero===300?"on":""}" onclick="C.pw.chapero=300;renderApp()">Chapero 300mm</button>
+        <button class="chip ${pw.chapero===500?"on":""}" onclick="C.pw.chapero=500;renderApp()">Chapero 500mm</button>
+      </div>
+    </div>`;
+  }
+
+  if((esAcero?pw.precioAcero>0:pw.ancho&&pw.alto)&&pw.tipo&&pw.relleno){
+    const p=pBase(pw);
+    if(p>0){
+      const modeloStr=pw.modelo&&pw.modelo!=="Lisa"?` · Modelo ${pw.modelo}`:"";
+      const llamaStr=pw.modelo==="Llaima"?` (inc. cajeado+refuerzo Llaima)`:"";
+      h+=`<div class="price-bar">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div style="font-size:14px;font-weight:600;">${pw.tipo}${modeloStr} ${esAcero?"":pw.ancho+"×"+pw.alto+"mm"} - ${pw.relleno}${llamaStr}</div>
+            <div style="font-size:11px;color:var(--txt3);">Espesor: ${["F30","F60","Acero"].includes(pw.tipo)?"45mm":"40-46mm"} · ${pw.tipo==="MDF MC"||pw.tipo==="MDF HR MC"?"½ Cuerpo · 1 luz · sin vidrio":"Cuerpo entero"} · Batiente pino simple · Cantos desnudos</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-family:Space Grotesk;font-size:24px;font-weight:800;color:#FFF;text-shadow:0 0 8px rgba(255,255,255,.9),0 0 20px rgba(255,255,255,.4);">${fmt(p)}</div>
+            <div style="font-size:10px;color:var(--txt3);">neto c/u</div>
+          </div>
+        </div>
+      </div>`;
+    } else if(!esAcero){
+      h+=`<div class="warn">⚠️ Combinación no disponible en lista de precios. Consultar con producción.</div>`;
+    }
+  }
+  h+=pasoMsg();
+  return h;
+}
+function rP4(){
+  const pw=C.pw;
+  let h=`<div class="step-title">④ Marco</div><div class="step-sub">Opcional. Sin marco → avanza.</div>
+  <div class="card"><span class="label">Tipo</span><div class="chips">
+    <button class="chip ${pw.tm===''?"on":""}" onclick="C.pw.tm='';C.pw.matm='';C.pw.am='';C.pw.altm='';renderApp()">Sin Marco</button>
+    <button class="chip ${pw.tm==='std'?"on":""}" onclick="C.pw.tm='std';C.pw.matm='';C.pw.am='';renderApp()">Estandar 30mm</button>
+    <button class="chip ${pw.tm==='F30'?"on":""}" onclick="C.pw.tm='F30';C.pw.matm='';C.pw.am='';renderApp()">Marco F30</button>
+    <button class="chip ${pw.tm==='F60'?"on":""}" onclick="C.pw.tm='F60';C.pw.matm='';C.pw.am='';renderApp()">Marco F60</button>
+  </div></div>`;
+  if(pw.tm==="std"){h+=`<div class="card"><span class="label">Ancho Marco</span><div class="chips">${["60-70","75-90","95-120"].map(a=>`<button class="chip ${pw.am===a?"on":""}" onclick="C.pw.am='${a}';renderApp()">${a} mm</button>`).join("")}</div></div>`;}
+  if(pw.tm){
+    const alts=pw.tm==="std"?[2100,2200,2400]:[2200,2400,2500];
+    h+=`<div class="card"><span class="label">Largo Piernas</span><div class="chips">${alts.map(a=>`<button class="chip ${pw.altm==a?"on":""}" onclick="C.pw.altm=${a};renderApp()">${a} mm</button>`).join("")}</div></div>`;
+    const mats=pw.tm==="std"?["Pino Desnudo","Pino Prepintado","P.Desnudo+Rebaje","P.Prepintado+Rebaje","Mara Clara","Mara Clara+Rebaje"]:["Pino Desnudo","Pino Prepintado","Mara Clara"];
+    h+=`<div class="card"><span class="label">Material</span><div class="chips">${mats.map(m=>`<button class="chip ${pw.matm===m?"on":""}" onclick="C.pw.matm='${m.replace(/'/g,"\\'")}';renderApp()">${m}</button>`).join("")}</div></div>`;
+  }
+  const pm=pMarco(pw);
+  if(pm>0){h+=`<div class="price-bar"><div style="display:flex;justify-content:space-between;"><div style="font-size:13px;font-weight:600;">Marco ${pw.tm==="std"?"Estandar":pw.tm} - ${pw.matm} · ${pw.altm}mm</div><div style="font-family:Space Grotesk;font-size:20px;font-weight:800;color:var(--green-l);">${fmt(pm)}</div></div></div>`;}
+  return h;
+}
+function rP5(){
+  const pw=C.pw;
+  let h=`<div class="step-title">⑤ Bisagras</div><div class="step-sub">Opcional.</div><div class="card">
+  <button class="chip ${!pw.bis?"on":""}" onclick="C.pw.bis='';renderApp()" style="margin-bottom:8px;">Sin Bisagras</button>`;
+  BISAGRAS.forEach(b=>{const on=pw.bis===b.id;h+=`<div class="srow ${on?"on":""}" onclick="C.pw.bis='${b.id}';renderApp()"><div style="display:flex;align-items:center;gap:9px;"><div style="width:14px;height:14px;border-radius:50%;border:2px solid ${on?"var(--gold)":"#555"};background:${on?"var(--gold)":"transparent"};flex-shrink:0;"></div><span>${b.n}</span></div><span class="badge">${fmt(b.p)}</span></div>`;});
+  h+=`</div>`;
+  if(pw.bis){h+=`<div class="card"><span class="label">Cantidad</span><div class="chips">${[2,3,4].map(n=>`<button class="chip ${pw.cbis===n?"on":""}" onclick="C.pw.cbis=${n};renderApp()">${n} bisagras</button>`).join("")}</div></div>`;}
+  return h;
+}
+function rP6(){
+  const pw=C.pw;
+  let h=`<div class="step-title">⑥ Servicios &amp; Accesorios</div>
+  <div class="step-sub">Todos los valores se multiplican por la cantidad de puertas cotizadas (${pw.cant} un.). Al terminar podrás agregar más puertas.</div>`;
+
+  // Sugerencia cantería según modelo — NO aplica para Acero
+  if(pw.tipo==="Acero"){
+    h+=`<div style="display:flex;align-items:center;gap:8px;padding:9px 13px;border-radius:8px;background:rgba(91,141,217,.1);border:1px solid rgba(91,141,217,.3);margin-bottom:10px;">
+      <span>ℹ️</span><span style="font-size:12px;color:var(--blue-l);">Las puertas de Acero no llevan canterías.</span></div>`;
+  }
+  if(pw.tipo!=="Acero"&&pw.modelo&&pw.modelo!=="Lisa"&&CANTERIA_MODELO&&CANTERIA_MODELO[pw.modelo]){
+    var cant=CANTERIA_MODELO[pw.modelo];
+    var yaSelec=(pw.servs||[]).includes(cant.id);
+    if(yaSelec){
+      h+='<div style="display:flex;align-items:center;gap:8px;padding:9px 13px;border-radius:8px;background:rgba(61,175,118,.1);border:1px solid rgba(61,175,118,.3);margin-bottom:10px;">'
+        +'<span>✅</span><span style="font-size:12px;color:var(--green-l);">Canterías <strong>'+cant.desc+'</strong> incluidas.</span></div>';
+    } else {
+      h+='<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 13px;border-radius:8px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);margin-bottom:10px;flex-wrap:wrap;">'
+        +'<div style="display:flex;align-items:center;gap:8px;"><span>💡</span>'
+        +'<span style="font-size:12px;color:#F59E0B;">Modelo <strong>'+pw.modelo+'</strong> - se recomienda <strong>Canterías '+cant.desc+'</strong></span></div>'
+        +'<button class="btn btn-sm sugerir-cant" data-cantid="'+cant.id+'" style="background:rgba(245,158,11,.2);border:1px solid rgba(245,158,11,.35);color:#F59E0B;font-size:11px;">+ Agregar</button>'
+        +'</div>';
+    // Bind button after render
+    setTimeout(function(){
+      document.querySelectorAll(".sugerir-cant").forEach(function(btn){
+        btn.addEventListener("click",function(){
+          var cid=btn.dataset.cantid;
+          if(!C.pw.servs)C.pw.servs=[];
+          if(!C.pw.servs.includes(cid))C.pw.servs.push(cid);
+          renderApp();
+        });
+      });
+    },50);
+    }
+  }
+
+  SERVICIOS.forEach(g=>{
+    h+=`<div class="card"><div class="grp-title">${g.g}</div>`;
+    g.items.forEach(s=>{
+      const on=(pw.servs||[]).includes(s.id);
+      const manualKey="spx_"+s.id;
+      const manualVal=pw[manualKey]||0;
+      const precioMostrar=s.manual?manualVal:s.p;
+      const precioFmt=s.manual?(manualVal>0?fmt(manualVal):"Ingrese $"):"$"+Math.round(s.p).toLocaleString("es-CL");
+      h+=`<div class="srow ${on?"on":""}" onclick="togServ('${s.id}')">
+        <div style="display:flex;align-items:center;gap:9px;">
+          <div style="width:14px;height:14px;border-radius:3px;border:2px solid ${on?"var(--gold)":"#555"};background:${on?"var(--gold)":"transparent"};display:flex;align-items:center;justify-content:center;font-size:8px;color:#fff;flex-shrink:0;">${on?"✓":""}</div>
+          <div>
+            <div style="font-size:13px;">${s.n}</div>
+            <div style="font-size:10px;color:var(--txt3);">
+              ${s.manual?(s.mult?`${pw.cant} puertas × ${s.mult} tiras = ${pw.cant*s.mult} tiras × precio = ${fmt((pw[manualKey]||0)*s.mult*pw.cant)} total`:`× ${pw.cant} = ${fmt((pw[manualKey]||0)*pw.cant)} total`):`× ${pw.cant} = ${fmt(s.p*pw.cant)} total`}
+            </div>
+          </div>
+        </div>
+        ${s.manual&&on?
+          `<input type="number" min="0" style="width:110px;text-align:right;font-weight:700;color:var(--gold);border-color:rgba(191,136,64,.3);font-size:13px;"
+            value="${manualVal>0?manualVal:''}" placeholder="Ingrese valor $"
+            onclick="event.stopPropagation();this.select()"
+            oninput="event.stopPropagation();C.pw['${manualKey}']=parseInt(this.value)||0" onblur="renderApp()">`
+          :`<span class="badge">${precioFmt}</span>`}
+      </div>`;
+    });
+    h+=`</div>`;
+  });
+
+  // Resumen parcial servicios
+  const seUnit=pServs(pw);
+  if(seUnit>0){
+    h+=`<div class="price-bar" style="margin-top:4px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-size:13px;color:var(--txt2);">Servicios seleccionados · subtotal</div>
+        <div>
+          <div style="font-family:Space Grotesk;font-size:15px;font-weight:800;color:var(--gold-l);">${fmt(seUnit)} c/u</div>
+          <div style="font-size:11px;color:var(--txt3);text-align:right;">× ${pw.cant} = ${fmt(seUnit*pw.cant)} total</div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  h+=`<div style="display:flex;justify-content:flex-end;margin-top:8px;"><button class="btn btn-p" onclick="avanzar()">Guardar puerta →</button></div>`;
+  return h;
+}
+
+// Paso 7: ¿Más puertas?
+function rP7(){
+  return`<div class="step-title">¿Más puertas?</div>
+  <div class="step-sub">Tienes <strong style="color:var(--gold-l);">${C.puertas.length}</strong> puerta${C.puertas.length>1?"s":""} - Subtotal: <strong style="color:#FFF;">${fmt(totPuertas())}</strong></div>
+  ${C.puertas.length>0?renderAcum():""}
+  <div class="card"><div style="text-align:center;padding:18px 10px;">
+    <div style="font-size:32px;margin-bottom:10px;">🚪</div>
+    <div style="font-size:15px;font-weight:600;margin-bottom:5px;">¿Agregar otra puerta a esta cotizacion?</div>
+    <div style="font-size:12px;color:var(--txt3);margin-bottom:18px;">Puedes cotizar todos los recintos del proyecto en un solo documento</div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn btn-green" onclick="masP()" style="font-size:14px;padding:11px 22px;">✅ Sí, agregar otra puerta</button>
+      <button class="btn btn-p" onclick="irFlete()" style="font-size:14px;padding:11px 22px;">🚛 No, agregar flete</button>
+      <button class="btn btn-g" onclick="irFinal()" style="font-size:14px;padding:11px 22px;">📄 No, ver cotizacion final</button>
+    </div>
+  </div></div>`;
+}
+
+// Paso 8: Flete
+function rP8(){
+  const transp=C.ft||"RBM";
+  const busq=(C.fw||"").toLowerCase();
+  const filtrados=FLETES.filter(f=>f.d.toLowerCase().includes(busq));
+  const getP=f=>transp==="RBM"?f.rbm:transp==="ALV"?f.alv:f.ind;
+  const tNom=transp==="RBM"?"Transp. RBM":transp==="ALV"?"Transp. Álvarez":"Camión InDooR";
+
+  let h=`<div class="step-title">🚛 Flete / Despacho</div>
+  <div class="step-sub">Selecciona destino y transportista. El monto es editable.</div>
+  <div class="card">
+    <div style="display:flex;gap:7px;margin-bottom:10px;flex-wrap:wrap;align-items:center;">
+      <span class="label" style="margin:0;">Transportista:</span>
+      ${[["RBM","Transp. RBM"],["ALV","Transp. Álvarez"],["IND","Camión InDooR"]].map(([k,l])=>`<button class="chip ${transp===k?"on":""}" onclick="C.ft='${k}';renderApp()">${l}</button>`).join("")}
+    </div>
+    <input placeholder="🔍 Buscar destino..." style="margin-bottom:8px;" value="${C.fw||""}" oninput="C.fw=this.value;renderApp()">
+    <div class="flete-list">`;
+  filtrados.forEach(f=>{const p=getP(f);const on=C.flete&&C.flete.destino===f.d;h+=`<div class="flete-row ${on?"on":""}" onclick="selFlete('${f.d.replace(/'/g,"\\'")}',${p})"><div><div style="font-size:13px;font-weight:500;">${f.d}</div><div style="font-size:10px;color:var(--txt3);">${tNom}</div></div><div style="font-family:Space Grotesk;font-size:13px;font-weight:700;color:var(--gold-l);">${p>0?fmt(p):"Consultar"}</div></div>`;});
+  h+=`</div></div>`;
+  if(C.flete){h+=`<div class="card"><div class="g3" style="align-items:end;">
+    <div><span class="label">Destino</span><div style="font-size:14px;font-weight:600;">📍 ${C.flete.destino}</div></div>
+    <div><span class="label">N° Viajes</span><div class="qty-ctrl" style="margin-top:0;"><button class="qty-btn" onclick="C.flete.viajes=Math.max(1,C.flete.viajes-1);renderApp()">−</button><input class="qty-inp" type="number" min="1" value="${C.flete.viajes}" oninput="C.flete.viajes=Math.max(1,parseInt(this.value)||1)" onblur="renderApp()"><button class="qty-btn" onclick="C.flete.viajes++;renderApp()">+</button></div></div>
+    <div><span class="label">Monto por viaje (editable)</span><input type="number" value="${C.flete.monto}" style="font-weight:700;color:var(--gold);border-color:rgba(191,136,64,.3);" oninput="C.flete.monto=parseInt(this.value)||0" onblur="renderApp()"></div>
+  </div>
+  <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center;">
+    <div style="font-size:13px;color:var(--txt2);">Total flete ${C.flete.viajes} viaje${C.flete.viajes>1?"s":""}</div>
+    <div style="font-family:Space Grotesk;font-size:20px;font-weight:800;color:#FFF;text-shadow:0 0 8px rgba(255,255,255,.8);">${fmt(totFlete())}</div>
+  </div>
+  <div style="margin-top:10px;">
+    <span class="label">📝 Referencia / Comentarios del despacho (opcional)</span>
+    <textarea style="height:110px;resize:vertical;font-size:13px;width:100%;line-height:1.7;" placeholder="Ej: Entregar en bodega Norte, contactar a Pedro Soto +56 9 XXXX, solo mañanas..."
+      oninput="C.flete.comentario=this.value">${C.flete.comentario||""}</textarea>
+  </div>
+  </div>`;}
+  h+=`<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px;flex-wrap:wrap;">
+    <button class="btn btn-g" onclick="C.flete=null;irFinal()">Sin Flete → Finalizar</button>
+    <button class="btn btn-p" ${C.flete?"":"disabled"} onclick="${C.flete?"guardarYFinalizar()":""}">💾 Guardar y Ver Cotizacion</button>
+  </div>`;
+  return h;
+}
+
+function selFlete(dest,precio){const tNom=C.ft==="RBM"?"Transp. RBM":C.ft==="ALV"?"Transp. Álvarez":"Camión InDooR";C.flete={destino:dest,transportista:tNom,viajes:1,monto:precio,comentario:""};renderApp();}
+function guardarYFinalizar(){guardarCot();irFinal();}
+
+// ═══ RESUMEN ═══
+function renderResumen(){
+  const T=totales();
+  const gS="color:#FFF;text-shadow:0 0 7px rgba(255,255,255,.85),0 0 16px rgba(255,255,255,.3);";
+  const gG="color:#FFF;text-shadow:0 0 7px rgba(61,175,118,.7);";
+  let h=`
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;gap:12px;">
+    <div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">Módulo de Cotizacion · InDooR 2026 · Claudio Uribe</div>
+      <div style="font-family:Space Grotesk;font-size:25px;font-weight:800;${gS}">Cotizacion</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap;">
+        <span class="ncot-badge">${C.ncot}</span>
+        <span style="font-size:12px;color:var(--txt3);">📅 ${C.fecha}</span>
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div style="width:42px;height:42px;background:#1a2f6a;border:1px solid rgba(255,255,255,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;">
+      <svg width="24" height="30" viewBox="0 0 22 28" fill="none">
+        <rect x="1" y="1" width="20" height="26" rx="1" stroke="#c87830" stroke-width="2" fill="none"/>
+        <rect x="4" y="4" width="14" height="20" rx="1" fill="#c87830"/>
+        <circle cx="16" cy="14" r="1.5" fill="#ffd080"/>
+      </svg>
+    </div>
+      <div style="font-size:9px;color:var(--txt3);margin-top:3px;">indoor-spa.cl</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:12px;"><div class="g2" style="gap:10px;">
+    ${C.cliente?`<div><span class="label">Contacto</span><div style="font-size:14px;font-weight:600;">${C.cliente}</div></div>`:""}
+    ${C.empresa?`<div><span class="label">Empresa</span><div style="font-size:14px;font-weight:600;">${C.empresa}</div></div>`:""}
+    ${C.fono?`<div><span class="label">Fono</span><div style="font-size:13px;color:var(--txt2);">${C.fono}</div></div>`:""}
+    ${C.email?`<div><span class="label">Email</span><div style="font-size:13px;color:var(--txt2);">${C.email}</div></div>`:""}
+    ${C.proyecto?`<div style="grid-column:1/-1;"><span class="label">Proyecto / Obra</span><div style="font-size:13px;color:var(--txt2);">📍 ${C.proyecto}</div></div>`:""}
+  </div></div>`;
+
+  // Asegurar defaults en puertas (compatibilidad con versiones anteriores)
+  C.puertas=C.puertas.map(function(p){return Object.assign({modelo:"",prepintada:null,conVidrio:null,chapero:null,precioAcero:0,cant:1,cbis:3,servs:[]},p);});
+  if(C.expandedPuerta===undefined)C.expandedPuerta=-1;
+
+  // KPIs resumen
+  var totUnidades=C.puertas.reduce((a,p)=>a+p.cant,0);
+  h+=`<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;">
+    <div class="kpi-card"><div class="label">Puertas</div><div style="font-size:20px;font-weight:800;color:#fff;">${totUnidades} und.</div></div>
+    <div class="kpi-card"><div class="label">Tipos</div><div style="font-size:20px;font-weight:800;color:#fff;">${C.puertas.length}</div></div>
+    <div class="kpi-card"><div class="label">Subtotal neto</div><div style="font-size:16px;font-weight:800;color:var(--gold-l);">${fmt(totUnidades>0?C.puertas.reduce((a,p)=>a+desglosePW(p).total,0):0)}</div></div>
+    <div class="kpi-card"><div class="label">Estado</div><div style="margin-top:4px;"><span style="background:rgba(245,166,35,.2);color:var(--gold-l);padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700;">Por revisar</span></div></div>
+  </div>`;
+
+  // Tarjetas colapsables por puerta
+  h+=`<div class="card" style="padding:0;overflow:hidden;">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--txt3);padding:12px 16px;border-bottom:1px solid var(--bdr);">
+      Detalle de Cotizacion — ${C.puertas.length} tipo${C.puertas.length>1?"s":""} · clic para editar
+    </div>`;
+
+  C.puertas.forEach((p,i)=>{
+    const rec=RECINTOS.find(r=>r.id===p.recinto);
+    const dsg=desglosePW(p);
+    const servNoms=(p.servs||[]).map(id=>AS.find(x=>x.id===id)?.n||"").filter(Boolean);
+    const modeloStr=p.modelo&&p.modelo!=="Lisa"?" "+p.modelo:"";
+    const esAcero=p.tipo==="Acero";
+    const isExpanded=C.expandedPuerta===i;
+    const tieneAlerta=esAcero&&(!p.precioAcero||p.precioAcero===0);
+
+    h+=`<div style="border-bottom:1px solid var(--bdr);">
+      <!-- HEADER COLAPSABLE -->
+      <div style="display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;background:${isExpanded?"var(--bg3)":"transparent"};"
+        onclick="C.expandedPuerta=${isExpanded?"-1":i};renderApp()">
+        <div style="width:28px;height:28px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0;">${i+1}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            ${rec?rec.ico+" "+rec.n:"Sin recinto"}
+            ${tieneAlerta?`<span style="background:rgba(245,158,11,.2);color:#F59E0B;font-size:10px;padding:2px 7px;border-radius:8px;">⚠️ Precio asumido</span>`:""}
+          </div>
+          <div style="font-size:11px;color:var(--txt3);margin-top:2px;">${p.tipo}${modeloStr} ${esAcero?"":p.ancho+"×"+p.alto+"mm"} · ${p.relleno} · ${p.cant} und.</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:14px;font-weight:800;color:var(--gold-l);">${fmt(dsg.total)}</div>
+          <div style="font-size:10px;color:var(--txt3);">${fmt(dsg.unit)} c/u</div>
+        </div>
+        <div style="color:var(--txt3);font-size:16px;">${isExpanded?"▲":"▼"}</div>
+      </div>
+      <!-- CUERPO EXPANDIBLE -->
+      ${isExpanded?`<div style="padding:14px 16px;border-top:1px solid var(--bdr);background:var(--bg3);">
+        <!-- Desglose componentes -->
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--txt3);margin-bottom:8px;">Desglose de componentes</div>
+        <div style="background:var(--bg2);border-radius:var(--r);padding:10px 14px;margin-bottom:14px;">
+        <div style="display:grid;grid-template-columns:1fr auto auto;gap:4px 16px;font-size:12px;">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--txt3);">Componente</div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--txt3);text-align:right;">c/u</div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--txt3);text-align:right;">× ${p.cant} total</div>
+          <div style="color:var(--txt2);">🚪 Puerta base${modeloStr}</div>
+          <div style="text-align:right;">${fmt(dsg.pb)}</div>
+          <div style="text-align:right;font-weight:700;color:#fff;">${fmt(dsg.pbT)}</div>
+          ${dsg.ma>0?`<div style="color:var(--txt2);">🪵 Marco ${p.tm==="std"?"Estandar":p.tm} ${p.matm}</div><div style="text-align:right;">${fmt(dsg.ma)}</div><div style="text-align:right;font-weight:700;color:var(--green-l);">${fmt(dsg.maT)}</div>`:""}
+          ${dsg.bi>0?`<div style="color:var(--txt2);">🔩 Bisagras (${p.cbis}× ${BISAGRAS.find(x=>x.id===p.bis)?.n||""})</div><div style="text-align:right;">${fmt(dsg.bi)}</div><div style="text-align:right;font-weight:700;color:#a78bfa;">${fmt(dsg.biT)}</div>`:""}
+          ${(p.servs||[]).map(id=>{const sv=AS.find(x=>x.id===id);if(!sv)return "";const mk="spx_"+id;const mult=sv.mult||1;const spBase=sv.manual?(p[mk]||0):sv.p;const spUnit=spBase*mult;const spTotal=spUnit*p.cant;if(spUnit===0)return "";return `<div style="color:var(--txt2);">⚙️ ${sv.n}</div><div style="text-align:right;">${fmt(spUnit)}</div><div style="text-align:right;font-weight:700;color:var(--gold-l);">${fmt(spTotal)}</div>`;}).join("")}
+          <div style="border-top:1px solid var(--bdr);padding-top:6px;margin-top:4px;font-weight:700;">SUBTOTAL</div>
+          <div style="border-top:1px solid var(--bdr);padding-top:6px;margin-top:4px;text-align:right;">${fmt(dsg.unit)}</div>
+          <div style="border-top:1px solid var(--bdr);padding-top:6px;margin-top:4px;text-align:right;font-size:14px;font-weight:800;color:#fff;">${fmt(dsg.total)}</div>
+        </div></div>
+        <!-- Edición rápida -->
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--txt3);margin-bottom:8px;">Editar</div>
+        <div style="display:grid;grid-template-columns:1fr 120px 70px;gap:8px;align-items:center;font-size:12px;">
+          <span style="color:var(--txt2);">Cantidad</span>
+          <input type="number" min="1" value="${p.cant}" style="padding:6px 8px;background:var(--bg4);border:1px solid var(--bdr2);color:#fff;border-radius:var(--r);font-size:12px;"
+            onchange="C.puertas[${i}].cant=Math.max(1,parseInt(this.value)||1);renderApp()">
+          <span style="color:var(--txt3);font-size:10px;">und.</span>
+          ${esAcero?`<span style="color:var(--txt2);">Precio puerta</span>
+          <input type="number" value="${p.precioAcero||70000}" style="padding:6px 8px;background:var(--bg4);border:1px solid var(--bdr2);color:#fff;border-radius:var(--r);font-size:12px;"
+            onblur="C.puertas[${i}].precioAcero=parseInt(this.value)||0;renderApp()">
+          <span style="color:var(--txt3);font-size:10px;">$ neto</span>`:""}
+          <span style="color:var(--txt2);">Marco</span>
+          <select onchange="C.puertas[${i}].tm=this.value;renderApp()" style="padding:6px 8px;background:var(--bg4);border:1px solid var(--bdr2);color:#fff;border-radius:var(--r);font-size:12px;">
+            <option value="std" ${p.tm==="std"?"selected":""}>Estandar</option>
+            <option value="F30" ${p.tm==="F30"?"selected":""}>F30</option>
+            <option value="F60" ${p.tm==="F60"?"selected":""}>F60</option>
+            <option value="" ${!p.tm?"selected":""}>Sin marco</option>
+          </select>
+          <span></span>
+          <span style="color:var(--txt2);">Bisagras cant.</span>
+          <input type="number" min="1" max="6" value="${p.cbis||3}" style="padding:6px 8px;background:var(--bg4);border:1px solid var(--bdr2);color:#fff;border-radius:var(--r);font-size:12px;"
+            onchange="C.puertas[${i}].cbis=Math.max(1,parseInt(this.value)||3);renderApp()">
+          <span style="color:var(--txt3);font-size:10px;">un.</span>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px;">
+          <button class="btn btn-g btn-sm" onclick="C.puertas.splice(${i},1);C.expandedPuerta=-1;renderApp()">🗑️ Eliminar</button>
+          <button class="btn btn-sm" style="background:var(--bg4);border:1px solid var(--bdr2);color:var(--txt2);" onclick="C.puertas.splice(${i}+1,0,{...C.puertas[${i}]});renderApp()">📋 Duplicar</button>
+          <button class="btn btn-g btn-sm" onclick="C.paso=${i===0?1:1};C.pw={...C.puertas[${i}]};C.resumen=false;renderApp()">✏️ Editar completo</button>
+        </div>
+      </div>`:""}
+
+
+      </div>
+    </div>`;
+  });
+
+  h+=`<div style="display:flex;justify-content:space-between;padding-top:12px;margin-top:4px;">
+    <div style="font-size:12px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.05em;">SUBTOTAL PUERTAS</div>
+    <div style="font-family:Space Grotesk;font-size:17px;font-weight:800;${gS}">${fmt(totPuertas())}</div>
+  </div></div>`;
+
+  // Flete
+  if(C.flete){
+    h+=`<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+      <div>
+        <div style="font-size:13px;font-weight:600;">🚛 Flete - ${C.flete.destino}</div>
+        <div style="font-size:11px;color:var(--txt3);">${C.flete.transportista} · ${C.flete.viajes} viaje${C.flete.viajes>1?"s":""} × ${fmt(C.flete.monto)} c/u</div>
+        ${C.flete.comentario?`<div style="font-size:11px;color:var(--txt2);margin-top:4px;">📝 ${C.flete.comentario}</div>`:""}
+      </div>
+      <div style="font-family:Space Grotesk;font-size:16px;font-weight:700;color:var(--blue-l);">${fmt(totFlete())}</div>
+    </div></div>`;
+  }
+
+  // Totales finales
+  h+=`<div class="totals-card">
+    <div class="total-line"><div style="font-size:13px;color:var(--txt2);">Subtotal general</div><div style="font-size:15px;font-weight:700;">${fmt(T.s)}</div></div>
+    <div class="total-line" style="align-items:flex-start;">
+      <div><div style="font-size:13px;color:var(--txt2);margin-bottom:5px;">Descuento comercial</div>
+        <div style="display:flex;gap:7px;align-items:center;margin-top:4px;">
+          <input type="number" min="0" max="100" step="0.5" value="${C.descuento}"
+            oninput="C.descuento=Math.min(100,Math.max(0,parseFloat(this.value)||0))" onblur="renderApp()"
+            style="width:72px;text-align:center;font-weight:700;color:var(--gold);border-color:rgba(191,136,64,.3);">
+          <span style="font-size:13px;color:var(--txt2);">%</span>
+          ${T.d>0?`<span style="font-size:12px;color:var(--red-l);">−${fmt(T.d)}</span>`:""}
+        </div>
+      </div>
+      ${T.d>0?`<div style="text-align:right;padding-top:22px;"><div style="font-size:14px;font-weight:700;color:var(--red-l);">−${fmt(T.d)}</div></div>`:""}
+    </div>
+    ${T.d>0?`<div class="total-line"><div style="font-size:13px;color:var(--txt2);">Subtotal con descuento</div><div style="font-size:15px;font-weight:700;">${fmt(T.sd)}</div></div>`:""}
+    <div class="total-line">
+      <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px;color:var(--txt2);">
+        <input type="checkbox" ${C.iva?"checked":""} onchange="C.iva=this.checked;renderApp()" style="accent-color:var(--gold);width:auto;"> Incluir IVA (19%)
+      </label>
+      ${C.iva?`<div style="font-size:14px;color:var(--txt2);">${fmt(T.iv)}</div>`:""}
+    </div>
+    <div class="total-final">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--gold-l);text-transform:uppercase;letter-spacing:.07em;">Total ${C.iva?"con IVA":"Neto"}${C.descuento>0?" · "+C.descuento+"% dcto":""}</div>
+        <div style="font-size:10px;color:var(--txt3);">${C.puertas.length} tipo${C.puertas.length>1?"s":""} · ${C.puertas.reduce((a,p)=>a+p.cant,0)} puertas · InDooR 2026 · Claudio Uribe</div>
+      </div>
+      <div class="big-price">${fmt(T.total)}</div>
+    </div>
+  </div>
+  <div class="nota">
+    * Precios netos en pesos chilenos sin IVA. Válido para constructoras e inmobiliarias. No incluye flete salvo el indicado.<br>
+    * Cotizacion válida 30 días desde emisión. Sujeto a disponibilidad de stock.
+  </div>
+  <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;" class="no-print">
+    <button class="btn btn-g" onclick="C.resumen=false;C.paso=7;renderApp()">← Editar</button>
+    <button class="btn btn-p" onclick="guardarCot()">💾 Guardar</button>
+    <button class="btn btn-p" onclick="generarPDF()">📄 PDF</button>
+    <button class="btn btn-green" onclick="enviarWA()">💬 WhatsApp</button>
+    <button class="btn btn-g" onclick="guardarPlantilla()">⭐ Plantilla</button>
+    <button class="btn btn-g" onclick="window.print()">🖨️ Imprimir</button>
+    <button class="btn btn-g" onclick="resetCot()">+ Nueva</button>
+  </div>`;
+  return h;
+}
+
+function guardarCot(){
+  const T=totales();
+  const snap={ncot:C.ncot,fecha:C.fecha,fechaISO:new Date().toISOString(),cliente:C.cliente,empresa:C.empresa,fono:C.fono,email:C.email,proyecto:C.proyecto,puertas:JSON.parse(JSON.stringify(C.puertas)),flete:C.flete,descuento:C.descuento,iva:C.iva,totalNeto:T.sd,totalFinal:T.total,mes:mesK(),estado:"enviada",notas:""};
+  saveCot(snap);
+  alert("Cotizacion "+C.ncot+" guardada correctamente.");
+}
+function togServ(id){const i=(C.pw.servs||[]).indexOf(id);if(i>-1)C.pw.servs.splice(i,1);else C.pw.servs.push(id);renderApp();}
+
+// ═══ HISTORIAL ═══
+let HF={mes:"",busq:"",estado:""};
+// ══════════════════════════════════════════
+// ESTADOS - Pipeline y badges
+// ══════════════════════════════════════════
+const ESTADOS={
+  pendiente:{lbl:"Pendiente",cls:"est-pendiente",ico:"⏳"},
+  enviada:{lbl:"Enviada",cls:"est-enviada",ico:"📤"},
+  revision:{lbl:"En Revisión",cls:"est-revision",ico:"🔍"},
+  aprobada:{lbl:"Aprobada",cls:"est-aprobada",ico:"✅"},
+  rechazada:{lbl:"Rechazada",cls:"est-rechazada",ico:"❌"},
+  produccion:{lbl:"En Producción",cls:"est-produccion",ico:"🏭"}
+};
+
+function estadoBadge(estado){
+  var e=ESTADOS[estado||"pendiente"]||ESTADOS.pendiente;
+  return '<span class="estado-badge '+e.cls+'">'+e.ico+' '+e.lbl+'</span>';
+}
+
+function cambiarEstado(ncot,estado){
+  var h=loadH();
+  var idx=h.findIndex(function(c){return c.ncot===ncot;});
+  if(idx>-1){h[idx].estado=estado;saveH(h);}
+  cerrarModal();renderApp();
+}
+
+function guardarNota(ncot,val){
+  var h=loadH();
+  var idx=h.findIndex(function(c){return c.ncot===ncot;});
+  if(idx>-1){h[idx].notas=val;saveH(h);}
+}
+
+function cerrarModal(){
+  var m=document.getElementById("modal-container");if(m)m.remove();
+}
+
+function abrirModal(content){
+  cerrarModal();
+  var wrap=document.createElement("div");
+  wrap.id="modal-container";
+  wrap.innerHTML='<div class="modal-bg" id="modal-bg"><div class="modal">'+content+'</div></div>';
+  wrap.querySelector("#modal-bg").addEventListener("click",function(e){if(e.target.id==="modal-bg")cerrarModal();});
+  document.body.appendChild(wrap);
+}
+
+function modalEstado(ncot){
+  var cot=loadH().find(function(c){return c.ncot===ncot;});
+  if(!cot)return;
+  var actual=cot.estado||"pendiente";
+  var rows="";
+  Object.keys(ESTADOS).forEach(function(k){
+    var v=ESTADOS[k];
+    var sel=(k===actual);
+    rows+='<div data-ncot="'+ncot+'" data-est="'+k+'" class="est-row" style="display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:10px;border:1.5px solid '+(sel?"var(--gold)":"var(--bdr)")+';background:'+(sel?"var(--gold-bg)":"var(--bg3)")+';cursor:pointer;margin-bottom:7px;">';
+    rows+='<span style="font-size:18px;">'+v.ico+'</span>';
+    rows+='<div style="font-size:13px;font-weight:600;color:'+(sel?"var(--gold-l)":"var(--txt)")+';">'+v.lbl+'</div>';
+    if(sel)rows+='<span style="margin-left:auto;color:var(--gold);">&#10003;</span>';
+    rows+='</div>';
+  });
+  var nota=cot.notas||"";
+  var content='<div class="modal-title">Estado de Cotizaci&#243;n</div>'
+    +'<div style="font-size:13px;color:var(--txt2);margin-bottom:14px;">'+cot.ncot+' &mdash; '+(cot.cliente||"Sin nombre")+'</div>'
+    +rows
+    +'<div style="margin-top:12px;"><span class="label">Notas internas</span>'
+    +'<textarea id="nota-ta" style="height:70px;resize:vertical;" placeholder="Condiciones, plazo, contacto...">'+nota+'</textarea></div>'
+    +'<div style="display:flex;justify-content:space-between;margin-top:12px;">'
+    +'<button class="btn btn-g btn-sm" id="btn-nota">&#128190; Guardar nota</button>'
+    +'<button class="btn btn-g btn-sm" onclick="cerrarModal()">Cerrar</button>'
+    +'</div>';
+  abrirModal(content);
+  setTimeout(function(){
+    document.querySelectorAll(".est-row").forEach(function(el){
+      el.addEventListener("click",function(){cambiarEstado(el.dataset.ncot,el.dataset.est);});
+    });
+    var bn=document.getElementById("btn-nota");
+    if(bn)bn.addEventListener("click",function(){
+      var ta=document.getElementById("nota-ta");
+      if(ta)guardarNota(ncot,ta.value);
+      alert("Nota guardada.");
+    });
+  },50);
+}
+
+function modalPlantillas(){
+  var plts=loadPlt();
+  var rows="";
+  if(!plts.length){
+    rows='<div style="text-align:center;padding:20px;color:var(--txt3);">No hay plantillas guardadas.</div>';
+  } else {
+    plts.forEach(function(p){
+      var nP=p.puertas.reduce(function(a,pw){return a+pw.cant;},0);
+      rows+='<div class="plantilla-item" data-pid="'+p.id+'" style="cursor:pointer;">';
+      rows+='<div><div style="font-size:13px;font-weight:700;">&#11088; '+p.nombre+'</div>';
+      rows+='<div style="font-size:11px;color:var(--txt3);">'+nP+' puerta'+(nP>1?"s":"")+" &middot; "+p.fecha+'</div></div>';
+      rows+='<button class="btn btn-red btn-sm" data-del="'+p.id+'">&#128465;&#65039;</button></div>';
+    });
+  }
+  var content='<div class="modal-title">&#11088; Plantillas Guardadas</div>'
+    +rows
+    +'<div style="display:flex;justify-content:flex-end;margin-top:12px;">'
+    +'<button class="btn btn-g btn-sm" onclick="cerrarModal()">Cerrar</button></div>';
+  abrirModal(content);
+  setTimeout(function(){
+    document.querySelectorAll(".plantilla-item").forEach(function(el){
+      el.addEventListener("click",function(e){if(!e.target.dataset.del)aplicarPlantilla(+el.dataset.pid);});
+    });
+    document.querySelectorAll("[data-del]").forEach(function(el){
+      el.addEventListener("click",function(e){e.stopPropagation();borrarPlantilla(+el.dataset.del);});
+    });
+  },50);
+}
+
+// Plantillas
+var LS_PLT="indoor_plantillas_2026";
+function loadPlt(){try{return JSON.parse(localStorage.getItem(LS_PLT)||"[]");}catch{return[];}}
+function savePlt(p){localStorage.setItem(LS_PLT,JSON.stringify(p));}
+
+function guardarPlantilla(){
+  if(!C.puertas.length){alert("No hay puertas para guardar como plantilla.");return;}
+  var nombre=prompt("Nombre para esta plantilla:");
+  if(!nombre)return;
+  var plts=loadPlt();
+  plts.unshift({id:Date.now(),nombre:nombre,puertas:JSON.parse(JSON.stringify(C.puertas)),fecha:hoy()});
+  savePlt(plts);
+  alert("Plantilla guardada: "+nombre);
+}
+
+function aplicarPlantilla(id){
+  var plt=loadPlt().find(function(p){return p.id===id;});
+  if(!plt)return;
+  if(!confirm("Agregar "+plt.puertas.length+" tipo(s) de la plantilla a la cotizacion actual?"))return;
+  plt.puertas.forEach(function(p){C.puertas.push(JSON.parse(JSON.stringify(p)));});
+  cerrarModal();C.paso=7;renderApp();
+}
+
+function borrarPlantilla(id){
+  if(!confirm("Eliminar esta plantilla?"))return;
+  savePlt(loadPlt().filter(function(p){return p.id!==id;}));
+  cerrarModal();modalPlantillas();
+}
+
+// ══════════════════════════════════════════
+// ALERTAS Y KPI
+// ══════════════════════════════════════════
+function alertaVencimiento(cot){
+  var alertarEn=["enviada","revision","pendiente"];
+  var estado=cot.estado||"pendiente";
+  if(alertarEn.indexOf(estado)===-1)return "";
+  if(!cot.fechaISO)return "";
+  var dias=Math.floor((Date.now()-new Date(cot.fechaISO).getTime())/(1000*60*60*24));
+  if(dias>=30)return '<span style="background:rgba(184,48,48,.25);color:#ff8080;padding:3px 8px;border-radius:10px;font-size:10px;font-weight:700;">🔴 VENCIDA ('+dias+'d)</span>';
+  if(dias>=25)return '<span style="background:rgba(245,158,11,.2);color:#F59E0B;padding:3px 8px;border-radius:10px;font-size:10px;font-weight:700;">⚠️ Vence en '+(30-dias)+'d</span>';
+  if(dias>=20)return '<span style="background:rgba(191,136,64,.15);color:var(--gold-l);padding:3px 8px;border-radius:10px;font-size:10px;font-weight:700;">⏰ '+dias+'d</span>';
+  return "";
+}
+
+function calcKPIConversion(hist){
+  var enviadas=hist.filter(function(c){return ["enviada","revision","aprobada","rechazada"].indexOf(c.estado||"")>-1;}).length;
+  var aprobadas=hist.filter(function(c){return c.estado==="aprobada";}).length;
+  var rechazadas=hist.filter(function(c){return c.estado==="rechazada";}).length;
+  var enCurso=hist.filter(function(c){return c.estado==="revision"||c.estado==="enviada";}).length;
+  var tasa=enviadas>0?Math.round(aprobadas/enviadas*100):0;
+  return{enviadas:enviadas,aprobadas:aprobadas,rechazadas:rechazadas,enCurso:enCurso,tasa:tasa};
+}
+
+function calcComparativoMes(hist){
+  var ahora=new Date();
+  var mesActual=ahora.getFullYear()+"-"+String(ahora.getMonth()+1).padStart(2,"0");
+  var antesMes=new Date(ahora.getFullYear(),ahora.getMonth()-1,1);
+  var mesAnterior=antesMes.getFullYear()+"-"+String(antesMes.getMonth()+1).padStart(2,"0");
+  var totActual=hist.filter(function(c){return c.mes===mesActual;}).reduce(function(a,c){return a+c.totalFinal;},0);
+  var totAnterior=hist.filter(function(c){return c.mes===mesAnterior;}).reduce(function(a,c){return a+c.totalFinal;},0);
+  var nActual=hist.filter(function(c){return c.mes===mesActual;}).length;
+  var nAnterior=hist.filter(function(c){return c.mes===mesAnterior;}).length;
+  var pctMonto=totAnterior>0?Math.round((totActual-totAnterior)/totAnterior*100):null;
+  var pctN=nAnterior>0?Math.round((nActual-nAnterior)/nAnterior*100):null;
+  return{mesActual:mesActual,mesAnterior:mesAnterior,totActual:totActual,totAnterior:totAnterior,nActual:nActual,nAnterior:nAnterior,pctMonto:pctMonto,pctN:pctN};
+}
+
+function deltaBadge(pct){
+  if(pct===null)return'<span style="font-size:11px;color:var(--txt3);">sin datos ant.</span>';
+  if(pct>0)return'<span style="font-size:12px;font-weight:700;color:#3DAF76;">&#9650; +'+pct+'%</span>';
+  if(pct<0)return'<span style="font-size:12px;font-weight:700;color:#E05050;">&#9660; '+pct+'%</span>';
+  return'<span style="font-size:12px;color:var(--txt3);">= Sin cambio</span>';
+}
+
+function buildPipelineBar(hist){
+  var out='<div class="pipeline-bar">';
+  var keys=["pendiente","enviada","revision","aprobada","rechazada","produccion"];
+  keys.forEach(function(est){
+    var cnt;
+    if(est==="pendiente"){cnt=hist.filter(function(c){return !c.estado||c.estado==="pendiente";}).length;}
+    else{cnt=hist.filter(function(c){return c.estado===est;}).length;}
+    if(cnt===0)return;
+    var e=ESTADOS[est]||ESTADOS.pendiente;
+    var sel=(HF.estado===est);
+    out+='<button class="estado-badge '+e.cls+'" data-pest="'+est+'" style="cursor:pointer;'+(sel?"outline:2px solid currentColor;":"")+'">';
+    out+=e.ico+" "+e.lbl+" <strong>"+cnt+"</strong></button>";
+  });
+  if(HF.estado){out+='<button class="btn btn-g btn-sm" id="btn-ver-todos" style="font-size:11px;">Ver todos</button>';}
+  out+='</div>';
+  setTimeout(function(){
+    document.querySelectorAll("[data-pest]").forEach(function(el){
+      el.addEventListener("click",function(){HF.estado=(HF.estado===el.dataset.pest)?"":el.dataset.pest;renderApp();});
+    });
+    var bt=document.getElementById("btn-ver-todos");
+    if(bt)bt.addEventListener("click",function(){HF.estado="";renderApp();});
+  },50);
+  return out;
+}
+
+
+function renderHistorial(){
+  const hist=loadH();
+  const meses=[...new Set(hist.map(c=>c.mes))].sort().reverse();
+  let h=`<div class="section-hdr"><div class="step-title" style="font-size:19px;">📋 Historial de Cotizaciones</div>
+    <div style="display:flex;gap:7px;"><button class="btn btn-green btn-sm" onclick="exportXLS()">📥 Excel</button>
+    <button class="btn btn-red btn-sm" onclick="if(confirm('¿Borrar historial?')){localStorage.removeItem('${LS}');renderApp();}">🗑️ Limpiar</button></div>
+  </div>
+  ${buildPipelineBar(hist)}
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:13px;">
+    <input placeholder="🔍 Buscar cliente, empresa, N° cotizacion..." style="flex:1;min-width:200px;" value="${HF.busq}" oninput="HF.busq=this.value;renderApp()">
+    <select style="width:155px;" onchange="HF.mes=this.value;renderApp()">
+      <option value="">Todos los meses</option>
+      ${meses.map(m=>`<option value="${m}" ${HF.mes===m?"selected":""}>${m}</option>`).join("")}
+    </select>
+  </div>`;
+  let lista=hist;
+  if(HF.mes)lista=lista.filter(c=>c.mes===HF.mes);
+  if(HF.busq){const q=HF.busq.toLowerCase();lista=lista.filter(c=>(c.cliente+c.empresa+c.proyecto+c.ncot).toLowerCase().includes(q));}
+  if(HF.estado){lista=lista.filter(c=>c.estado===HF.estado);}
+  if(!lista.length){h+=`<div class="empty-state"><div style="font-size:36px;margin-bottom:10px;">${hist.length?"🔍":"📋"}</div><div style="font-size:14px;">${hist.length?"Sin resultados":"Aún no hay cotizaciones guardadas"}</div></div>`;return h;}
+  const totF=lista.reduce((a,c)=>a+c.totalFinal,0);
+  const nPF=lista.reduce((a,c)=>a+(c.puertas||[]).reduce((b,p)=>b+p.cant,0),0);
+  h+=`<div class="g4" style="margin-bottom:14px;">
+    <div class="kpi-card"><div class="kpi-label">Cotizaciones</div><div class="kpi-value">${lista.length}</div></div>
+    <div class="kpi-card"><div class="kpi-label">Total Cotizado</div><div class="kpi-value" style="font-size:16px;">${fmt(totF)}</div></div>
+    <div class="kpi-card"><div class="kpi-label">Puertas</div><div class="kpi-value">${nPF}</div></div>
+    <div class="kpi-card"><div class="kpi-label">Ticket Prom.</div><div class="kpi-value" style="font-size:15px;">${fmt(totF/lista.length)}</div></div>
+  </div>`;
+  lista.forEach(c=>{const np=c.puertas?(c.puertas||[]).reduce((a,p)=>a+p.cant,0):0;
+    h+=`<div class="hist-row" onclick="verCot('${c.ncot}')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap;">
+            <span style="font-family:Space Grotesk;font-weight:700;font-size:13px;color:var(--gold-l);">${c.ncot}</span>
+            <span style="font-size:11px;color:var(--txt3);">📅 ${c.fecha}</span>
+            ${alertaVencimiento(c)}
+          </div>
+          <div style="font-size:14px;font-weight:600;">${c.cliente||"(Sin nombre)"}${c.empresa?" - "+c.empresa:""}</div>
+          ${c.proyecto?`<div style="font-size:12px;color:var(--txt3);margin-top:2px;">📍 ${c.proyecto}</div>`:""}
+          <div style="display:flex;gap:6px;margin-top:5px;flex-wrap:wrap;"><span class="badge-blue">${np} puerta${np>1?"s":""}</span>${c.flete?`<span class="badge-green">🚛 ${c.flete.destino}</span>`:""}${c.descuento>0?`<span class="badge-red">${c.descuento}% dcto</span>`:""}</div>
+          <div style="margin-top:6px;" onclick="event.stopPropagation();">${estadoBadge(c.estado||"pendiente")}</div>
+          ${c.notas?`<div style="font-size:11px;color:var(--txt3);margin-top:3px;font-style:italic;">📝 ${c.notas.substring(0,60)}${c.notas.length>60?"...":""}</div>`:""}
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:Space Grotesk;font-size:16px;font-weight:800;color:#FFF;text-shadow:0 0 6px rgba(255,255,255,.7);">${fmt(c.totalFinal)}</div>
+          <div style="font-size:10px;color:var(--txt3);">${c.iva?"con IVA":"neto"}</div>
+          <div style="display:flex;gap:5px;margin-top:5px;justify-content:flex-end;">
+            <button class="btn btn-sm" style="background:var(--gold-bg);border:1px solid rgba(191,136,64,.3);color:var(--gold-l);" onclick="event.stopPropagation();modalEstado('${c.ncot}')">✏️ Estado</button>
+            <button class="btn btn-sm" style="background:rgba(42,92,170,.15);border:1px solid rgba(42,92,170,.3);color:var(--blue-l);" onclick="event.stopPropagation();editarCot('${c.ncot}')">🖊️ Editar</button>
+            <button class="btn btn-red btn-sm" onclick="event.stopPropagation();borrarC('${c.ncot}')">🗑️</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  });
+  return h;
+}
+function borrarC(ncot){if(!confirm("¿Eliminar "+ncot+"?"))return;saveH(loadH().filter(c=>c.ncot!==ncot));renderApp();}
+function verCot(ncot){
+  var c=loadH().find(function(x){return x.ncot===ncot;});
+  if(!c)return;
+  // Preparar datos con defaults seguros para campos nuevos
+  var puertas=(c.puertas||[]).map(function(p){
+    return Object.assign({modelo:"",prepintada:null,conVidrio:null,chapero:null,precioAcero:0},p);
+  });
+  // Guardar C temporal para renderizar resumen en modal
+  var cTemp=Object.assign({},c,{
+    puertas:puertas,
+    flete:c.flete||null,
+    descuento:c.descuento||0,
+    iva:c.iva||false
+  });
+  // Renderizar resumen en modal sin cambiar el tab
+  var htmlResumen=renderResumenData(cTemp);
+  var wrap=document.createElement("div");
+  wrap.id="modal-container";
+  wrap.innerHTML='<div class="modal-bg" id="modal-bg" style="padding:12px;overflow-y:auto;">'
+    +'<div style="max-width:920px;margin:0 auto;background:var(--bg2);border:1px solid var(--bdr2);border-radius:14px;padding:20px;position:relative;">'
+    +'<button onclick="cerrarModal()" style="position:sticky;top:0;float:right;background:var(--bg3);border:1px solid var(--bdr2);color:var(--txt2);border-radius:8px;padding:6px 14px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;z-index:10;">✕ Cerrar</button>'
+    +htmlResumen
+    +'</div></div>';
+  wrap.querySelector("#modal-bg").addEventListener("click",function(e){
+    if(e.target.id==="modal-bg")cerrarModal();
+  });
+  document.body.appendChild(wrap);
+  setTimeout(function(){
+    var bi=wrap.querySelector(".vercot-imprimir");
+    var be=wrap.querySelector(".vercot-editar");
+    if(bi)bi.addEventListener("click",function(){imprimirCot(bi.dataset.ncot);});
+    if(be)be.addEventListener("click",function(){cerrarModal();editarCot(be.dataset.ncot);});
+  },50);
+}
+
+function renderResumenData(cot){
+  // Renderiza resumen de una cotizacion guardada (sin modificar C global)
+  var T=calcTotalesCot(cot);
+  var gS="color:#FFF;text-shadow:0 0 7px rgba(255,255,255,.85),0 0 16px rgba(255,255,255,.3);";
+  var h='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;flex-wrap:wrap;gap:10px;">'
+    +'<div><div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;">Cotizacion · InDooR 2026 · Claudio Uribe</div>'
+    +'<div style="font-family:Space Grotesk;font-size:22px;font-weight:800;'+gS+'">'+cot.ncot+'</div>'
+    +'<div style="font-size:12px;color:var(--txt3);margin-top:4px;">📅 '+cot.fecha+'</div></div>'
+    +'<div style="display:flex;gap:8px;flex-wrap:wrap;">'
+    +'<button class="btn btn-p btn-sm vercot-imprimir" data-ncot="'+cot.ncot+'">🖨️ Imprimir</button>'
+    +'<button class="btn btn-green btn-sm vercot-editar" data-ncot="'+cot.ncot+'">🖊️ Editar</button>'
+    +'</div></div>';
+
+  // Cliente
+  h+='<div style="background:var(--bg3);border-radius:10px;padding:12px 16px;margin-bottom:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">';
+  if(cot.cliente)h+='<div><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.08em;">Cliente</div><div style="font-size:14px;font-weight:600;">'+cot.cliente+(cot.empresa?' - '+cot.empresa:'')+'</div></div>';
+  if(cot.fono)h+='<div><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.08em;">Fono</div><div style="font-size:13px;color:var(--txt2);">'+cot.fono+'</div></div>';
+  if(cot.proyecto)h+='<div style="grid-column:1/-1;"><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.08em;">Proyecto</div><div style="font-size:13px;color:var(--txt2);">📍 '+cot.proyecto+'</div></div>';
+  h+='</div>';
+
+  // Puertas
+  h+='<div style="background:var(--bg3);border-radius:10px;padding:12px 16px;margin-bottom:12px;">';
+  h+='<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--txt3);margin-bottom:10px;">Detalle de Puertas</div>';
+  cot.puertas.forEach(function(p,i){
+    var rec=RECINTOS.find(function(r){return r.id===p.recinto;});
+    var dsg=desglosePW(p);
+    var modeloStr=(p.modelo&&p.modelo!=="Lisa")?" "+p.modelo:"";
+    var esAcero=p.tipo==="Acero";
+    h+='<div style="border-bottom:1px solid var(--bdr);padding:9px 0;">';
+    h+='<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:6px;">';
+    h+='<div><div style="font-size:13px;font-weight:700;">'+(i+1)+'. '+(rec?rec.ico+' '+rec.n:'')+'</div>';
+    h+='<div style="font-size:12px;color:var(--gold-l);">'+p.tipo+modeloStr+(esAcero?'':' '+p.ancho+'×'+p.alto+'mm')+' - '+p.relleno+'</div></div>';
+    h+='<div style="text-align:right;"><div style="font-size:12px;font-weight:700;'+gS+'">'+fmt(dsg.total)+'</div>';
+    h+='<div style="font-size:10px;color:var(--txt3);">'+p.cant+' un × '+fmt(dsg.unit)+'</div></div></div>';
+    // Desglose componentes
+    h+='<div style="font-size:11px;color:var(--txt3);margin-top:4px;padding-left:8px;">';
+    if(dsg.pb>0)h+='🚪 Puerta: '+fmt(dsg.pb)+' c/u · ';
+    if(dsg.ma>0)h+='🪵 Marco: '+fmt(dsg.ma)+' c/u · ';
+    if(dsg.bi>0)h+='🔩 Bisagras: '+fmt(dsg.bi)+' c/u · ';
+    if(dsg.se>0)h+='⚙️ Servicios: '+fmt(dsg.se)+' c/u';
+    h+='</div></div>';
+  });
+  h+='<div style="display:flex;justify-content:space-between;padding-top:10px;"><div style="font-size:12px;font-weight:700;color:var(--txt2);text-transform:uppercase;">Subtotal Puertas</div>'
+    +'<div style="font-family:Space Grotesk;font-size:15px;font-weight:800;'+gS+'">'+fmt(T.s)+'</div></div>';
+  h+='</div>';
+
+  // Flete
+  if(cot.flete&&cot.flete.monto>0){
+    h+='<div style="background:var(--bg3);border-radius:10px;padding:12px 16px;margin-bottom:12px;">';
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;">';
+    h+='<div><div style="font-size:13px;font-weight:600;">🚛 Flete - '+cot.flete.destino+'</div>';
+    h+='<div style="font-size:11px;color:var(--txt3);">'+cot.flete.transportista+' · '+cot.flete.viajes+' viaje'+(cot.flete.viajes>1?"s":"")+'</div>';
+    if(cot.flete.comentario)h+='<div style="font-size:11px;color:var(--txt2);">📝 '+cot.flete.comentario+'</div>';
+    h+='</div><div style="font-size:15px;font-weight:700;color:var(--blue-l);">'+fmt(cot.flete.monto*cot.flete.viajes)+'</div></div></div>';
+  }
+
+  // Totales
+  h+='<div style="background:linear-gradient(135deg,rgba(191,136,64,.12),transparent);border:1px solid rgba(191,136,64,.3);border-radius:12px;padding:16px 18px;">';
+  h+='<div style="display:flex;justify-content:space-between;margin-bottom:7px;"><span style="font-size:13px;color:var(--txt2);">Subtotal</span><span style="font-size:14px;font-weight:600;">'+fmt(T.s)+'</span></div>';
+  if(T.d>0){h+='<div style="display:flex;justify-content:space-between;margin-bottom:7px;"><span style="font-size:13px;color:var(--txt2);">Descuento '+cot.descuento+'%</span><span style="font-size:14px;color:var(--red-l);">−'+fmt(T.d)+'</span></div>';}
+  if(cot.iva){h+='<div style="display:flex;justify-content:space-between;margin-bottom:7px;"><span style="font-size:13px;color:var(--txt2);">IVA 19%</span><span style="font-size:14px;">'+fmt(T.iv)+'</span></div>';}
+  h+='<div style="border-top:1px solid rgba(191,136,64,.3);padding-top:12px;display:flex;justify-content:space-between;align-items:center;">';
+  h+='<div style="font-size:11px;font-weight:700;color:var(--gold-l);text-transform:uppercase;">Total '+(cot.iva?"con IVA":"Neto")+(cot.descuento>0?" · "+cot.descuento+"% dcto":"")+'</div>';
+  h+='<div style="font-family:Space Grotesk;font-size:26px;font-weight:800;color:#FFF;text-shadow:0 0 10px rgba(255,255,255,.9),0 0 25px rgba(255,255,255,.5);">'+fmt(T.total)+'</div>';
+  h+='</div></div>';
+
+  h+='<div style="font-size:11px;color:var(--txt3);margin-top:12px;line-height:1.7;">* Precios netos CLP sin IVA. Válido 30 días. Sujeto a disponibilidad de stock.</div>';
+  return h;
+}
+
+function calcTotalesCot(cot){
+  var s=(cot.puertas||[]).reduce(function(a,p){return a+unitPW(p)*p.cant;},0)
+       +(cot.flete?cot.flete.monto*cot.flete.viajes:0);
+  var d=s*((cot.descuento||0)/100);
+  var sd=s-d;
+  var iv=cot.iva?sd*0.19:0;
+  return{s:s,d:d,sd:sd,iv:iv,total:sd+iv};
+}
+
+function imprimirCot(ncot){
+  // Cargar en C y generar PDF
+  var c=loadH().find(function(x){return x.ncot===ncot;});
+  if(!c)return;
+  var puertas=(c.puertas||[]).map(function(p){
+    return Object.assign({modelo:"",prepintada:null,conVidrio:null,chapero:null,precioAcero:0},p);
+  });
+  C=Object.assign({},c,{puertas:puertas,flete:c.flete||null,
+    pw:{recinto:"",cant:1,tipo:"",modelo:"",relleno:"",ancho:"",alto:"",precioAcero:0,
+        prepintada:null,conVidrio:null,chapero:null,tm:"",am:"",altm:"",matm:"",bis:"",cbis:3,servs:[]},
+    fw:"",ft:"RBM",resumen:true});
+  cerrarModal();
+  generarPDF();
+}
+function editarCot(ncot){
+  var c=loadH().find(function(x){return x.ncot===ncot;});
+  if(!c)return;
+  // Abrir modal de edición rápida de campos de encabezado
+  var content='<div class="modal-title">🖊️ Editar Cotizacion '+ncot+'</div>'
+    +'<div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;">'
+    +'<div><span class="label">N° Cotizacion</span><input id="ed-ncot" value="'+c.ncot+'"></div>'
+    +'<div><span class="label">Fecha</span><input id="ed-fecha" value="'+c.fecha+'"></div>'
+    +'<div><span class="label">Cliente</span><input id="ed-cli" value="'+(c.cliente||"")+'"></div>'
+    +'<div><span class="label">Empresa</span><input id="ed-emp" value="'+(c.empresa||"")+'"></div>'
+    +'<div><span class="label">Fono</span><input id="ed-fono" value="'+(c.fono||"")+'"></div>'
+    +'<div><span class="label">Email</span><input id="ed-email" value="'+(c.email||"")+'"></div>'
+    +'<div><span class="label">Proyecto / Obra</span><input id="ed-proy" value="'+(c.proyecto||"")+'"></div>'
+    +'<div><span class="label">Descuento %</span><input id="ed-dcto" type="number" min="0" max="100" value="'+(c.descuento||0)+'"></div>'
+    +'</div>'
+    +'<div style="display:flex;gap:8px;justify-content:flex-end;">'
+    +'<button class="btn btn-g btn-sm" onclick="cerrarModal()">Cancelar</button>'
+    +'<button class="btn btn-p btn-sm" id="btn-guardar-edit">💾 Guardar cambios</button>'
+    +'</div>';
+  abrirModal(content);
+  setTimeout(function(){
+    var btn=document.getElementById("btn-guardar-edit");
+    if(btn)btn.addEventListener("click",function(){
+      var hist=loadH();
+      var idx=hist.findIndex(function(x){return x.ncot===ncot;});
+      if(idx>-1){
+        hist[idx].ncot=document.getElementById("ed-ncot").value||hist[idx].ncot;
+        hist[idx].fecha=document.getElementById("ed-fecha").value||hist[idx].fecha;
+        hist[idx].cliente=document.getElementById("ed-cli").value;
+        hist[idx].empresa=document.getElementById("ed-emp").value;
+        hist[idx].fono=document.getElementById("ed-fono").value;
+        hist[idx].email=document.getElementById("ed-email").value;
+        hist[idx].proyecto=document.getElementById("ed-proy").value;
+        hist[idx].descuento=parseFloat(document.getElementById("ed-dcto").value)||0;
+        // Recalcular totales con nuevo descuento
+        var sd=hist[idx].totalNeto||0;
+        var dcto=hist[idx].descuento;
+        // Approximate recalc
+        var newSd=sd*(1-dcto/100)/(1-(hist[idx].descuento||0)/100)*(1-dcto/100);
+        hist[idx].totalFinal=hist[idx].iva?newSd*1.19:newSd;
+        saveH(hist);
+      }
+      cerrarModal();
+      renderApp();
+      alert("✅ Cotizacion actualizada correctamente.");
+    });
+  },50);
+}
+function exportXLS(){
+  var hist=loadH();
+  if(!hist.length){alert("No hay cotizaciones guardadas.");return;}
+
+  // Hoja 1 - Resumen por cotizacion
+  var h1="N° Cot\tFecha\tCliente\tEmpresa\tFono\tProyecto\tEstado\tPuertas\tFlete Destino\tDescuento%\tTotal Neto\tTotal Final\n";
+  hist.forEach(function(c){
+    var np=(c.puertas||[]).reduce(function(a,p){return a+p.cant;},0);
+    var est=ESTADOS[c.estado||"pendiente"]?ESTADOS[c.estado||"pendiente"].lbl:"Pendiente";
+    h1+=c.ncot+"\t"+c.fecha+"\t"+(c.cliente||"")+"\t"+(c.empresa||"")+"\t"+(c.fono||"")+"\t"+(c.proyecto||"")+"\t"+est+"\t"+np+"\t"+(c.flete?c.flete.destino:"")+"\t"+(c.descuento||0)+"\t"+(c.totalNeto||0)+"\t"+(c.totalFinal||0)+"\n";
+  });
+
+  // Hoja 2 - Detalle por puerta (una fila por puerta)
+  var h2="N° Cot\tFecha\tCliente\tEmpresa\tProyecto\tRecinto\tTipo Puerta\tRelleno\tAncho\tAlto\tMarco\tMaterial Marco\tBisagras\tServicios\tCantidad\tPrecio Unitario\tSubtotal Puerta\n";
+  hist.forEach(function(c){
+    (c.puertas||[]).forEach(function(p){
+      var rec=RECINTOS.find(function(r){return r.id===p.recinto;});
+      var recNom=rec?rec.n:(p.recinto||"");
+      var pb=0;
+      var ppSrc=window.PP_CUSTOM||PP;
+      var pr=ppSrc[p.tipo]&&ppSrc[p.tipo][+p.alto]&&ppSrc[p.tipo][+p.alto][+p.ancho]?ppSrc[p.tipo][+p.alto][+p.ancho]:null;
+      if(pr){var ai=p.relleno&&p.relleno.includes("Aislapol");pb=(ai&&pr[1]!=null)?pr[1]:(pr[0]||0);}
+      var ma=0;
+      if(p.tm&&p.altm&&p.matm){
+        var mt;if(p.tm==="F30")mt=MF30;else if(p.tm==="F60")mt=MF60;else if(p.am&&MS[p.am])mt=MS[p.am];
+        if(mt&&mt[+p.altm])ma=mt[+p.altm][p.matm]||0;
+      }
+      var bi=p.bis?((BISAGRAS.find(function(b){return b.id===p.bis;})||{p:0}).p*p.cbis):0;
+      var se=(p.servs||[]).reduce(function(a,id){var s=AS.find(function(x){return x.id===id;});return a+(s?s.p:0);},0);
+      var unit=pb+ma+bi+se;
+      var servNoms=(p.servs||[]).map(function(id){var s=AS.find(function(x){return x.id===id;});return s?s.n:"";}).filter(Boolean).join(" | ");
+      var marcoDes=(p.tm&&p.tm!="")?((p.tm==="std"?"Estandar":p.tm)+" "+(p.altm||"")+"mm"):"";
+      var bisDes=p.bis?((BISAGRAS.find(function(b){return b.id===p.bis;})||{n:""}).n+" x"+p.cbis):"";
+      h2+=c.ncot+"\t"+c.fecha+"\t"+(c.cliente||"")+"\t"+(c.empresa||"")+"\t"+(c.proyecto||"")+"\t"
+        +recNom+"\t"+p.tipo+"\t"+(p.relleno||"")+"\t"+(p.ancho||"")+"\t"+(p.alto||"")+"\t"
+        +marcoDes+"\t"+(p.matm||"")+"\t"+bisDes+"\t"+servNoms+"\t"
+        +p.cant+"\t"+Math.round(unit)+"\t"+Math.round(unit*p.cant)+"\n";
+    });
+    // Fila flete si existe
+    if(c.flete){
+      h2+=c.ncot+"\t"+c.fecha+"\t"+(c.cliente||"")+"\t"+(c.empresa||"")+"\t"+(c.proyecto||"")+"\t"
+        +"FLETE\t"+c.flete.destino+"\t"+c.flete.transportista+"\t\t\t\t\t\t\t"
+        +c.flete.viajes+"\t"+Math.round(c.flete.monto)+"\t"+Math.round(c.flete.monto*c.flete.viajes)+"\n";
+    }
+  });
+
+  // Exportar como 2 hojas usando XLSX si disponible
+  if(typeof XLSX!=="undefined"){
+    var wb=XLSX.utils.book_new();
+    var ws1=XLSX.utils.aoa_to_sheet(h1.trim().split("\n").map(function(r){return r.split("\t");}));
+    var ws2=XLSX.utils.aoa_to_sheet(h2.trim().split("\n").map(function(r){return r.split("\t");}));
+    // Ancho de columnas
+    ws1["!cols"]=[{wch:16},{wch:14},{wch:20},{wch:22},{wch:14},{wch:22},{wch:14},{wch:8},{wch:18},{wch:10},{wch:14},{wch:14}];
+    ws2["!cols"]=[{wch:16},{wch:14},{wch:18},{wch:20},{wch:20},{wch:14},{wch:10},{wch:18},{wch:7},{wch:7},{wch:16},{wch:18},{wch:20},{wch:30},{wch:8},{wch:14},{wch:14}];
+    XLSX.utils.book_append_sheet(wb,ws1,"Resumen Cotizaciones");
+    XLSX.utils.book_append_sheet(wb,ws2,"Detalle Puertas");
+    XLSX.writeFile(wb,"InDooR_Cotizaciones_"+mesK()+".xlsx");
+  } else {
+    // Fallback a TSV si no hay XLSX
+    var combined="=== RESUMEN ===\n"+h1+"\n\n=== DETALLE PUERTAS ===\n"+h2;
+    var b=new Blob(["\ufeff"+combined],{type:"text/tab-separated-values;charset=utf-8"});
+    var a=document.createElement("a");a.href=URL.createObjectURL(b);
+    a.download="InDooR_Cotizaciones_"+mesK()+".xls";a.click();
+  }
+}
+
+// ═══ DASHBOARD ═══
+function renderDashboard(){
+  const hist=loadH();
+  if(!hist.length)return`<div class="empty-state"><div style="font-size:36px;margin-bottom:10px;">📊</div><div style="font-size:14px;">Guarda cotizaciones para ver el dashboard.</div><div style="font-size:12px;color:var(--txt3);margin-top:6px;">Ve al cotizador, completa y presiona "💾 Guardar"</div></div>`;
+  const totC=hist.reduce((a,c)=>a+c.totalFinal,0);
+  const nP=hist.reduce((a,c)=>a+(c.puertas||[]).reduce((b,p)=>b+p.cant,0),0);
+  const conF=hist.filter(c=>c.flete).length;
+  const tProm=totC/hist.length;
+  const porTipo={};hist.forEach(c=>(c.puertas||[]).forEach(p=>{porTipo[p.tipo]=(porTipo[p.tipo]||0)+p.cant;}));
+  const porRec={};hist.forEach(c=>(c.puertas||[]).forEach(p=>{const r=RECINTOS.find(x=>x.id===p.recinto);const k=r?r.n:p.recinto||"Otro";porRec[k]=(porRec[k]||0)+p.cant;}));
+  const porMes={};hist.forEach(c=>{const m=c.mes||"N/A";porMes[m]=(porMes[m]||0)+c.totalFinal;});
+  const porDest={};hist.filter(c=>c.flete).forEach(c=>{const d=c.flete.destino;porDest[d]=(porDest[d]||0)+1;});
+  const topDest=Object.entries(porDest).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const porServ={};hist.forEach(c=>(c.puertas||[]).forEach(p=>(p.servs||[]).forEach(id=>{const s=AS.find(x=>x.id===id);if(s)porServ[s.n]=(porServ[s.n]||0)+1;})));
+  const topServ=Object.entries(porServ).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const porCli={};hist.forEach(c=>{const k=c.empresa||c.cliente||"Sin nombre";if(!porCli[k])porCli[k]={t:0,n:0};porCli[k].t+=c.totalFinal;porCli[k].n++;});
+  const topCli=Object.entries(porCli).sort((a,b)=>b[1].t-a[1].t).slice(0,6);
+  const porMarco={};hist.forEach(c=>(c.puertas||[]).forEach(p=>{if(p.tm){const k=p.tm==="std"?"Estandar 30mm":p.tm;porMarco[k]=(porMarco[k]||0)+p.cant;}}));
+  const GOLD=["#D9A85A","#BF8840","#96681F","#F0C878","#C89040","#A07030"];
+  const COLS=["#2A5CAA","#3DAF76","#E05050","#F59E0B","#8B5CF6","#5B8DD9"];
+  window._dd={porTipo,porRec,porMes,topDest,topServ,GOLD,COLS};
+  const KPI=calcKPIConversion(hist);
+  const CMP=calcComparativoMes(hist);
+  const venc=hist.filter(function(c){return alertaVencimiento(c).includes("VENCIDA")||alertaVencimiento(c).includes("Vence");}).length;
+  let h=`<div style="margin-bottom:10px;"><div class="step-title" style="font-size:19px;margin-bottom:2px;">📊 Dashboard Comercial</div>
+    <div style="font-size:12px;color:var(--txt3);">${hist.length} cotizaciones guardadas · Claudio Uribe · InDooR 2026</div></div>
+
+  <!-- KPI FILA 1: Volumen -->
+  <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--txt3);margin-bottom:8px;">📈 Volumen General</div>
+  <div class="kpi-grid" style="margin-bottom:8px;">
+    <div class="kpi-card" style="border-color:rgba(191,136,64,.3);">
+      <div class="kpi-label">Total Cotizado</div>
+      <div class="kpi-value" style="font-size:17px;">${fmt(totC)}</div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:4px;">${deltaBadge(CMP.pctMonto)}<span style="font-size:10px;color:var(--txt3);">vs mes ant.</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Cotizaciones</div>
+      <div class="kpi-value">${hist.length}</div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:4px;">${deltaBadge(CMP.pctN)}<span style="font-size:10px;color:var(--txt3);">vs mes ant.</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Puertas Cotizadas</div>
+      <div class="kpi-value">${nP}</div>
+      <div class="kpi-sub">Unidades totales</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Ticket Promedio</div>
+      <div class="kpi-value" style="font-size:16px;">${fmt(tProm)}</div>
+      <div class="kpi-sub">Por cotizacion</div>
+    </div>
+  </div>
+
+  <!-- KPI FILA 2: Conversión -->
+  <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--txt3);margin-bottom:8px;margin-top:14px;">🎯 Conversión y Pipeline</div>
+  <div class="kpi-grid" style="margin-bottom:8px;">
+    <div class="kpi-card" style="border-color:rgba(61,175,118,.3);">
+      <div class="kpi-label">Tasa de Cierre</div>
+      <div class="kpi-value" style="color:#FFF;text-shadow:0 0 8px rgba(61,175,118,.8),0 0 20px rgba(61,175,118,.4);">${KPI.tasa}%</div>
+      <div class="kpi-sub">${KPI.aprobadas} aprobadas / ${KPI.enviadas} enviadas</div>
+    </div>
+    <div class="kpi-card" style="border-color:rgba(61,175,118,.2);">
+      <div class="kpi-label">Aprobadas</div>
+      <div class="kpi-value" style="color:#3DAF76;">${KPI.aprobadas}</div>
+      <div class="kpi-sub">Confirmadas</div>
+    </div>
+    <div class="kpi-card" style="border-color:rgba(91,141,217,.2);">
+      <div class="kpi-label">En Curso</div>
+      <div class="kpi-value" style="color:#5B8DD9;">${KPI.enCurso}</div>
+      <div class="kpi-sub">Enviadas + Revisión</div>
+    </div>
+    <div class="kpi-card" style="border-color:${venc>0?"rgba(184,48,48,.3)":"var(--bdr)"};">
+      <div class="kpi-label">⚠️ Por Vencer</div>
+      <div class="kpi-value" style="${venc>0?"color:#ff8080;text-shadow:0 0 8px rgba(255,100,100,.6)":""};">${venc}</div>
+      <div class="kpi-sub">25+ días sin respuesta</div>
+    </div>
+  </div>
+
+  <!-- Comparativo mes actual vs anterior -->
+  <div class="card" style="margin-bottom:14px;border-color:rgba(191,136,64,.2);">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--txt3);margin-bottom:12px;">📅 Comparativo Mensual</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div>
+        <div style="font-size:11px;color:var(--txt3);margin-bottom:4px;">Mes actual (${CMP.mesActual})</div>
+        <div style="font-family:Space Grotesk;font-size:18px;font-weight:800;color:#FFF;text-shadow:0 0 8px rgba(255,255,255,.7);">${fmt(CMP.totActual)}</div>
+        <div style="font-size:11px;color:var(--txt3);margin-top:2px;">${CMP.nActual} cotizacion${CMP.nActual!==1?"es":""}</div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--txt3);margin-bottom:4px;">Mes anterior (${CMP.mesAnterior})</div>
+        <div style="font-family:Space Grotesk;font-size:18px;font-weight:700;color:var(--txt2);">${fmt(CMP.totAnterior)}</div>
+        <div style="font-size:11px;color:var(--txt3);margin-top:2px;">${CMP.nAnterior} cotizacion${CMP.nAnterior!==1?"es":""}</div>
+      </div>
+    </div>
+    ${CMP.pctMonto!==null?`<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--bdr);display:flex;align-items:center;gap:8px;">
+      <span style="font-size:12px;color:var(--txt2);">Variación:</span>
+      ${deltaBadge(CMP.pctMonto)}
+      <span style="font-size:11px;color:var(--txt3);">en monto cotizado</span>
+    </div>`:""}
+  </div>
+
+  <!-- Gráfico conversión embudo -->
+  <div class="chart-wrap" style="margin-bottom:14px;">
+    <div class="chart-title">🎯 Embudo de Conversión</div>
+    <canvas id="ch-conv" height="85"></canvas>
+  </div>
+  <div class="charts-2col">
+    <div class="chart-wrap"><div class="chart-title">🚪 Puertas por Tipo</div><canvas id="ch1" height="180"></canvas></div>
+    <div class="chart-wrap"><div class="chart-title">🏠 Puertas por Recinto</div><canvas id="ch2" height="180"></canvas></div>
+  </div>
+  <div class="chart-wrap"><div class="chart-title">📅 Monto Cotizado por Mes (CLP)</div><canvas id="ch3" height="100"></canvas></div>
+  <div class="charts-2col">
+    <div class="chart-wrap"><div class="chart-title">🚛 Top Destinos Flete</div><canvas id="ch4" height="180"></canvas></div>
+    <div class="chart-wrap"><div class="chart-title">🔧 Servicios más Cotizados</div><canvas id="ch5" height="180"></canvas></div>
+  </div>
+  <div class="chart-wrap"><div class="card-title" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--txt2);margin-bottom:12px;">🏢 Top Clientes / Empresas</div>`;
+  topCli.forEach(([k,v],i)=>{const pct=Math.round(v.t/totC*100);h+=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><div style="width:20px;height:20px;border-radius:50%;background:var(--gold-grd);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#fff;flex-shrink:0;">${i+1}</div><div style="flex:1;"><div style="display:flex;justify-content:space-between;margin-bottom:3px;"><span style="font-size:13px;font-weight:600;">${k}</span><span style="font-size:12px;color:var(--gold-l);font-weight:700;">${fmt(v.t)}</span></div><div style="height:4px;background:var(--bg3);border-radius:2px;"><div style="height:4px;background:var(--gold-grd);border-radius:2px;width:${pct}%;"></div></div></div><span class="badge-blue">${v.n} cot.</span></div>`;});
+  h+=`</div><div class="charts-2col"><div class="card"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--txt2);margin-bottom:10px;">🪵 Marcos Cotizados</div>`;
+  Object.entries(porMarco).sort((a,b)=>b[1]-a[1]).forEach(([k,v])=>{h+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--bdr);"><span style="font-size:13px;">${k}</span><span class="badge">${v} unds</span></div>`;});
+  h+=`</div><div class="card"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--txt2);margin-bottom:10px;">⚙️ Top Servicios</div>`;
+  topServ.forEach(([k,v])=>{h+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--bdr);"><span style="font-size:12px;color:var(--txt2);">${k}</span><span class="badge-green">${v}×</span></div>`;});
+  h+=`</div></div>`;
+  return h;
+}
+
+// ════════════════════════════════════════════════════
+// ASISTENTE IA - Cotizacion desde texto libre
+// Usa Claude API para interpretar requerimientos
+// ════════════════════════════════════════════════════
+
+// Estado del asistente
+var AI = {
+  input: "",
+  loading: false,
+  resultado: null,   // puertas interpretadas
+  error: "",
+  histIA: []         // historial de interpretaciones
+};
+
+function renderAsistente(){
+  // Panel configuracion API key — siempre visible arriba si no hay key o si se quiere cambiar
+  if(!window.INDOOR_API_KEY||window.INDOOR_SHOW_KEY_CONFIG){
+    return '<div class="section-hdr"><div class="step-title" style="font-size:19px;">🤖 Asistente IA - Configuracion</div></div>'
+      +'<div class="card" style="border-color:rgba(245,158,11,.4);">'
+      +'<div style="font-size:15px;font-weight:700;color:#F59E0B;margin-bottom:10px;">🔑 Ingresar API Key de Anthropic</div>'
+      +'<div style="font-size:13px;color:var(--txt2);margin-bottom:14px;">'
+      +'1. Ve a <strong>console.anthropic.com</strong><br>'
+      +'2. Clic en <strong>API Keys</strong> → <strong>Create Key</strong><br>'
+      +'3. Clic en el boton <strong>Copiar</strong> (no selecciones el texto a mano)<br>'
+      +'4. Pega aqui abajo con Ctrl+V y guarda</div>'
+      +'<span class="label">Pega tu API Key aqui (Ctrl+V)</span>'
+      +'<input id="api-key-input" type="text" placeholder="sk-ant-api03-..." style="margin-bottom:10px;font-size:12px;letter-spacing:.02em;">'
+      +'<div style="display:flex;gap:8px;">'
+      +'<button class="btn btn-p" onclick="guardarApiKey()" style="flex:1;">💾 Guardar API Key</button>'
+      +(window.INDOOR_API_KEY?'<button class="btn btn-g btn-sm" onclick="window.INDOOR_SHOW_KEY_CONFIG=false;renderApp()">Cancelar</button>':'')
+      +'</div>'
+      +'<div style="font-size:11px;color:var(--txt3);margin-top:8px;">La key se guarda en este navegador y nunca se comparte con nadie.</div>'
+      +'</div>';
+  }
+  var h = '<div class="section-hdr">'
+    +'<div class="step-title" style="font-size:19px;">🤖 Asistente IA - Cotizacion Inteligente</div>'
+    +'</div>';
+
+  // Explicación
+  h += '<div class="card" style="border-color:rgba(91,141,217,.3);margin-bottom:14px;">'
+    +'<div style="display:flex;align-items:flex-start;gap:14px;">'
+    +'<div style="font-size:28px;flex-shrink:0;">🤖</div>'
+    +'<div>'
+    +'<div style="font-size:14px;font-weight:700;color:var(--txt);margin-bottom:6px;">Cómo funciona</div>'
+    +'<div style="font-size:13px;color:var(--txt2);line-height:1.7;">'
+    +'Pega el correo del cliente, describe los requerimientos con tus palabras, o copia una tabla de puertas.<br>'
+    +'La IA interpreta la información, cruza con los precios InDooR y genera el borrador de cotizacion.<br>'
+    +'<strong style="color:var(--gold-l);">Tú solo revisas, corriges si algo está mal, y con un clic lo traspasas al cotizador.</strong>'
+    +'</div>'
+    +'</div></div>'
+    +'<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;">'
+    +'<span style="font-size:11px;background:var(--bg3);padding:4px 10px;border-radius:12px;color:var(--txt3);">✓ Correos de clientes</span>'
+    +'<span style="font-size:11px;background:var(--bg3);padding:4px 10px;border-radius:12px;color:var(--txt3);">✓ Listas de puertas</span>'
+    +'<span style="font-size:11px;background:var(--bg3);padding:4px 10px;border-radius:12px;color:var(--txt3);">✓ Descripción libre</span>'
+    +'<span style="font-size:11px;background:var(--bg3);padding:4px 10px;border-radius:12px;color:var(--txt3);">✓ Tablas copiadas</span>'
+    +'</div>'
+    +'</div>';
+
+  // Ejemplos rápidos
+  var ejemplos = [
+    "36 puertas MDF Copahue 800x2100 Aislapol con marco pino desnudo 60-70mm, precolgado y chapero 500",
+    "Necesito cotizar: Acceso 12 puertas MDF HR 850x2000, Baños 8 puertas MDF 700x2000 con celosía, Dormitorios 24 MDF 800x2100",
+    "Para el proyecto Villa Verde: 50 puertas MDF 4mm modelo Calbuco prepintadas 700x2100 relleno honey, marco pino prepintado, bisagras inox, precolgado normal"
+  ];
+
+  h += '<div class="card" style="margin-bottom:14px;">'
+    +'<div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--txt3);margin-bottom:10px;">💡 Ejemplos - haz clic para usar</div>'
+    +'<div style="display:flex;flex-direction:column;gap:7px;">';
+  ejemplos.forEach(function(ej,i){
+    h += '<div class="ia-ejemplo" data-ej="'+i+'" style="padding:9px 13px;border-radius:8px;background:var(--bg3);border:1px solid var(--bdr);cursor:pointer;font-size:12px;color:var(--txt2);transition:all .15s;">'
+      +'<span style="color:var(--gold-l);font-weight:600;">Ej '+(i+1)+':</span> '+ej
+      +'</div>';
+  });
+  h += '</div></div>';
+
+  // Input principal
+  h += '<div class="card">'
+    +'<span class="label">Ingresa los requerimientos del cliente</span>'
+    +'<textarea id="ia-input" style="height:280px;resize:vertical;font-size:13px;line-height:1.8;width:100%;min-width:100%;font-family:inherit;" '
+    +'placeholder="Ingresa los requerimientos aqui...">'+(AI.input||'')+'</textarea>'
+    +'<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">'
+    +'<button class="btn btn-p" id="btn-interpretar" style="font-size:14px;padding:11px 24px;">'
+    +(AI.loading?'<span id="ia-loading">⏳ Interpretando...</span>':'🤖 Interpretar y Cotizar')
+    +'</button>'
+    +'<button class="btn btn-g btn-sm" id="btn-limpiar-ia">🗑️ Limpiar</button>'
+    +'</div>'
+    +'</div>';
+
+  // Error
+  if(AI.error){
+    h += '<div class="warn" style="margin-bottom:14px;">⚠️ '+AI.error+'</div>';
+  }
+
+  // Resultado
+  if(AI.resultado&&AI.resultado.length>0){
+    h += renderResultadoIA();
+  }
+
+  return h;
+}
+
+function renderResultadoIA(){
+  var res = AI.resultado;
+  var h = '<div class="card" style="border-color:rgba(61,175,118,.3);">'
+    +'<div class="section-hdr">'
+    +'<div style="font-size:13px;font-weight:700;color:var(--green-l);">✅ Interpretacion completada - '+res.length+' tipo'+(res.length>1?"s":"")+" de puerta detectado"+(res.length>1?"s":"")+'</div>'
+    +'<button class="btn btn-p btn-sm" id="btn-traspasar">🚀 Traspasar al Cotizador</button>'
+    +'</div>';
+
+  // Tabla de resultados
+  h += '<div style="overflow-x:auto;">'
+    +'<table style="width:100%;border-collapse:collapse;font-size:12px;">'
+    +'<tr style="background:var(--bg3);">'
+    +'<th style="padding:8px;text-align:left;color:var(--gold-l);">Recinto</th>'
+    +'<th style="padding:8px;text-align:left;color:var(--txt2);">Tipo</th>'
+    +'<th style="padding:8px;text-align:left;color:var(--txt2);">Modelo</th>'
+    +'<th style="padding:8px;text-align:right;color:var(--txt2);">Ancho</th>'
+    +'<th style="padding:8px;text-align:right;color:var(--txt2);">Alto</th>'
+    +'<th style="padding:8px;text-align:left;color:var(--txt2);">Relleno</th>'
+    +'<th style="padding:8px;text-align:left;color:var(--txt2);">Marco</th>'
+    +'<th style="padding:8px;text-align:center;color:var(--txt2);">Cant.</th>'
+    +'<th style="padding:8px;text-align:right;color:var(--txt2);">Precio c/u</th>'
+    +'<th style="padding:8px;text-align:right;color:var(--gold-l);">Subtotal</th>'
+    +'</tr>';
+
+  var totalGeneral = 0;
+  res.forEach(function(p,i){
+    var bg = i%2===0?'var(--bg2)':'var(--bg3)';
+    var precio = p.precioUnit||0;
+    var sub = precio * p.cant;
+    totalGeneral += sub;
+    var alertaColor = p.alerta?'color:var(--red-l)':'color:var(--txt)';
+    h += '<tr style="background:'+bg+';">'
+      +'<td style="padding:8px;font-weight:600;'+alertaColor+'">'+p.recinto+'</td>'
+      +'<td style="padding:8px;">'+p.tipo+(p.prepintada?' <span class="badge-green" style="font-size:9px;">Prepint.</span>':'')+'</td>'
+      +'<td style="padding:8px;color:var(--txt2);">'+(p.modelo||'-')+'</td>'
+      +'<td style="padding:8px;text-align:right;">'+(p.ancho||'-')+'</td>'
+      +'<td style="padding:8px;text-align:right;">'+(p.alto||'-')+'</td>'
+      +'<td style="padding:8px;color:var(--txt2);">'+(p.relleno||'-')+'</td>'
+      +'<td style="padding:8px;color:var(--txt2);font-size:11px;">'+(p.marcoDesc||'-')+'</td>'
+      +'<td style="padding:8px;text-align:center;font-weight:700;">'+p.cant+'</td>'
+      +'<td style="padding:8px;text-align:right;">'+(precio>0?fmt(precio):'<span style="color:var(--red-l);">Consultar</span>')+'</td>'
+      +'<td style="padding:8px;text-align:right;font-weight:700;color:var(--gold-l);">'+(precio>0?fmt(sub):'-')+'</td>'
+      +'</tr>';
+    if(p.servicios&&p.servicios.length>0){
+      h += '<tr style="background:'+bg+';"><td colspan="10" style="padding:2px 8px 8px 24px;font-size:11px;color:var(--txt3);">'
+        +'⚙️ Servicios: '+p.servicios.join(' · ')
+        +'</td></tr>';
+    }
+    if(p.alerta){
+      h += '<tr style="background:rgba(184,48,48,.08);"><td colspan="10" style="padding:4px 8px;font-size:11px;color:var(--red-l);">⚠️ '+p.alerta+'</td></tr>';
+    }
+  });
+
+  h += '<tr style="background:var(--gold-bg);border-top:2px solid var(--gold);">'
+    +'<td colspan="9" style="padding:10px 8px;font-weight:700;color:var(--gold-l);text-transform:uppercase;font-size:11px;">TOTAL ESTIMADO NETO</td>'
+    +'<td style="padding:10px 8px;text-align:right;font-family:Space Grotesk;font-size:16px;font-weight:800;color:#FFF;text-shadow:0 0 8px rgba(255,255,255,.7);">'+fmt(totalGeneral)+'</td>'
+    +'</tr>';
+
+  h += '</table></div>';
+
+  // Notas de la IA
+  if(AI.notas){
+    h += '<div style="margin-top:12px;padding:10px 14px;background:var(--bg3);border-radius:8px;font-size:12px;color:var(--txt2);line-height:1.7;">'
+      +'<strong style="color:var(--gold-l);">📝 Notas del Asistente:</strong><br>'+AI.notas+'</div>';
+  }
+
+  h += '</div>';
+  return h;
+}
+
+function guardarApiKey(){
+  var k=document.getElementById("api-key-input");
+  if(!k||!k.value.trim()){alert("Ingresa la API Key primero.");return;}
+  // Limpiar espacios, saltos de linea y caracteres invisibles
+  var val=k.value.trim().replace(/[\r\n\t ]/g,"");
+  if(!val.startsWith("sk-ant-")){
+    alert("La key debe empezar con sk-ant-\nVerifica que la copiaste completa desde Anthropic.");
+    return;
+  }
+  window.INDOOR_API_KEY=val;
+  window.INDOOR_SHOW_KEY_CONFIG=false;
+  localStorage.setItem("indoor_api_key",val);
+  alert("API Key guardada correctamente. Ya puedes usar el Asistente IA.");
+  renderApp();
+}
+
+// API Key InDooR configurada
+(function(){
+  var k=localStorage.getItem("indoor_api_key");
+  window.INDOOR_API_KEY=k||"";
+})();
+
+function initAsistente(){
+  // Bind ejemplos
+  document.querySelectorAll(".ia-ejemplo").forEach(function(el){
+    el.addEventListener("click",function(){
+      var ejemplos=[
+        "36 puertas MDF Copahue 800x2100 Aislapol con marco pino desnudo 60-70mm, precolgado y chapero 500",
+        "Necesito cotizar: Acceso 12 puertas MDF HR 850x2000, Baños 8 puertas MDF 700x2000 con celosía, Dormitorios 24 MDF 800x2100",
+        "Para el proyecto Villa Verde: 50 puertas MDF 4mm modelo Calbuco prepintadas 700x2100 relleno honey, marco pino prepintado, bisagras inox, precolgado normal"
+      ];
+      var ta=document.getElementById("ia-input");
+      if(ta){ta.value=ejemplos[+el.dataset.ej];AI.input=ta.value;}
+    });
+    el.addEventListener("mouseover",function(){el.style.borderColor="var(--gold)";el.style.color="var(--txt)";});
+    el.addEventListener("mouseout",function(){el.style.borderColor="var(--bdr)";el.style.color="var(--txt2)";});
+  });
+
+  // Bind input
+  var ta=document.getElementById("ia-input");
+  if(ta){
+    ta.addEventListener("input",function(){AI.input=this.value;});
+    if(AI.input)ta.value=AI.input;
+  }
+
+  // Bind botón interpretar
+  var btn=document.getElementById("btn-interpretar");
+  if(btn&&!AI.loading){
+    btn.addEventListener("click",function(){
+      AI.input=document.getElementById("ia-input")?.value||"";
+      if(!AI.input.trim()){alert("Ingresa los requerimientos primero.");return;}
+      interpretarConIA();
+    });
+  }
+
+  // Bind limpiar
+  var bl=document.getElementById("btn-limpiar-ia");
+  if(bl)bl.addEventListener("click",function(){AI.input="";AI.resultado=null;AI.error="";AI.notas="";renderApp();});
+
+  // Bind traspasar
+  var bt=document.getElementById("btn-traspasar");
+  if(bt)bt.addEventListener("click",function(){traspasarAlCotizador();});
+}
+
+async function interpretarConIA(){
+  if(!AI.input.trim())return;
+  // Auto-detectar si pegaron una API key
+  var inputLimpio=AI.input.trim().split("\r").join("").split("\n").join("").split("\t").join("").split(" ").join("");
+  if(inputLimpio.startsWith("sk-ant-")){
+    window.INDOOR_API_KEY=inputLimpio;
+    try{localStorage.setItem("indoor_api_key",inputLimpio);}catch(e){}
+    try{sessionStorage.setItem("indoor_api_key",inputLimpio);}catch(e){}
+    AI.input="";
+    alert("API Key guardada. Ahora ingresa los requerimientos del cliente y vuelve a hacer clic en Interpretar.");
+    renderApp();
+    return;
+  }
+  if(!window.INDOOR_API_KEY){
+    var k=localStorage.getItem("indoor_api_key")||sessionStorage.getItem("indoor_api_key")||"";
+    if(!k){alert("Primero pega tu API Key en el campo y presiona Interpretar para guardarla.");return;}
+    window.INDOOR_API_KEY=k;
+  }
+  AI.loading=true;AI.error="";AI.resultado=null;
+  renderApp();
+
+  // Construir prompt con toda la info de precios InDooR
+  var preciosRef = construirRefPrecios();
+
+  var prompt = `Eres un experto en cotizacion de puertas InDooR SpA, Chile.
+
+Tu tarea es interpretar los requerimientos del cliente y extraer las puertas a cotizar.
+
+PRECIOS DISPONIBLES InDooR (neto CLP, 2026):
+${preciosRef}
+
+SERVICIOS DISPONIBLES:
+- Precolgado Normal: $3.827
+- Precolgado 1 Pierna: $2.296
+- Perforación Pomo: $1.708
+- Canterías Copahue/Lonquimay: $2.254
+- Canterías Calbuco/Antuco II: $2.049
+- Bisagra Cromo Satín 3.5x3.5: $720
+- Bisagra Acero Inox 3.5x3.5: $2.660
+- Burlete+Instalación: $9.316
+- Barredera+Instalación: $3.780
+- Celosía PVC 12.5x35cm: $5.619
+- Doble Bastidor: $4.540
+- Chapero 300mm: precio manual
+- Chapero 500mm: precio manual
+
+REQUERIMIENTO DEL CLIENTE:
+${AI.input}
+
+Responde SOLO con un JSON válido (sin texto adicional, sin markdown) con esta estructura exacta:
+{
+  "puertas": [
+    {
+      "recinto": "nombre del recinto",
+      "tipo": "MDF|MDF HR|F30|F60|Enchapada|Acero|MDF MC|MDF HR MC",
+      "modelo": "Lisa|Copahue|Calbuco|Antuco|Antuco II|Lonquimay|Llaima|Mara Clara",
+      "ancho": numero_mm,
+      "alto": numero_mm,
+      "relleno": "Carton Honey|Aislapol",
+      "prepintada": true|false,
+      "cant": numero,
+      "marcoDesc": "descripción breve del marco o null",
+      "marcoTipo": "std|F30|F60|null",
+      "marcoAncho": "60-70|75-90|95-120|null",
+      "marcoAlto": numero_mm_o_null,
+      "marcoMat": "Pino Desnudo|Pino Prepintado|Mara Clara|null",
+      "bisagraId": "b1|b2|b3|b4|b5|b6|null",
+      "cantBisagras": 3,
+      "servicios": ["lista de servicios detectados en texto"],
+      "servIds": ["pc1","ca1","ex6","ex7"],
+      "precioUnit": precio_calculado_o_0_si_no_disponible,
+      "alerta": "mensaje si hay algo que no pudo resolver o null"
+    }
+  ],
+  "notas": "observaciones generales del asistente sobre la interpretación"
+}
+
+Bisagras IDs: b1=Cromo Satín 3.5x3.5($720), b2=Cromo Satín 3x3($700), b3=Acero Níquel 3.5x3.5($1370), b4=Acero Inox 3.5x3.5($2660), b5=Acero Inox 3x3($2870), b6=Acero Inox 3x3 Lioi($2060)
+Servicios IDs: pc1=Precolgado Normal($3827), pc2=Precolgado 1 Pierna($2296), pf1=Perf.Pomo($1708), ca1=Cant.Copahue($2254), ca2=Cant.Calbuco($2049), ca5=Cant.Enchapada($4303), ca6=Prepintado Cantos($2869), ex1=Doble Cabezal($750), ex2=Doble Bastidor($4540), ex4=Doble Batiente($3030), ex6=Burlete+Inst($9316), ex7=Barredera+Inst($3780), ex8=Celosía 12.5x35($5619), ex9=Celosía 20x30($6569)
+
+IMPORTANTE — DATOS CRITICOS vs DATOS MENORES:
+
+REGLAS DE NEGOCIO INDOOR — APLICAR SIEMPRE:
+
+1. PUERTAS ACERO/METALICA:
+   - NO llevan canterías nunca
+   - Bisagra: Cromo Satín Canto Redondo 3×3 (b2, $700), 3 unidades
+   - Relleno: Poliuretano Inyectado (NUNCA Aislapol)
+   - Si no viene precio: usar precioAcero=70000, avisar "ASUMI precio Acero $70.000. Modificar en cotizador."
+
+2. ACCESO/EXTERIOR/COCINA + MDF: cambiar a MDF HR + Aislapol. Avisar.
+
+3. PRECIOS MARCOS (actualizados) — MUY IMPORTANTE:
+   - Marco Pino Desnudo 60-70mm 2100mm = $8.474
+   - Marco Pino Desnudo 75-90mm 2100mm = $11.840  ← usar cuando cliente dice "90mm" o "marco 90"
+   - Marco Pino Desnudo 75-90mm 2200mm = $11.842
+   - REGLA CRITICA: Si el cliente especifica "90mm" o "30x90" en el marco → SIEMPRE usar marcoAncho="75-90" y precio $11.840 (alto 2100) o $11.842 (alto 2200), SIN EXCEPCION, independiente del ancho de la puerta (600, 650, 700, 800, 900mm).
+   - Solo usar 60-70mm ($8.474) si el cliente dice explicitamente "70mm" o "marco 70" o no especifica ancho de marco.
+   - "Marco Pino Finger" = Marco Pino Desnudo (mismo producto).
+
+4. MEDIDAS EN CM: convertir a mm automáticamente (100cm=1000mm). Avisar.
+
+5. BISAGRAS — asignar según tipo de puerta:
+   - MDF, Enchapada: Cromo Satín Canto Redondo 3.5×3.5 (b1, $720), 3 unidades
+   - Acero/Metalica: Cromo Satín Canto Redondo 3×3 (b2, $700), 3 unidades
+   - F30/F60: Acero Níquel 3.5×3.5 Italinea 469 (b3, $1.370), 4 unidades
+
+6. PERFORACION — distinguir exactamente:
+   - Cliente dice "embutida" o "embutido" → usar pf4 "Perforación Embutida" ($5.635)
+   - Cliente dice "pomo" o "lateral" → usar pf1 "Perforación Pomo" ($1.708)
+   - NO agregar perforación si no la solicita explícitamente
+
+7. CHAPERO — distinguir exactamente:
+   - Cliente dice "chapero 300" → ex5b "Chapero 300mm" (precio manual)
+   - Cliente dice "chapero 500" → ex5c "Chapero 500mm" (precio manual)
+   - NO asumir tamaño si no lo especifica
+
+8. SERVICIOS: incluir SOLO los mencionados explícitamente. NUNCA agregar servicios no solicitados.
+
+9. MARCO PINO FINGER = Marco Pino Desnudo (mismo producto, distinto nombre en terreno).
+
+DATOS CRITICOS (si faltan, NO calcules ese recinto — pon precioUnit=0):
+- Ancho puerta faltante → alerta="FALTA ancho de puerta. No se puede calcular precio. Completar manualmente."
+- Alto puerta faltante → alerta="FALTA alto de puerta. No se puede calcular precio. Completar manualmente."
+- Tipo puerta faltante → alerta="FALTA tipo de puerta. Completar manualmente."
+
+DATOS MENORES (asume y avisa en alerta con prefijo ASUMI):
+- Marco "90mm" → marcoAncho="75-90", alerta="ASUMI marco 75-90mm por indicacion 90mm"
+- Marco "70mm" → marcoAncho="60-70", alerta="ASUMI marco 60-70mm"
+- Marco no especificado en acceso/exterior → marcoAncho="75-90", alerta="ASUMI marco 75-90mm para acceso"
+- Marco no especificado en interior/bano → marcoAncho="60-70", alerta="ASUMI marco 60-70mm para interior"
+- Alto marco no especificado → usar alto puerta redondeado al siguiente disponible (2100→2200, etc), avisar
+- Relleno no especificado + MDF HR o acceso → Aislapol, alerta="ASUMI relleno Aislapol"
+- Relleno no especificado + MDF interior → Carton Honey, alerta="ASUMI relleno Carton Honey"
+- Bisagras no especificadas → 3 unidades Cromo Satin 3.5x3.5, alerta="ASUMI 3 bisagras Cromo Satin"
+- Medidas redondeadas (ej 2205→2200) → alerta="ASUMI alto 2200mm (redondeado desde 2205mm)"
+- Chapero → siempre precio manual, NO incluir en precioUnit, indicar en servicios
+
+Pueden haber multiples alertas por recinto separadas por " | "
+Calcula precioUnit = puerta base + marco + bisagras(precio×cant) + servicios (sin chapero)`;
+
+  try {
+    var response = await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","x-api-key":window.INDOOR_API_KEY||"","anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-5",
+        max_tokens:4000,
+        messages:[{role:"user",content:prompt}]
+      })
+    });
+
+    if(!response.ok){
+      var err=await response.json();
+      throw new Error(err.error?.message||"Error API: "+response.status);
+    }
+
+    var data=await response.json();
+    var texto=data.content?.filter(function(c){return c.type==="text";}).map(function(c){return c.text;}).join("")||"";
+
+    // Limpiar posible markdown
+    texto=texto.replace(/```json[\n]?/g,"").replace(/```[\n]?/g,"").trim();
+    var parsed=JSON.parse(texto);
+
+    // Enriquecer con precios reales del sistema
+    AI.resultado=(parsed.puertas||[]).map(function(p){
+      return enriquecerPuerta(p);
+    });
+    AI.notas=parsed.notas||"";
+    AI.loading=false;
+
+  }catch(e){
+    AI.error="Error al interpretar: "+e.message+". Revisa la descripción e intenta nuevamente.";
+    AI.loading=false;
+  }
+  renderApp();
+}
+
+function construirRefPrecios(){
+  // Resumen compacto de precios para el prompt
+  var ref="MDF (Carton Honey / Aislapol) - Anchos 600-1100mm:\n";
+  [2000,2100,2200].forEach(function(al){
+    ref+="  Alto "+al+"mm: ";
+    [700,800,900,1000].forEach(function(an){
+      var r=PP.MDF&&PP.MDF[al]&&PP.MDF[al][an];
+      if(r)ref+=an+"mm=$"+Math.round(r[0]).toLocaleString("es-CL")+"/"+Math.round(r[1]).toLocaleString("es-CL")+" ";
+    });
+    ref+="\n";
+  });
+  ref+="MDF HR (Carton Honey / Aislapol) - Anchos 600-1100mm:\n";
+  [2000,2100].forEach(function(al){
+    ref+="  Alto "+al+"mm: ";
+    [700,800,850,900].forEach(function(an){
+      var r=PP["MDF HR"]&&PP["MDF HR"][al]&&PP["MDF HR"][al][an];
+      if(r)ref+=an+"mm=$"+Math.round(r[0]).toLocaleString("es-CL")+"/"+Math.round(r[1]).toLocaleString("es-CL")+" ";
+    });
+    ref+="\n";
+  });
+  ref+="F30: Alto 2000mm 700mm=$"+fmt(PP.F30[2000][700][0])+", 800mm=$"+fmt(PP.F30[2000][800][0])+"\n";
+  ref+="Marco Estandar Pino Desnudo 60-70mm: 2100=$8474 2200=$8895\n";
+  ref+="Marco Estandar Pino Prepintado 60-70mm: 2100=$10184 2200=$10658\n";
+  ref+="Marco Estandar 75-90mm Pino Desnudo: 2100=$11316 2200=$11842\n";
+  return ref;
+}
+
+function enriquecerPuerta(p){
+  // Recalcular precio con datos reales del sistema
+  var pw={
+    tipo:p.tipo||"MDF",
+    modelo:p.modelo||"",
+    relleno:p.relleno||"Carton Honey",
+    ancho:p.ancho||0,
+    alto:p.alto||0,
+    precioAcero:0,
+    conVidrio:false,
+    cant:p.cant||1,
+    tm:p.marcoTipo==="std"?"std":(p.marcoTipo||""),
+    am:p.marcoAncho||"",
+    altm:p.marcoAlto||0,
+    matm:p.marcoMat||"",
+    bis:p.bisagraId||"",
+    cbis:p.cantBisagras||3,
+    servs:p.servIds||[]
+  };
+
+  // Normalizar alto al más cercano disponible
+  var altosDisp=[2000,2100,2200,2400];
+  var altoCercano=altosDisp.reduce(function(prev,curr){
+    return Math.abs(curr-pw.alto)<Math.abs(prev-pw.alto)?curr:prev;
+  });
+  if(pw.alto>0&&altoCercano!==pw.alto){
+    p.alerta=(p.alerta?p.alerta+". ":"")+"Alto normalizado de "+pw.alto+"mm a "+altoCercano+"mm";
+    pw.alto=altoCercano;p.alto=altoCercano;
+  }
+
+  var precioReal=unitPW(pw);
+  // Puerta Acero sin precio manual → asumir 70000
+  if(pw.tipo==="Acero"&&(!pw.precioAcero||pw.precioAcero===0)){
+    pw.precioAcero=70000;
+    precioReal=pBase(pw)+pMarco(pw)+pBisag(pw)+pServs(pw);
+    p.alerta=(p.alerta?p.alerta+" | ":"")+"⚠️ ASUMI precio puerta Acero = $70.000. Verificar y modificar en cotizador.";
+  }
+
+  // Servicios: mantener todos los que vienen del prompt (ya filtrados por regla 8)
+  var serviciosFiltrados=(p.servicios||[]);
+  // Solo eliminar pf1/pf2 si no fue explicitamente mencionado "pomo" en servicios
+  var tienePomo=serviciosFiltrados.some(function(s){return s.toLowerCase().indexOf("pomo")>-1;});
+  var servIdsFiltrados=(pw.servs||[]).filter(function(id){
+    if((id==="pf1"||id==="pf2")&&!tienePomo)return false;
+    return true;
+  });
+  pw.servs=servIdsFiltrados;
+
+  return {
+    recinto:p.recinto||"Sin recinto",
+    tipo:pw.tipo,
+    modelo:pw.modelo,
+    ancho:pw.ancho,
+    alto:pw.alto,
+    relleno:pw.relleno,
+    prepintada:p.prepintada||false,
+    cant:pw.cant,
+    marcoDesc:p.marcoDesc||"",
+    servicios:serviciosFiltrados,
+    precioUnit:precioReal>0?precioReal:(p.precioUnit||0),
+    alerta:p.alerta||null,
+    _pw:pw
+  };
+}
+
+function traspasarAlCotizador(){
+  if(!AI.resultado||!AI.resultado.length){alert("No hay resultados para traspasar.");return;}
+
+  // Verificar datos cotizacion
+  if(!datosCompletos()){
+    alert("Completa primero los datos del cliente y proyecto en el Cotizador antes de traspasar.");
+    return;
+  }
+
+  // Convertir resultados IA a puertas del cotizador
+  var puertas=AI.resultado.map(function(r){
+    var pw=r._pw||{};
+    // Mapear recinto al id correcto
+    var recNom=(r.recinto||"").toLowerCase();
+    var recMap={acceso:"acceso",baño:"bano",bano:"bano","baño":"bano",dormitorio:"dormitorio",
+      cocina:"interior",cosina:"interior",cocina:"interior",terraza:"terraza",
+      logia:"logia",exterior:"exterior",interior:"interior"};
+    var recId="interior";
+    Object.keys(recMap).forEach(function(k){if(recNom.includes(k))recId=recMap[k];});
+
+    return Object.assign({},pw,{
+      recinto:recId,
+      cant:r.cant||1,
+      prepintada:r.prepintada||false,
+      conVidrio:null,
+      chapero:null
+    });
+  });
+
+  // Acumular en C.puertas
+  var tenia=C.puertas.length;
+  puertas.forEach(function(p){C.puertas.push(p);});
+
+  // Ir al cotizador paso 7 (¿más puertas?)
+  TAB="cotizador";
+  document.querySelectorAll(".nav-tab").forEach(function(b){b.classList.remove("on");});
+  var tc=document.getElementById("tab-cot");if(tc)tc.classList.add("on");
+  C.paso=7;
+
+  alert("Listo! "+puertas.length+" tipo"+(puertas.length>1?"s":"")+" de puerta traspasado al cotizador. Revisa y continua.");
+
+
+
+
+
+  AI.resultado=null;AI.input="";
+  renderApp();
+}
+
+
+function renderPrecios(){
+  var ls_pp=localStorage.getItem("indoor_precios_custom");
+  var custom=ls_pp?JSON.parse(ls_pp):null;
+  var h='<div class="section-hdr"><div class="step-title" style="font-size:19px;">💰 Actualizar Precios</div></div>';
+
+  h+='<div class="card">';
+  h+='<div style="font-size:13px;font-weight:600;color:var(--txt);margin-bottom:8px;">📂 Cargar Planilla de Precios Excel</div>';
+  h+='<div style="font-size:12px;color:var(--txt3);margin-bottom:14px;">Sube el archivo <strong style="color:var(--gold-l);">Precios_Indoor_FECHA.xlsx</strong> cuando InDooR actualice la lista.</div>';
+  h+='<div class="upload-zone"><input type="file" accept=".xlsx,.xls" onchange="procesarExcelPrecios(event)">';
+  h+='<div style="font-size:32px;margin-bottom:8px;">📊</div>';
+  h+='<div style="font-size:14px;font-weight:600;color:var(--txt);">Arrastra o haz clic para subir</div>';
+  h+='<div style="font-size:11px;color:var(--txt3);margin-top:4px;">Precios_Indoor_FECHA.xlsx</div></div></div>';
+
+  if(custom){
+    h+='<div class="card" style="border-color:rgba(61,175,118,.3);"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">';
+    h+='<div><div style="font-size:13px;font-weight:700;color:var(--green-l);">✅ Precios personalizados activos</div>';
+    h+='<div style="font-size:12px;color:var(--txt3);margin-top:3px;">Cargados el '+custom.fecha+' - '+custom.registros+' precios · '+custom.archivo+'</div></div>';
+    h+='<button class="btn btn-red btn-sm" onclick="restaurarPrecios()">Restaurar originales</button>';
+    h+='</div></div>';
+  } else {
+    h+='<div class="card" style="border-color:rgba(42,92,170,.3);"><div style="font-size:13px;color:var(--blue-l);">ℹ️ Usando precios originales Precios_Indoor_24042026.xlsx</div></div>';
+  }
+
+  // Función helper tabla de precios
+  function tablaPrecios(tipo, titulo, useAislapol){
+    var src=window.PP_CUSTOM||PP;
+    var t='<div class="card"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--txt3);margin-bottom:10px;">'+titulo+'</div>';
+    t+='<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:12px;">';
+    t+='<tr style="background:var(--bg3);"><th style="padding:6px 8px;text-align:left;color:var(--gold-l);font-weight:700;">Alto↓ / Ancho→</th>';
+    [600,700,800,900,1000].forEach(function(a){t+='<th style="padding:6px 8px;text-align:right;color:var(--txt2);">'+a+'</th>';});
+    t+='</tr>';
+    [2000,2100,2200,2400].forEach(function(al,i){
+      t+='<tr style="background:'+(i%2===0?'var(--bg2)':'var(--bg3)')+';">';
+      t+='<td style="padding:6px 8px;font-weight:700;color:var(--gold-l);">'+al+'mm</td>';
+      [600,700,800,900,1000].forEach(function(an){
+        var row=src[tipo]&&src[tipo][al]&&src[tipo][al][an]?src[tipo][al][an]:null;
+        var p=row?(useAislapol?row[1]:row[0]):null;
+        t+='<td style="padding:6px 8px;text-align:right;color:var(--txt2);">'+(p&&p>0?"$"+Math.round(p).toLocaleString("es-CL"):"-")+'</td>';
+      });
+      t+='</tr>';
+    });
+    t+='</table></div></div>';
+    return t;
+  }
+
+  // F30 y F60 - tabla diferente (solo altos 2000,2100,2200)
+  function tablaF(tipo, titulo){
+    var src=window.PP_CUSTOM||PP;
+    var altosF=[2000,2100,2200];
+    var t='<div class="card"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--txt3);margin-bottom:10px;">'+titulo+'</div>';
+    t+='<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:12px;">';
+    t+='<tr style="background:var(--bg3);"><th style="padding:6px 8px;text-align:left;color:var(--gold-l);font-weight:700;">Alto↓ / Ancho→</th>';
+    [600,700,800,900,1000].forEach(function(a){t+='<th style="padding:6px 8px;text-align:right;color:var(--txt2);">'+a+'</th>';});
+    t+='</tr>';
+    altosF.forEach(function(al,i){
+      t+='<tr style="background:'+(i%2===0?'var(--bg2)':'var(--bg3)')+';">';
+      t+='<td style="padding:6px 8px;font-weight:700;color:var(--gold-l);">'+al+'mm</td>';
+      [600,700,800,900,1000].forEach(function(an){
+        var row=src[tipo]&&src[tipo][al]&&src[tipo][al][an]?src[tipo][al][an]:null;
+        var p=row?row[0]:null;
+        t+='<td style="padding:6px 8px;text-align:right;color:var(--txt2);">'+(p&&p>0?"$"+Math.round(p).toLocaleString("es-CL"):"-")+'</td>';
+      });
+      t+='</tr>';
+    });
+    t+='</table></div></div>';
+    return t;
+  }
+
+  h+=tablaPrecios("MDF","Vista Rápida - Precios MDF 4mm (neto, Carton Honey)",false);
+  h+=tablaPrecios("MDF","Vista Rápida - Precios MDF 4mm (neto, Aislapol)",true);
+  h+=tablaPrecios("MDF HR","Vista Rápida - Precios MDF HR 4mm (neto, Carton Honey)",false);
+  h+=tablaPrecios("MDF HR","Vista Rápida - Precios MDF HR 4mm (neto, Aislapol)",true);
+  h+=tablaF("F30","Vista Rápida - Precios F30 (neto)");
+  h+=tablaF("F60","Vista Rápida - Precios F60 (neto)");
+  return h;
+}
+
+function restaurarPrecios(){
+  if(confirm("Volver a precios originales?"))
+  {localStorage.removeItem("indoor_precios_custom");window.PP_CUSTOM=null;renderApp();}
+}
+
+function procesarExcelPrecios(ev){
+  var file=ev.target.files[0];
+  if(!file)return;
+  if(typeof XLSX==="undefined"){alert("Librería Excel no cargada. Verifica conexión.");return;}
+  var reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      var wb=XLSX.read(e.target.result,{type:"array"});
+      var newPP={MDF:{},"MDF HR":{},F30:{},F60:{},Enchapada:{}};
+      var registros=0;
+      var sheetNames=wb.SheetNames;
+      var hojasMDF=sheetNames.filter(function(n){return n.match(/pintura|mdf|puerta/i);});
+      var hojasF30=sheetNames.filter(function(n){return n.match(/f30|cortafuego 30/i);});
+      var hojasF60=sheetNames.filter(function(n){return n.match(/f60|cortafuego 60/i);});
+      var hojasEnch=sheetNames.filter(function(n){return n.match(/enchap|mara/i);});
+      function leerHoja(sheetName,tipo){
+        if(!sheetName||!wb.Sheets[sheetName])return;
+        var data=XLSX.utils.sheet_to_json(wb.Sheets[sheetName],{header:1,defval:null});
+        data.forEach(function(row){
+          if(!row||row.length<3)return;
+          var alto=parseInt(row[0]);
+          if(![2000,2100,2200,2400].includes(alto))return;
+          if(!newPP[tipo][alto])newPP[tipo][alto]={};
+          ANCHOS.forEach(function(ancho,ai){
+            var val=row[ai+1];
+            if(val&&!isNaN(parseFloat(val))){
+              var precio=parseFloat(val);
+              if(precio>1000){
+                var ex=PP[tipo]&&PP[tipo][alto]&&PP[tipo][alto][ancho];
+                newPP[tipo][alto][ancho]=[precio,ex&&ex[1]?ex[1]:null];
+                registros++;
+              }
+            }
+          });
+        });
+      }
+      if(hojasMDF.length)leerHoja(hojasMDF[0],"MDF");
+      if(hojasF30.length)leerHoja(hojasF30[0],"F30");
+      if(hojasF60.length)leerHoja(hojasF60[0],"F60");
+      if(hojasEnch.length)leerHoja(hojasEnch[0],"Enchapada");
+      if(registros===0){alert("No se encontraron precios. Hojas: "+sheetNames.join(", "));return;}
+      Object.keys(PP).forEach(function(tipo){if(!Object.keys(newPP[tipo]).length)newPP[tipo]=JSON.parse(JSON.stringify(PP[tipo]));});
+      var custom={fecha:hoy(),registros:registros,pp:newPP,archivo:file.name};
+      localStorage.setItem("indoor_precios_custom",JSON.stringify(custom));
+      window.PP_CUSTOM=newPP;
+      alert("✅ "+registros+" precios cargados · "+file.name);
+      renderApp();
+    }catch(err){alert("Error al leer Excel: "+err.message);}
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+// Cargar precios custom al inicio
+(function(){
+  var lsp=localStorage.getItem("indoor_precios_custom");
+  if(lsp){try{window.PP_CUSTOM=JSON.parse(lsp).pp;}catch(e){}}
+})();
+
+// Override pBase para usar PP_CUSTOM si existe (ya definida arriba, solo asegurar)
+
+function initCharts(){
+  const d=window._dd;
+  if(!d)return;
+  function mkChart(id,type,labels,data,colors,opts){
+    var el=document.getElementById(id);
+    if(!el)return;
+    if(_ch[id])_ch[id].destroy();
+    _ch[id]=new Chart(el,{type:type,data:{labels:labels,datasets:[{data:data,backgroundColor:colors,borderColor:"transparent",borderWidth:0}]},options:opts});
+  }
+  var tickX={color:"#5C5650"};
+  var tickY={color:"#A09890"};
+  var gridC={color:"rgba(255,255,255,.04)"};
+  var ttBar={callbacks:{label:function(c){return "$"+Math.round(c.raw).toLocaleString("es-CL");}}};
+  var ttDot={callbacks:{label:function(c){return c.label+": "+c.raw;}}};
+  var legRight={position:"right",labels:{color:"#A09890",font:{size:10}}};
+  var legHide={display:false};
+
+  mkChart("ch1","doughnut",Object.keys(d.porTipo),Object.values(d.porTipo),d.GOLD,
+    {responsive:true,plugins:{legend:legRight,tooltip:ttDot}});
+
+  mkChart("ch2","bar",Object.keys(d.porRec),Object.values(d.porRec),d.COLS,
+    {responsive:true,plugins:{legend:{display:false},tooltip:ttBar},
+     scales:{x:{ticks:tickX,grid:gridC},y:{ticks:tickY,grid:gridC}}});
+
+  var mesL=Object.keys(d.porMes).sort();
+  var mesD=mesL.map(function(k){return d.porMes[k];});
+  if(_ch["ch3"])_ch["ch3"].destroy();
+  _ch["ch3"]=new Chart(document.getElementById("ch3"),{
+    type:"bar",
+    data:{labels:mesL,datasets:[{data:mesD,backgroundColor:"rgba(191,136,64,.6)",borderColor:"rgba(191,136,64,1)",borderWidth:1,borderRadius:4}]},
+    options:{responsive:true,
+      plugins:{legend:legHide,tooltip:{callbacks:{label:function(c){return "$"+Math.round(c.raw).toLocaleString("es-CL");}}}},
+      scales:{
+        x:{ticks:{color:"#5C5650"},grid:{display:false}},
+        y:{ticks:{color:"#5C5650",callback:function(v){return "$"+Math.round(v/1000)+"k";}},grid:gridC}
+      }
+    }
+  });
+
+  var dL=d.topDest.map(function(x){return x[0];});
+  var dD=d.topDest.map(function(x){return x[1];});
+  mkChart("ch4","doughnut",dL,dD,d.GOLD.concat(d.COLS),
+    {responsive:true,plugins:{legend:legRight,tooltip:ttDot}});
+
+  var sL=d.topServ.map(function(x){return x[0].substring(0,22);});
+  var sD=d.topServ.map(function(x){return x[1];});
+  mkChart("ch5","bar",sL,sD,d.COLS,
+    {responsive:true,plugins:{legend:{display:false},tooltip:ttBar},
+     scales:{x:{ticks:tickX,grid:gridC},y:{ticks:tickY,grid:gridC}}});
+
+  // Embudo conversión
+  var hist=loadH();
+  var kpi=calcKPIConversion(hist);
+  var convL=["Guardadas","Enviadas","En Revisión","Aprobadas","Rechazadas"];
+  var convD=[hist.length,kpi.enviadas+kpi.aprobadas+kpi.rechazadas,kpi.enCurso,kpi.aprobadas,kpi.rechazadas];
+  var convC=["rgba(191,136,64,.7)","rgba(42,92,170,.7)","rgba(245,158,11,.7)","rgba(42,122,82,.8)","rgba(184,48,48,.7)"];
+  var elC=document.getElementById("ch-conv");
+  if(elC){
+    if(_ch["ch-conv"])_ch["ch-conv"].destroy();
+    _ch["ch-conv"]=new Chart(elC,{
+      type:"bar",
+      data:{labels:convL,datasets:[{data:convD,backgroundColor:convC,borderColor:"transparent",borderWidth:0,borderRadius:6}]},
+      options:{indexAxis:"y",responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+" cotizaciones";}}}},
+        scales:{x:{ticks:{color:"#5C5650"},grid:{color:"rgba(255,255,255,.04)"}},y:{ticks:{color:"#A09890"},grid:{display:false}}}}
+    });
+  }
+}
+
+
+// ═══════════════════════════════════════════
+// ESTADOS DE COTIZACIÓN
+// ═══════════════════════════════════════════
+function abrirModal(content){
+  cerrarModal();
+  var wrap=document.createElement("div");
+  wrap.id="modal-container";
+  wrap.innerHTML="<div class='modal-bg' id='modal-bg'><div class='modal'>"+content+"</div></div>";
+  wrap.querySelector("#modal-bg").addEventListener("click",function(e){if(e.target.id==="modal-bg")cerrarModal();});
+  document.body.appendChild(wrap);
+}
+
+
+function loadPlt(){try{return JSON.parse(localStorage.getItem(LS_PLT)||"[]");}catch{return[];}}
+function savePlt(p){localStorage.setItem(LS_PLT,JSON.stringify(p));}
+
+function guardarPlantilla(){
+  if(!C.puertas.length){alert("No hay puertas en la cotizacion para guardar como plantilla.");return;}
+  var nombre=prompt("Nombre para esta plantilla (ej: Baño estándar, Acceso proyecto tipo):");
+  if(!nombre)return;
+  var plts=loadPlt();
+  plts.unshift({id:Date.now(),nombre:nombre,puertas:JSON.parse(JSON.stringify(C.puertas)),fecha:hoy()});
+  savePlt(plts);
+  alert("✅ Plantilla '"+nombre+"' guardada. Disponible en el paso 1 del cotizador.");
+}
+
+function aplicarPlantilla(id){
+  var plt=loadPlt().find(function(p){return p.id===id;});
+  if(!plt)return;
+  if(!confirm("¿Agregar las "+plt.puertas.length+" puertas de la plantilla '"+plt.nombre+"' a la cotizacion actual?"))return;
+  plt.puertas.forEach(function(p){C.puertas.push(JSON.parse(JSON.stringify(p)));});
+  cerrarModal();
+  C.paso=7;
+  renderApp();
+}
+
+function borrarPlantilla(id){
+  if(!confirm("¿Eliminar esta plantilla?"))return;
+  savePlt(loadPlt().filter(function(p){return p.id!==id;}));
+  cerrarModal();
+  modalPlantillas();
+}
+
+function borrarPlantilla(id){
+  if(!confirm("¿Eliminar esta plantilla?"))return;
+  savePlt(loadPlt().filter(function(p){return p.id!==id;}));
+  cerrarModal();
+  modalPlantillas();
+}
+
+
+
+// ═══════════════════════════════════════════
+// PDF PROFESIONAL con jsPDF
+// ═══════════════════════════════════════════
+function generarPDF(){
+  if(typeof window.jspdf==="undefined"){
+    alert("Librería PDF cargando... espera 3 segundos e intenta nuevamente.");
+    return;
+  }
+  var jsPDF=window.jspdf.jsPDF;
+  var doc=new jsPDF({orientation:"portrait",unit:"mm",format:"a4"});
+  var W=210,M=14,y=0;
+  var GOLD=[191,136,64],GOLDD=[150,105,40],WHITE=[245,240,232],DARK=[13,12,9],GRAY=[80,76,70],LGRAY=[140,135,128];
+  var BLUE=[42,92,170],GREEN=[42,122,82],RED=[180,50,50];
+
+  function addPage(){doc.addPage();y=16;}
+  function chk(need){if(y+need>280)addPage();}
+  function line(col,x1,x2,yy,w){doc.setDrawColor(col[0],col[1],col[2]);doc.setLineWidth(w||0.3);doc.line(x1,yy,x2,yy);}
+  function rect(col,x,yy,w,h,fill){if(fill){doc.setFillColor(col[0],col[1],col[2]);doc.rect(x,yy,w,h,"F");}else{doc.setDrawColor(col[0],col[1],col[2]);doc.rect(x,yy,w,h,"S");}}
+  function txt(str,x,yy,size,col,style,align){
+    doc.setFontSize(size||9);
+    doc.setFont("helvetica",style||"normal");
+    doc.setTextColor(col?col[0]:WHITE[0],col?col[1]:WHITE[1],col?col[2]:WHITE[2]);
+    doc.text(String(str||""),x,yy,{align:align||"left"});
+  }
+  function money(n){return n>0?"$"+Math.round(n).toLocaleString("es-CL"):"-";}
+
+  // ── HEADER FONDO OSCURO ──
+  rect(DARK,0,0,W,28,true);
+  rect(GOLD,0,28,W,1.2,true);
+  // Logo text
+  doc.setFont("helvetica","bold");doc.setFontSize(18);
+  doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);doc.text("InDoor",M,12);
+  doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);doc.text(" SpA",M+20,12);
+  doc.setFont("helvetica","normal");doc.setFontSize(7.5);
+  doc.setTextColor(LGRAY[0],LGRAY[1],LGRAY[2]);
+  doc.text("FÁBRICA DE PUERTAS · CABRERO, BIOBÍO · indoor-spa.cl",M,17);
+
+  // N° Cotizacion derecha
+  doc.setFont("helvetica","bold");doc.setFontSize(8);
+  doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);
+  doc.text(C.ncot,W-M,10,{align:"right"});
+  doc.setFont("helvetica","normal");doc.setFontSize(7.5);
+  doc.setTextColor(LGRAY[0],LGRAY[1],LGRAY[2]);
+  doc.text(C.fecha,W-M,15,{align:"right"});
+  doc.text("Claudio Uribe · Ejecutivo Comercial",W-M,20,{align:"right"});
+
+  // Título COTIZACIÓN centrado
+  doc.setFont("helvetica","bold");doc.setFontSize(22);
+  doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);
+  doc.text("COTIZACIÓN",W/2,23,{align:"center"});
+  y=36;
+
+  // ── DATOS CLIENTE ──
+  rect([22,22,28],M-2,y-4,W-2*(M-2),20,true);
+  txt("CLIENTE",M,y,7,GOLD,"bold");y+=5;
+  if(C.cliente){txt(C.cliente+(C.empresa?" - "+C.empresa:""),M,y,10,WHITE,"bold");y+=5;}
+  var row2=[];
+  if(C.fono)row2.push("📞 "+C.fono);
+  if(C.email)row2.push(C.email);
+  if(row2.length){txt(row2.join("   ·   "),M,y,7.5,LGRAY);y+=4;}
+  if(C.proyecto){txt("📍 Proyecto: "+C.proyecto,M,y,8,[210,180,100]);y+=5;}
+  y+=4;
+
+  // ── DETALLE POR RECINTO ──
+  C.puertas.forEach(function(p,i){
+    chk(50);
+    var rec=RECINTOS.find(function(r){return r.id===p.recinto;});
+    var dsg=desglosePW(p);
+    var modeloStr=(p.modelo&&p.modelo!=="Lisa")?" "+p.modelo:""; var chaperoStr=p.chapero?" · Chapero "+p.chapero+"mm":"";
+    var esAcero=p.tipo==="Acero";
+    var medStr=esAcero?"":"  "+p.ancho+"×"+p.alto+"mm";
+
+    // Cabecera recinto - fondo dorado
+    rect(GOLD,M-2,y-4,W-2*(M-2),8,true);
+    doc.setFont("helvetica","bold");doc.setFontSize(9);
+    doc.setTextColor(255,255,255);
+    doc.text((i+1)+". "+(rec?rec.n:""),M,y);
+    doc.text(p.cant+" unidades",W-M,y,{align:"right"});
+    y+=6;
+
+    // Descripción puerta
+    rect([24,24,30],M-2,y-3,W-2*(M-2),6,true);
+    txt(p.tipo+modeloStr+medStr+" - "+p.relleno,M,y,8,[220,200,150],"bold");
+    txt("Espesor: "+(["F30","F60","Acero"].includes(p.tipo)?"45mm":"40-46mm")+" · Batiente pino simple",W-M,y,7,LGRAY,"normal","right");
+    y+=7;
+
+    // Grid desglose
+    var cols=[M,M+75,M+105,M+140,W-M];
+    // Header tabla
+    doc.setFillColor(35,34,40);doc.rect(M-2,y-3.5,W-2*(M-2),5.5,"F");
+    txt("Componente",cols[0],y,7,LGRAY,"bold");
+    txt("P. Unitario",cols[2],y,7,LGRAY,"bold","right");
+    txt("Cantidad",cols[3],y,7,LGRAY,"bold","right");
+    txt("Subtotal",cols[4],y,7,LGRAY,"bold","right");
+    y+=5;
+
+    // Puerta base
+    doc.setFillColor(20,20,24);doc.rect(M-2,y-3.5,W-2*(M-2),5.5,"F");
+    txt("Puerta base"+(p.modelo==="Llaima"?" + Llaima":""),cols[0],y,8,WHITE);
+    txt(money(dsg.pb),cols[2],y,8,WHITE,"normal","right");
+    txt("×"+p.cant,cols[3],y,8,LGRAY,"normal","right");
+    doc.setFont("helvetica","bold");doc.setFontSize(8);
+    doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);
+    doc.text(money(dsg.pbT),cols[4],y,{align:"right"});
+    y+=5.5;
+
+    // Marco
+    if(dsg.ma>0){
+      doc.setFillColor(18,22,18);doc.rect(M-2,y-3.5,W-2*(M-2),5.5,"F");
+      txt("Marco "+(p.tm==="std"?"Estandar":p.tm)+" "+p.matm+" "+p.altm+"mm",cols[0],y,8,WHITE);
+      txt(money(dsg.ma),cols[2],y,8,WHITE,"normal","right");
+      txt("×"+p.cant,cols[3],y,8,LGRAY,"normal","right");
+      doc.setFont("helvetica","bold");doc.setFontSize(8);
+      doc.setTextColor(GREEN[0]+60,GREEN[1]+100,GREEN[2]+60);
+      doc.text(money(dsg.maT),cols[4],y,{align:"right"});
+      y+=5.5;
+    }
+    // Bisagras
+    if(dsg.bi>0){
+      var bNom=BISAGRAS.find(function(x){return x.id===p.bis;})||{n:""};
+      doc.setFillColor(18,18,25);doc.rect(M-2,y-3.5,W-2*(M-2),5.5,"F");
+      txt("Bisagras "+p.cbis+"× "+bNom.n,cols[0],y,8,WHITE);
+      txt(money(dsg.bi),cols[2],y,8,WHITE,"normal","right");
+      txt("×"+p.cant,cols[3],y,8,LGRAY,"normal","right");
+      doc.setFont("helvetica","bold");doc.setFontSize(8);
+      doc.setTextColor(167,139,250);
+      doc.text(money(dsg.biT),cols[4],y,{align:"right"});
+      y+=5.5;
+    }
+    // Servicios
+    (p.servs||[]).forEach(function(id){
+      var sv=AS.find(function(x){return x.id===id;});if(!sv)return;
+      var mk="spx_"+id;var mult=sv.mult||1;var spBase=sv.manual?(p[mk]||0):sv.p;var sp=spBase*mult;if(sp===0)return;
+      doc.setFillColor(16,16,20);doc.rect(M-2,y-3.5,W-2*(M-2),5.5,"F");
+      txt(sv.n,cols[0],y,7.5,[210,200,185]);
+      txt(money(sp),cols[2],y,7.5,[210,200,185],"normal","right");
+      txt("×"+p.cant,cols[3],y,7.5,LGRAY,"normal","right");
+      doc.setFont("helvetica","bold");doc.setFontSize(7.5);
+      doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);
+      doc.text(money(sp*p.cant),cols[4],y,{align:"right"});
+      y+=5.5;
+      chk(8);
+    });
+
+    // Total recinto
+    rect(GOLDD,M-2,y-3,W-2*(M-2),6.5,true);
+    doc.setFont("helvetica","bold");doc.setFontSize(9);
+    doc.setTextColor(255,255,255);
+    doc.text("SUBTOTAL RECINTO",M,y);
+    doc.text(money(dsg.total),W-M,y,{align:"right"});
+    y+=9;
+    chk(15);
+  });
+
+  // ── FLETE ──
+  if(C.flete&&totFlete()>0){
+    chk(12);
+    rect([30,45,85],M-2,y-3.5,W-2*(M-2),9,true);
+    doc.setFont("helvetica","bold");doc.setFontSize(9);
+    doc.setTextColor(BLUE[0]+80,BLUE[1]+80,255);
+    doc.text("FLETE - "+C.flete.destino,M,y);
+    doc.text(money(totFlete()),W-M,y,{align:"right"});
+    doc.setFont("helvetica","normal");doc.setFontSize(7.5);
+    doc.setTextColor(LGRAY[0],LGRAY[1],LGRAY[2]);
+    doc.text(C.flete.transportista+" · "+C.flete.viajes+" viaje"+(C.flete.viajes>1?"s":"")+" × "+money(C.flete.monto),M,y+4);
+    if(C.flete.comentario){
+      doc.setFontSize(7);doc.setTextColor(LGRAY[0],LGRAY[1],LGRAY[2]);
+      doc.text("Ref: "+C.flete.comentario.substring(0,90),M,y+8);
+    }
+    y+=11;
+  }
+
+  // ── TOTALES ──
+  chk(45);
+  var T=totales();
+  var txLeft=M+60;
+  rect([28,25,18],txLeft-4,y-4,W-txLeft-M+6,T.d>0?40:30,true);
+  rect(GOLD,txLeft-4,y-4,1.5,T.d>0?40:30,true);
+
+  doc.setFont("helvetica","normal");doc.setFontSize(9);
+  doc.setTextColor(LGRAY[0],LGRAY[1],LGRAY[2]);
+  doc.text("Subtotal",txLeft+2,y);
+  doc.setFont("helvetica","bold");
+  doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);
+  doc.text(money(T.s),W-M,y,{align:"right"});y+=7;
+
+  if(T.d>0){
+    doc.setFont("helvetica","normal");doc.setFontSize(8.5);
+    doc.setTextColor(LGRAY[0],LGRAY[1],LGRAY[2]);
+    doc.text("Descuento "+C.descuento+"%",txLeft+2,y);
+    doc.setFont("helvetica","bold");doc.setFontSize(8.5);
+    doc.setTextColor(RED[0]+40,RED[1]+40,RED[2]+40);
+    var descStr="-"+money(T.d);
+    doc.text(descStr,W-M,y,{align:"right"});y+=7;
+    doc.setFont("helvetica","normal");doc.setFontSize(8.5);
+    doc.setTextColor(LGRAY[0],LGRAY[1],LGRAY[2]);
+    doc.text("Subtotal c/descuento",txLeft+2,y);
+    doc.setFont("helvetica","bold");doc.setFontSize(8.5);
+    doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);
+    doc.text(money(T.sd),W-M,y,{align:"right"});y+=7;
+  }
+  if(C.iva){
+    doc.setFont("helvetica","normal");doc.setFontSize(9);
+    doc.setTextColor(LGRAY[0],LGRAY[1],LGRAY[2]);
+    doc.text("IVA 19%",txLeft+2,y);
+    doc.setFont("helvetica","bold");
+    doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);
+    doc.text(money(T.iv),W-M,y,{align:"right"});y+=7;
+  }
+
+  // Total final - bloque dorado
+  rect(GOLD,txLeft-4,y-4,W-txLeft-M+6,12,true);
+  doc.setFont("helvetica","bold");doc.setFontSize(10);
+  doc.setTextColor(255,255,255);
+  doc.text("TOTAL "+(C.iva?"CON IVA":"NETO")+(C.descuento>0?" ("+C.descuento+"% dcto)":""),txLeft+2,y+2);
+  doc.setFontSize(13);
+  doc.text(money(T.total),W-M,y+2,{align:"right"});
+  y+=16;
+
+  // ── PIE DE PÁGINA ──
+  var pageH=doc.internal.pageSize.getHeight();
+  rect(DARK,0,pageH-14,W,14,true);
+  rect(GOLD,0,pageH-14,W,0.8,true);
+  doc.setFont("helvetica","normal");doc.setFontSize(7);
+  doc.setTextColor(LGRAY[0],LGRAY[1],LGRAY[2]);
+  doc.text("* Precios netos CLP sin IVA. Válido 30 días. Sujeto a disponibilidad de stock. No incluye flete salvo el indicado.",W/2,pageH-9,{align:"center"});
+  doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);
+  doc.text("InDooR SpA · indoor-spa.cl · ventas@indoor-spa.cl · Claudio Uribe",W/2,pageH-5,{align:"center"});
+
+  doc.save("Cotizacion_"+C.ncot+".pdf");
+}
+
+</script>
+</body>
+</html>
