@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #fff;
+    color: #1e293b;
+    font-size: 10px;
+  }
+
+  /* ── PAGE ── */
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 0;
+    page-break-after: always;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: #0d1b3e;
+    padding: 14px 20px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: #F5A623;
+  }
+  .logo-text { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+  .logo-sub  { font-size: 9px; color: #4A9ED6; font-weight: 400; letter-spacing: .05em; margin-top: 1px; }
+  .header-right { text-align: right; }
+  .header-right .tagline { font-size: 10px; color: #cbd5e1; font-style: italic; }
+  .header-right .contact { font-size: 9px; color: #94a3b8; margin-top: 3px; }
+
+  /* ── BODY ── */
+  .body { padding: 14px 20px; }
+
+  /* ── INTRO STRIP ── */
+  .intro {
+    background: #f4f7fb;
+    border-left: 4px solid #F5A623;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    border-radius: 0 6px 6px 0;
+  }
+  .intro p { font-size: 10px; color: #334155; line-height: 1.55; }
+  .intro strong { color: #0d1b3e; font-weight: 700; }
+
+  /* ── SECTION LABEL ── */
+  .sec-lbl {
+    font-size: 8px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .1em; color: #64748b;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 4px; margin-bottom: 10px; margin-top: 14px;
+  }
+  .sec-lbl:first-child { margin-top: 0; }
+
+  /* ── PRODUCT GRID ── */
+  .prod-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .prod-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 8px 6px;
+    text-align: center;
+  }
+  .prod-card .prod-ico { font-size: 16px; margin-bottom: 4px; }
+  .prod-card .prod-name { font-size: 8.5px; font-weight: 700; color: #0d1b3e; margin-bottom: 2px; }
+  .prod-card .prod-desc { font-size: 7.5px; color: #64748b; line-height: 1.4; }
+  .prod-card .prod-tag {
+    display: inline-block; margin-top: 4px;
+    font-size: 7px; font-weight: 600; padding: 1px 5px;
+    border-radius: 10px; background: #e6f1fb; color: #185fa5;
+  }
+
+  /* ── VENTAJAS 2 COL ── */
+  .ventajas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  .ventaja {
+    display: flex; gap: 8px; align-items: flex-start;
+    padding: 8px 10px;
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 6px;
+  }
+  .ventaja .v-ico {
+    width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+  }
+  .ventaja .v-txt .v-title { font-size: 9px; font-weight: 700; color: #0d1b3e; margin-bottom: 2px; }
+  .ventaja .v-txt .v-desc  { font-size: 8px; color: #64748b; line-height: 1.4; }
+
+  /* ── COMPARATIVO TABLE ── */
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 8.5px; margin-bottom: 14px; }
+  .comp-table thead tr { background: #0d1b3e; }
+  .comp-table thead th { padding: 6px 8px; text-align: left; color: #fff; font-weight: 600; }
+  .comp-table thead th:nth-child(2) { color: #F5A623; text-align: center; }
+  .comp-table thead th:nth-child(3) { text-align: center; color: #94a3b8; }
+  .comp-table tbody tr:nth-child(even) { background: #f8fafc; }
+  .comp-table tbody td { padding: 5px 8px; border-bottom: 1px solid #e2e8f0; color: #334155; }
+  .comp-table tbody td:nth-child(2) { text-align: center; font-weight: 700; color: #22c55e; }
+  .comp-table tbody td:nth-child(3) { text-align: center; color: #94a3b8; }
+  .win { color: #22c55e !important; }
+  .lose { color: #ef4444 !important; }
+
+  /* ── SERVICIOS STRIP ── */
+  .serv-strip { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 14px; }
+  .serv-chip {
+    padding: 3px 8px; border-radius: 12px; font-size: 7.5px; font-weight: 500;
+    background: #e6f1fb; color: #185fa5; border: 1px solid #b5d4f4;
+  }
+
+  /* ── FLETE STRIP ── */
+  .flete-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; margin-bottom: 14px; }
+  .flete-card {
+    background: #f4f7fb; border: 1px solid #e2e8f0; border-radius: 6px;
+    padding: 7px 8px; text-align: center;
+  }
+  .flete-card .f-ciudad { font-size: 8.5px; font-weight: 700; color: #0d1b3e; }
+  .flete-card .f-rbm { font-size: 8px; color: #64748b; }
+  .flete-card .f-ind { font-size: 9px; font-weight: 700; color: #22c55e; }
+
+  /* ── STATS ROW ── */
+  .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 14px; }
+  .stat-box {
+    text-align: center; padding: 10px 8px;
+    border-radius: 6px; border: 1px solid #e2e8f0;
+  }
+  .stat-box .s-num { font-size: 18px; font-weight: 800; }
+  .stat-box .s-lbl { font-size: 8px; color: #64748b; margin-top: 2px; }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: #0d1b3e;
+    padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: auto;
+    position: absolute; bottom: 0; left: 0; right: 0;
+  }
+  .footer .f-left { color: #94a3b8; font-size: 8px; }
+  .footer .f-right { color: #4A9ED6; font-size: 8px; text-align: right; }
+  .footer .f-contact { color: #fff; font-size: 9px; font-weight: 600; }
+
+  /* ── HIGHLIGHT BOX ── */
+  .highlight {
+    background: linear-gradient(135deg, #0d1b3e 0%, #1a3b6e 100%);
+    border-radius: 8px; padding: 12px 16px; color: #fff; margin-bottom: 14px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .highlight .h-text { font-size: 10px; line-height: 1.5; color: #cbd5e1; max-width: 65%; }
+  .highlight .h-text strong { color: #F5A623; font-weight: 700; }
+  .highlight .h-num { font-size: 32px; font-weight: 800; color: #F5A623; text-align: right; }
+  .highlight .h-num span { display: block; font-size: 8px; color: #94a3b8; font-weight: 400; }
+
+  /* ── CERT ROW ── */
+  .cert-row { display: flex; gap: 8px; margin-bottom: 14px; }
+  .cert-badge {
+    flex: 1; padding: 7px 10px; border-radius: 6px; text-align: center;
+    border: 1px solid #e2e8f0;
+  }
+  .cert-badge .c-ico { font-size: 14px; }
+  .cert-badge .c-txt { font-size: 8px; font-weight: 700; color: #0d1b3e; margin-top: 3px; }
+  .cert-badge .c-sub { font-size: 7px; color: #64748b; }
+
+  @media print {
+    body { margin: 0; }
+    .page { page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PÁGINA 1 — EMPRESA + GAMA + VENTAJAS      -->
+<!-- ══════════════════════════════════════════ -->
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <div class="logo-text">InDooR <span style="color:#4A9ED6;font-weight:300">SpA</span></div>
+      <div class="logo-sub">LA PUERTA DEL SUR · CABRERO, BIOBÍO</div>
+    </div>
+    <div class="header-right">
+      <div class="tagline">"Fabricamos en el sur — entregamos en tu obra"</div>
+      <div class="contact">ventas@indoor-spa.cl · (+56 43) 2 874130 · (+56 9) 3208 0500</div>
+    </div>
+  </div>
+
+  <div class="body" style="padding-bottom: 50px;">
+
+    <!-- INTRO -->
+    <div style="height:10px"></div>
+    <div class="intro">
+      <p>InDooR SpA es una <strong>fábrica de puertas ubicada en Cabrero, Región del Biobío</strong>, que provee a constructoras, inmobiliarias y SERVIU en todo Chile. Fabricamos puertas MDF prepintadas, enchapadas, cortafuego F30/F60, metálicas y terciado — entregando directo en obra con plazo de <strong>5 a 7 días</strong>, sin intermediarios desde Santiago.</p>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-box" style="border-left:3px solid #F5A623;">
+        <div class="s-num" style="color:#F5A623;">+15</div>
+        <div class="s-lbl">años fabricando puertas</div>
+      </div>
+      <div class="stat-box" style="border-left:3px solid #4A9ED6;">
+        <div class="s-num" style="color:#4A9ED6;">5–7</div>
+        <div class="s-lbl">días entrega en obra sur</div>
+      </div>
+      <div class="stat-box" style="border-left:3px solid #22c55e;">
+        <div class="s-num" style="color:#22c55e;">78</div>
+        <div class="s-lbl">destinos con flete directo</div>
+      </div>
+      <div class="stat-box" style="border-left:3px solid #a78bfa;">
+        <div class="s-num" style="color:#a78bfa;">1 año</div>
+        <div class="s-lbl">garantía todos los productos</div>
+      </div>
+    </div>
+
+    <!-- GAMA PRODUCTOS -->
+    <div class="sec-lbl">Gama de productos</div>
+    <div class="prod-grid">
+      <div class="prod-card">
+        <div class="prod-ico">🚪</div>
+        <div class="prod-name">MDF Prepintada</div>
+        <div class="prod-desc">Lisa, Copahue, Calbuco, Antuco II, Lonquimay, Llaima, Osorno</div>
+        <span class="prod-tag">9 modelos</span>
+      </div>
+      <div class="prod-card">
+        <div class="prod-ico">🪵</div>
+        <div class="prod-name">Enchapada</div>
+        <div class="prod-desc">Mara Clara, Encino. Nevada, Calbuco, Copahue, Lonquimay, Osorno</div>
+        <span class="prod-tag">9 modelos</span>
+      </div>
+      <div class="prod-card" style="border-color:#fca5a5;">
+        <div class="prod-ico">🔥</div>
+        <div class="prod-name">Cortafuego</div>
+        <div class="prod-desc">F30 y F60 certificadas IDIEM. Marco Lenga nativo. Norma NCh354</div>
+        <span class="prod-tag" style="background:#fef2f2;color:#991b1b;">Cert. IDIEM</span>
+      </div>
+      <div class="prod-card" style="border-color:#c7d2fe;">
+        <div class="prod-ico">🔩</div>
+        <div class="prod-name">Metálica</div>
+        <div class="prod-desc">Lisa, Diamante, 9 Luces, Tronador. Con/sin Termopanel</div>
+        <span class="prod-tag" style="background:#eef2ff;color:#4338ca;">10 modelos</span>
+      </div>
+      <div class="prod-card">
+        <div class="prod-ico">📋</div>
+        <div class="prod-name">Terciado</div>
+        <div class="prod-desc">Lisa y Osorno. Relleno HoneyComb 38.5mm. Garantía 2 años</div>
+        <span class="prod-tag">2 años</span>
+      </div>
+    </div>
+
+    <!-- SERVICIOS -->
+    <div class="sec-lbl">Servicios de fábrica incluidos</div>
+    <div class="serv-strip">
+      <span class="serv-chip">✅ Precolgado</span>
+      <span class="serv-chip">✅ Precolgado 1 pierna</span>
+      <span class="serv-chip">✅ Perforación pomo</span>
+      <span class="serv-chip">✅ Perforación embutida</span>
+      <span class="serv-chip">✅ Canterías por modelo</span>
+      <span class="serv-chip">✅ Instalación celosías</span>
+      <span class="serv-chip">✅ Burlete marco</span>
+      <span class="serv-chip">✅ Barredor + ranurado</span>
+      <span class="serv-chip">✅ Doble bastidor</span>
+      <span class="serv-chip">✅ Triple bastidor</span>
+      <span class="serv-chip">✅ Termopanel vidrio</span>
+      <span class="serv-chip">✅ Cinta intumescente</span>
+      <span class="serv-chip">✅ Bisagras inox</span>
+      <span class="serv-chip">✅ Medidas especiales</span>
+    </div>
+
+    <!-- VENTAJAS -->
+    <div class="sec-lbl">Por qué InDooR</div>
+    <div class="ventajas-grid">
+      <div class="ventaja">
+        <div class="v-ico" style="background:#e6f1fb;">📍</div>
+        <div class="v-txt">
+          <div class="v-title">Fábrica en el sur</div>
+          <div class="v-desc">Planta en Cabrero, Biobío. Entregamos en tu obra en 5–7 días sin flete desde Santiago.</div>
+        </div>
+      </div>
+      <div class="ventaja">
+        <div class="v-ico" style="background:#fef3c7;">🏅</div>
+        <div class="v-txt">
+          <div class="v-title">Certificación IDIEM</div>
+          <div class="v-desc">Puertas F30/F60 certificadas. Carpeta técnica disponible para DOM y SERVIU.</div>
+        </div>
+      </div>
+      <div class="ventaja">
+        <div class="v-ico" style="background:#f0fdf4;">🔧</div>
+        <div class="v-txt">
+          <div class="v-title">Entrega lista para instalar</div>
+          <div class="v-desc">Precolgada, perforada y con cantería. Sin subcontratos en obra.</div>
+        </div>
+      </div>
+      <div class="ventaja">
+        <div class="v-ico" style="background:#fdf4ff;">👤</div>
+        <div class="v-txt">
+          <div class="v-title">Ejecutivo en tu zona</div>
+          <div class="v-desc">Atención directa en Chillán y Talca. Respuesta el mismo día.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CERT BADGES -->
+    <div class="cert-row">
+      <div class="cert-badge" style="background:#fef3c7;border-color:#fde68a;">
+        <div class="c-ico">📜</div>
+        <div class="c-txt">Norma NCh354</div>
+        <div class="c-sub">Todas las puertas</div>
+      </div>
+      <div class="cert-badge" style="background:#fef2f2;border-color:#fecaca;">
+        <div class="c-ico">🔥</div>
+        <div class="c-txt">Certificación IDIEM</div>
+        <div class="c-sub">F30 y F60</div>
+      </div>
+      <div class="cert-badge" style="background:#f0fdf4;border-color:#bbf7d0;">
+        <div class="c-ico">✅</div>
+        <div class="c-txt">Garantía 1 año</div>
+        <div class="c-sub">MDF, Metálica, F30/F60</div>
+      </div>
+      <div class="cert-badge" style="background:#eff6ff;border-color:#bfdbfe;">
+        <div class="c-ico">🏗</div>
+        <div class="c-txt">Proyectos SERVIU</div>
+        <div class="c-sub">DS49, DS1, programas habitacionales</div>
+      </div>
+      <div class="cert-badge" style="background:#faf5ff;border-color:#e9d5ff;">
+        <div class="c-ico">🚛</div>
+        <div class="c-txt">78 destinos</div>
+        <div class="c-sub">Flete directo todo Chile</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER P1 -->
+  <div class="footer">
+    <div class="f-left">InDooR SpA · Parcela 4, Sector La Quinta, Cabrero, VIII Región del Biobío</div>
+    <div class="f-right">
+      <div class="f-contact">Claudio Uribe — Ejecutivo Comercial Ñuble · Maule</div>
+      <div>ventas@indoor-spa.cl · indoor-spa.cl</div>
+    </div>
+  </div>
+
+</div><!-- end page 1 -->
+
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PÁGINA 2 — COMPARATIVO + FLETE + CONTACTO -->
+<!-- ══════════════════════════════════════════ -->
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <div class="logo-text">InDooR <span style="color:#4A9ED6;font-weight:300">SpA</span></div>
+      <div class="logo-sub">COMPARATIVO COMPETITIVO 2026</div>
+    </div>
+    <div class="header-right">
+      <div class="tagline">Precio puesto en obra — la diferencia real</div>
+      <div class="contact">ventas@indoor-spa.cl · (+56 9) 3208 0500</div>
+    </div>
+  </div>
+
+  <div class="body" style="padding-bottom: 50px;">
+    <div style="height:10px"></div>
+
+    <!-- HIGHLIGHT BOX -->
+    <div class="highlight">
+      <div class="h-text">
+        Toda la competencia fabrica en <strong>Santiago, RM</strong>. El flete de un proyecto de 300 puertas desde RM a Chillán cuesta entre <strong>$700.000 y $1.200.000</strong>. Con InDooR ese costo es mínimo — nuestra fábrica está en el sur.
+      </div>
+      <div style="text-align:right;">
+        <div class="h-num">$900K<span>ahorro promedio flete<br>proyecto 300 puertas Chillán</span></div>
+      </div>
+    </div>
+
+    <!-- COMPARATIVO TABLE -->
+    <div class="sec-lbl">InDooR vs competencia RM — atributos clave</div>
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th style="width:38%">Atributo</th>
+          <th style="width:31%">✅ InDooR SpA</th>
+          <th style="width:31%">❌ Competencia RM</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Ubicación fábrica</strong></td>
+          <td class="win">Cabrero, Biobío</td>
+          <td class="lose">Santiago, RM (+400 km)</td>
+        </tr>
+        <tr>
+          <td><strong>Flete a Chillán / Talca</strong></td>
+          <td class="win">Mínimo — entrega directa</td>
+          <td class="lose">$700K – $1.200.000 por proyecto</td>
+        </tr>
+        <tr>
+          <td><strong>Plazo de entrega en obra</strong></td>
+          <td class="win">5 – 7 días</td>
+          <td class="lose">15 – 25 días (despacho + flete)</td>
+        </tr>
+        <tr>
+          <td><strong>Puertas F30 / F60 certificadas</strong></td>
+          <td class="win">Sí — IDIEM</td>
+          <td style="color:#64748b;">Solo Tramasa / Moldtek</td>
+        </tr>
+        <tr>
+          <td><strong>Puertas metálicas</strong></td>
+          <td class="win">Sí — 10 modelos</td>
+          <td class="lose">Mayoría no tiene</td>
+        </tr>
+        <tr>
+          <td><strong>Servicio precolgado / perforado</strong></td>
+          <td class="win">Sí — lista para instalar</td>
+          <td class="lose">Sin servicio o subcontratado</td>
+        </tr>
+        <tr>
+          <td><strong>Atención comercial en zona</strong></td>
+          <td class="win">Ejecutivo en Chillán</td>
+          <td class="lose">Call center RM</td>
+        </tr>
+        <tr>
+          <td><strong>Precio total puesto en obra</strong></td>
+          <td class="win">Competitivo sin flete RM</td>
+          <td class="lose">Precio + $700K – $1.2M flete</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- FLETE ZONA -->
+    <div class="sec-lbl">Flete estimado — zona Ñuble y Maule (Transp. RBM, por viaje)</div>
+    <div class="flete-grid">
+      <div class="flete-card">
+        <div class="f-ciudad">Chillán</div>
+        <div class="f-rbm">RBM $244.000</div>
+        <div class="f-ind">InDooR $137.000</div>
+      </div>
+      <div class="flete-card">
+        <div class="f-ciudad">Concepción</div>
+        <div class="f-rbm">RBM $293.000</div>
+        <div class="f-ind">InDooR $153.000</div>
+      </div>
+      <div class="flete-card">
+        <div class="f-ciudad">Los Ángeles</div>
+        <div class="f-rbm">RBM $207.000</div>
+        <div class="f-ind">InDooR $119.000</div>
+      </div>
+      <div class="flete-card">
+        <div class="f-ciudad">Linares</div>
+        <div class="f-rbm">RBM $366.000</div>
+        <div class="f-ind">InDooR $286.000</div>
+      </div>
+      <div class="flete-card">
+        <div class="f-ciudad">Talca</div>
+        <div class="f-rbm">RBM $488.000</div>
+        <div class="f-ind">InDooR $360.000</div>
+      </div>
+      <div class="flete-card">
+        <div class="f-ciudad">Parral</div>
+        <div class="f-rbm">RBM $427.000</div>
+        <div class="f-ind">InDooR $212.000</div>
+      </div>
+      <div class="flete-card">
+        <div class="f-ciudad">Curicó</div>
+        <div class="f-rbm">RBM $549.000</div>
+        <div class="f-ind">InDooR $413.000</div>
+      </div>
+      <div class="flete-card">
+        <div class="f-ciudad">San Fernando</div>
+        <div class="f-rbm">RBM $610.000</div>
+        <div class="f-ind">InDooR $492.000</div>
+      </div>
+    </div>
+
+    <!-- ARGUMENTO CLAVE -->
+    <div style="background:#fffbeb;border:1px solid #fde68a;border-left:4px solid #F5A623;border-radius:0 6px 6px 0;padding:10px 14px;margin-bottom:14px;">
+      <div style="font-size:8.5px;font-weight:700;color:#92400e;margin-bottom:4px;">💬 Argumento que funciona en visita</div>
+      <div style="font-size:9px;color:#78350f;line-height:1.5;">
+        "Antes de comparar precio unitario, suma el flete. Un proveedor de Santiago te cobra entre $244.000 y $1.200.000 solo para llegar a tu obra en el sur. Con InDooR ese valor se reduce a la mitad — y además tienes un ejecutivo en Chillán que responde el mismo día."
+      </div>
+    </div>
+
+    <!-- CONTACTO -->
+    <div class="sec-lbl">Contacto y cotización</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div style="background:#f4f7fb;border-radius:6px;padding:12px 14px;">
+        <div style="font-size:11px;font-weight:700;color:#0d1b3e;margin-bottom:6px;">Claudio Uribe</div>
+        <div style="font-size:9px;color:#475569;margin-bottom:2px;">Ejecutivo Comercial — Ñuble · Maule</div>
+        <div style="font-size:9px;color:#475569;margin-bottom:2px;">📱 (+56 9) 3208 0500</div>
+        <div style="font-size:9px;color:#475569;margin-bottom:2px;">✉️ ventas@indoor-spa.cl</div>
+        <div style="font-size:9px;color:#475569;">📍 Chillán, Región de Ñuble</div>
+      </div>
+      <div style="background:#f4f7fb;border-radius:6px;padding:12px 14px;">
+        <div style="font-size:11px;font-weight:700;color:#0d1b3e;margin-bottom:6px;">InDooR SpA — Planta</div>
+        <div style="font-size:9px;color:#475569;margin-bottom:2px;">📞 (+56 43) 2 874130</div>
+        <div style="font-size:9px;color:#475569;margin-bottom:2px;">🌐 indoor-spa.cl</div>
+        <div style="font-size:9px;color:#475569;margin-bottom:2px;">✉️ ventas@indoor-spa.cl</div>
+        <div style="font-size:9px;color:#475569;">📍 Parcela 4, Sector La Quinta, Cabrero, Biobío</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER P2 -->
+  <div class="footer">
+    <div class="f-left">Precios netos CLP · Tarifas de flete referenciales · indoor-spa.cl</div>
+    <div class="f-right">
+      <div class="f-contact">indoor-spa.cl</div>
+      <div>Junio 2026</div>
+    </div>
+  </div>
+
+</div><!-- end page 2 -->
+
+</body>
+</html>
