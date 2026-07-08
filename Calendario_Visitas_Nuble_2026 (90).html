@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>InDooR — Calendario Visitas Ñuble 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#0a1f44;color:#e8edf5;font-size:13px}
+
+/* HEADER */
+.hdr{background:#122a5e;border-bottom:2px solid #3b82f6;padding:11px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.logo{background:#3b82f6;color:#0d1821;font-weight:900;font-size:15px;padding:4px 10px;border-radius:4px}
+.hdr-t h1{font-size:13px;font-weight:700;color:#dbeafe}
+.hdr-t p{font-size:10px;color:#64748b;margin-top:1px}
+.hstats{display:flex;gap:8px;flex-wrap:wrap}
+.hs{background:rgba(255,255,255,.04);border:1px solid #1a3a8f;border-radius:5px;padding:5px 12px;text-align:center}
+.hs-n{font-size:17px;font-weight:900;color:#3b82f6}
+.hs-l{font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.4px}
+
+/* TABS */
+.tabs{background:#122a5e;border-bottom:2px solid #1a3a8f;display:flex;flex-wrap:wrap}
+.tab{padding:9px 16px;cursor:pointer;font-size:12px;font-weight:700;color:#64748b;border:none;border-bottom:3px solid transparent;background:none;font-family:inherit;white-space:nowrap}
+.tab:hover{color:#e8edf5}
+.tab.on{color:#3b82f6;border-bottom-color:#3b82f6}
+
+/* PANELS */
+.panel{display:none;padding:14px 18px}
+.panel.on{display:block}
+
+/* WEEK NAV */
+.wnav{background:#122a5e;border-bottom:1px solid #1a3a8f;padding:8px 18px;display:flex;gap:5px;flex-wrap:wrap;align-items:center;position:sticky;top:0;z-index:10}
+.wbtn{padding:4px 12px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,0.35);background:transparent;color:#ffffff;white-space:nowrap}
+.wbtn:hover{border-color:#ffffff;color:#ffffff;background:rgba(255,255,255,0.1)}
+.wbtn.on{background:#3b82f6;color:#ffffff;border-color:#3b82f6}
+.wbtn.urg{border-color:#dc2626;color:#dc2626}
+.wbtn.urg.on{background:#dc2626;color:#fff}
+.wlbl{font-size:9px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:0 3px}
+
+/* TOOLBAR */
+.toolbar{padding:9px 18px;background:#122a5e;border-bottom:1px solid #1a3a8f;display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.toolbar input,.toolbar select{background:#0d2460;border:1px solid #1a3a8f;color:#e8edf5;padding:5px 9px;border-radius:5px;font-size:11px;font-family:inherit}
+.toolbar input{min-width:200px}
+.btn{padding:5px 13px;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer;border:none}
+.btn-p{background:#3b82f6;color:#0d1821}
+.btn-o{background:transparent;border:1px solid #1a3a8f;color:#e8edf5}
+.btn-g{background:#16a34a;color:#0d1821}
+.btn-o:hover{border-color:#3b82f6;color:#3b82f6}
+
+/* WEEK VIEW */
+.wview{display:none}
+.wview.on{display:block}
+.wnota{background:rgba(232,160,32,.07);border:1px solid rgba(232,160,32,.2);border-radius:5px;padding:7px 12px;font-size:11px;color:#60a5fa;margin-bottom:10px}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+
+/* DAY CARD */
+.dcol{background:#122a5e;border:1px solid #1a3a8f;border-radius:7px;overflow:hidden}
+.dhead{padding:8px 12px;border-bottom:2px solid;display:flex;align-items:center;justify-content:space-between}
+.dname{font-size:12px;font-weight:800;color:#dbeafe}
+.dfecha{font-size:10px;color:#64748b}
+.dsec{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-top:1px}
+.dcnt{font-size:10px;font-weight:900;padding:1px 7px;border-radius:9px;color:#0d1821}
+.dnota{background:rgba(232,160,32,.07);border:1px solid rgba(232,160,32,.15);border-radius:4px;padding:5px 9px;margin:6px 8px 0;font-size:10px;color:#3b82f6}
+.dbody{padding:6px}
+
+/* OBRA CARD */
+.oc{border:1px solid #1a3a8f;border-radius:5px;margin-bottom:5px;overflow:hidden;cursor:pointer;transition:border-color .15s}
+.oc:hover{border-color:#3b82f6}
+.oc-top{display:flex;gap:7px;padding:7px 9px;align-items:flex-start}
+.oc-num{width:20px;height:20px;border-radius:50%;font-size:9px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.oc-info{flex:1;min-width:0}
+.oc-p{font-size:11px;font-weight:700;color:#dbeafe}
+.oc-e{font-size:10px;color:#3b82f6;margin-top:1px}
+.oc-d{font-size:10px;color:#ffffff;font-weight:700;margin-top:2px}
+.oc-meta{padding:4px 9px;background:rgba(0,0,0,.2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:3px}
+.oc-foot{padding:4px 9px;display:flex;align-items:center;justify-content:space-between}
+.badge{display:inline-block;padding:1px 7px;border-radius:8px;font-size:9px;font-weight:700}
+.tag{display:inline-block;padding:1px 7px;border-radius:8px;font-size:9px;font-weight:700}
+.av-nuevo{background:rgba(42,159,216,.15);color:#3b82f6;border:1px solid rgba(42,159,216,.3)}
+.av-og{background:rgba(232,200,32,.15);color:#60a5fa;border:1px solid rgba(232,200,32,.3)}
+.av-term{background:rgba(90,122,150,.15);color:#64748b;border:1px solid rgba(90,122,150,.3)}
+.av-prel{background:rgba(155,108,247,.15);color:#7c3aed;border:1px solid rgba(155,108,247,.3)}
+.est-pend{background:rgba(232,200,32,.12);color:#60a5fa;border:1px solid rgba(232,200,32,.25)}
+.est-vis{background:rgba(39,201,122,.12);color:#16a34a;border:1px solid rgba(39,201,122,.25)}
+.est-cot{background:rgba(42,159,216,.12);color:#3b82f6;border:1px solid rgba(42,159,216,.25)}
+.est-rep{background:rgba(90,122,150,.12);color:#64748b;border:1px solid rgba(90,122,150,.25)}
+.est-sc{background:rgba(232,85,85,.12);color:#dc2626;border:1px solid rgba(232,85,85,.25)}
+.est-ov{background:rgba(155,108,247,.12);color:#7c3aed;border:1px solid rgba(155,108,247,.25)}
+.rbtn{background:none;border:1px solid #1a3a8f;border-radius:4px;color:#64748b;font-size:9px;padding:2px 7px;cursor:pointer;font-family:inherit}
+.rbtn:hover{border-color:#3b82f6;color:#3b82f6}
+
+/* CRM TABLE */
+.tbl-wrap{overflow-x:auto;border-radius:7px;border:1px solid #1a3a8f}
+table{width:100%;border-collapse:collapse;font-size:11px}
+thead th{background:#0d2460;padding:8px 10px;text-align:left;font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #1a3a8f;white-space:nowrap;cursor:pointer}
+thead th:hover{color:#3b82f6}
+tbody tr{border-bottom:1px solid rgba(30,51,71,.4)}
+tbody tr:hover{background:rgba(255,255,255,.02)}
+tbody td{padding:8px 10px;vertical-align:middle}
+.sem{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:5px}
+.sem-g{background:#16a34a;box-shadow:0 0 5px #16a34a}
+.sem-b{background:#3b82f6;box-shadow:0 0 5px #3b82f6}
+.sem-y{background:#60a5fa}
+.sem-r{background:#dc2626}
+.sem-m{background:#64748b}
+
+/* DIALOG MODAL */
+dialog{border:none;border-radius:9px;padding:0;background:#122a5e;color:#e8edf5;max-width:480px;width:95%;box-shadow:0 24px 64px rgba(0,0,0,.8)}
+dialog::backdrop{background:rgba(0,0,0,.82)}
+.dlg-body{padding:18px}
+.dlg-body h2{font-size:14px;color:#dbeafe;margin-bottom:14px}
+.fg{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.fg label{font-size:10px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.fg input,.fg select,.fg textarea{background:#0d2460;border:1px solid #1a3a8f;color:#e8edf5;padding:7px 9px;border-radius:5px;font-size:12px;font-family:inherit}
+.fg textarea{resize:vertical;min-height:55px}
+.dlg-foot{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:600px){.fr2{grid-template-columns:1fr}}
+
+/* SYNC BADGE */
+#syncBadge{font-size:10px;font-weight:700;padding:3px 10px;background:rgba(39,201,122,.12);border:1px solid rgba(39,201,122,.25);border-radius:10px;color:#16a34a;display:none}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="logo">InDooR</div>
+    <div class="hdr-t">
+      <h1>Calendario de Visitas — Región del Ñuble 2026</h1>
+      <p>Urgencia + Sector · Sin lunes · 🚗 Maule: S5/S7/S9/S11 · Prioridad: Nuevos → Obra Gruesa → Terminaciones</p>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+    <span id="syncBadge"></span>
+    <div class="hstats">
+      <div class="hs"><div class="hs-n" id="s-tot">—</div><div class="hs-l">Obras</div></div>
+      <div class="hs"><div class="hs-n" id="s-vis" style="color:#16a34a">—</div><div class="hs-l">Visitadas</div></div>
+      <div class="hs"><div class="hs-n" id="s-pct" style="color:#3b82f6">—</div><div class="hs-l">Avance</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="progressBar" style="background:#081838;border-bottom:1px solid #1a3a8f;padding:6px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+  <div style="display:flex;align-items:center;gap:7px;flex:1;min-width:180px">
+    <span style="font-size:10px;font-weight:700;color:#93c5fd;white-space:nowrap">ÑUBLE</span>
+    <div style="flex:1;height:8px;background:#122a5e;border-radius:4px;overflow:hidden;min-width:80px">
+      <div id="barNuble" style="height:100%;background:#3b82f6;border-radius:4px;transition:width .5s;width:0%"></div></div>
+    <span id="pctNuble" style="font-size:11px;font-weight:900;color:#3b82f6;min-width:32px">0%</span>
+    <span id="cntNuble" style="font-size:10px;color:#64748b">0/0</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:7px;flex:1;min-width:180px">
+    <span style="font-size:10px;font-weight:700;color:#fbbf24;white-space:nowrap">MAULE</span>
+    <div style="flex:1;height:8px;background:#122a5e;border-radius:4px;overflow:hidden;min-width:80px">
+      <div id="barMaule" style="height:100%;background:#fbbf24;border-radius:4px;transition:width .5s;width:0%"></div></div>
+    <span id="pctMaule" style="font-size:11px;font-weight:900;color:#fbbf24;min-width:32px">0%</span>
+    <span id="cntMaule" style="font-size:10px;color:#64748b">0/0</span>
+  </div>
+  <span style="font-size:10px;color:#64748b">Pendientes: <strong id="pbPend" style="color:#fff">0</strong> &nbsp; ~<strong id="pbDias" style="color:#fff">0</strong> días</span>
+</div>
+
+<!-- MAIN TABS -->
+<div class="tabs" id="mainTabs">
+  <button class="tab on" onclick="showTab('cal',this)">📅 Calendario</button>
+  <button class="tab" onclick="showTab('crm',this)">📋 CRM Clientes</button>
+  <button class="tab" onclick="showTab('ia',this)">🤖 Asistente</button>
+  <button class="tab" onclick="showTab('email',this)">✉️ Correo Masivo</button>
+  <button class="tab" onclick="showTab('informe',this)">📊 Informe Semanal</button>
+</div>
+
+<!-- ═══ TAB: CALENDARIO ═══ -->
+<div id="tab-cal" class="panel on">
+
+  <!-- WEEK NAV -->
+  <div class="wnav" id="weekNav"></div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <input type="text" id="fBusq" placeholder="🔍 Buscar proyecto, empresa..." oninput="renderWeek()">
+    <select id="fEst" onchange="renderWeek()">
+      <option value="">Todos los estados</option>
+      <option value="PENDIENTE">⏳ Pendiente</option>
+      <option value="VISITADA">✅ Visitada</option>
+      <option value="COTIZANDO">📄 Cotizando</option>
+      <option value="REPROGRAMAR">🔄 Reprogramar</option>
+      <option value="SIN CONTACTO">❌ Sin contacto</option>
+    </select>
+    <select id="fSec" onchange="renderWeek()">
+      <option value="">Todos los sectores</option>
+      <option value="Centro Chillán">Centro Chillán</option>
+      <option value="Norte Chillán">Norte Chillán</option>
+      <option value="Sur Chillán">Sur Chillán</option>
+      <option value="Oriente Chillán">Oriente Chillán</option>
+      <option value="Sur-Oriente Chillán">Sur-Oriente Chillán</option>
+      <option value="Chillán Viejo">Chillán Viejo</option>
+      <option value="Talca">Talca</option>
+      <option value="Linares">Linares</option>
+      <option value="Parral">Parral</option>
+      <option value="Curicó">Curicó</option>
+      <option value="San Fernando">San Fernando</option>
+      <option value="Rancagua">Rancagua</option>
+    </select>
+    <button class="btn btn-o" onclick="clearFilters()">✕ Limpiar</button>
+    <button class="btn btn-o" onclick="toggleAddPanel()">➕ Agregar obra</button>
+    <button class="btn btn-o" onclick="lsDiagnostico()" style="font-size:10px" title="Ver que hay guardado">🔍 Verificar guardado</button>
+    <button class="btn btn-o" onclick="lsExportarBackup()" style="font-size:10px" title="Descargar respaldo">💾 Backup</button>
+  </div>
+
+  <!-- ADD PANEL (hidden) -->
+  <div id="addPanel" style="display:none;padding:14px 18px;background:#122a5e;border-bottom:1px solid #1a3a8f">
+    <div style="font-size:12px;font-weight:700;color:#dbeafe;margin-bottom:10px">➕ Agregar nueva obra</div>
+    <div class="fr2">
+      <div class="fg"><label>Proyecto</label><input type="text" id="np" placeholder="Nombre del proyecto"></div>
+      <div class="fg"><label>Empresa</label><input type="text" id="ne" placeholder="Constructora / Inmobiliaria"></div>
+    </div>
+    <div class="fr2">
+      <div class="fg"><label>Dirección</label><input type="text" id="nd" placeholder="Calle, número, ciudad"></div>
+      <div class="fg"><label>Sector</label>
+        <select id="nsec">
+          <option>Centro Chillán</option><option>Norte Chillán</option><option>Sur Chillán</option>
+          <option>Oriente Chillán</option><option>Sur-Oriente Chillán</option><option>Chillán Viejo</option>
+          <option>Talca</option><option>Linares</option><option>Parral</option>
+        </select>
+      </div>
+    </div>
+    <div class="fr2">
+      <div class="fg"><label>Unidades</label><input type="number" id="nu" placeholder="Ej: 120"></div>
+      <div class="fg"><label>Avance</label>
+        <select id="nav">
+          <option>Permisos por Construir</option><option>Permiso de Anteproyecto</option>
+          <option>Obras Preliminares</option><option>Obra Gruesa</option><option>Terminaciones</option>
+        </select>
+      </div>
+    </div>
+    <div class="fr2">
+      <div class="fg"><label>Contacto</label><input type="text" id="nc" placeholder="Nombre"></div>
+      <div class="fg"><label>Teléfono / Email</label><input type="text" id="ntel" placeholder="+56 9..."></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn btn-g" onclick="addObra()">✅ Agregar</button>
+      <button class="btn btn-o" onclick="toggleAddPanel()">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- WEEK CONTENT -->
+  <div style="padding:12px 18px" id="weekContent"></div>
+
+</div>
+
+<!-- ═══ TAB: CRM ═══ -->
+<div id="tab-crm" class="panel">
+  <div class="toolbar" style="margin-bottom:12px">
+    <input type="text" id="cBusq" placeholder="🔍 Buscar..." oninput="renderCRM()">
+    <select id="cEst" onchange="renderCRM()">
+      <option value="">Todos los estados</option>
+      <option value="PENDIENTE">⏳ Pendiente</option>
+      <option value="VISITADA">✅ Visitada</option>
+      <option value="COTIZANDO">📄 Cotizando</option>
+      <option value="REPROGRAMAR">🔄 Reprogramar</option>
+      <option value="SIN CONTACTO">❌ Sin contacto</option>
+      <option value="OTRO VENDEDOR">🚫 Otro vendedor</option>
+      <option value="OBRA NO EXISTE">🚫 Obra no existe</option>
+    </select>
+    <select id="cSec" onchange="renderCRM()">
+      <option value="">Todos los sectores</option>
+      <option value="Centro Chillán">Centro Chillán</option>
+      <option value="Norte Chillán">Norte Chillán</option>
+      <option value="Sur Chillán">Sur Chillán</option>
+      <option value="Chillán Viejo">Chillán Viejo</option>
+      <option value="Talca">Talca</option>
+    </select>
+    <select id="cTam" onchange="renderCRM()">
+      <option value="">Todos los tamaños</option>
+      <option value="Grande">🔴 Grande</option>
+      <option value="Mediana">🟡 Mediana</option>
+      <option value="Pequeña">🔵 Pequeña</option>
+    </select>
+    <select id="cSort" onchange="renderCRM()">
+      <option value="pri">Nuevos primero</option>
+      <option value="est">Por estado</option>
+      <option value="emp">Empresa A-Z</option>
+    </select>
+    <button class="btn btn-p" onclick="exportPDF()">📄 PDF</button>
+  </div>
+  <div id="crmKpis" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"></div>
+  <div class="tbl-wrap"><table id="crmTable">
+    <thead><tr>
+      <th>#</th><th>Est.</th><th>Empresa (Mandante)</th><th>Proyecto</th><th>Tamaño</th><th>Sector</th>
+      <th>Dirección</th><th>Contacto</th><th>Tel/Email</th><th>Uds</th><th>Avance</th><th>Nota</th><th></th>
+    </tr></thead>
+    <tbody id="crmBody"></tbody>
+  </table></div>
+  <div id="crmCount" style="font-size:10px;color:#64748b;margin-top:6px"></div>
+</div>
+
+<!-- ═══ TAB: ASISTENTE IA ═══ -->
+<div id="tab-ia" class="panel">
+  <div style="background:rgba(155,108,247,.06);border:1px solid rgba(155,108,247,.2);border-radius:7px;padding:14px;max-width:800px">
+    <div style="font-size:13px;font-weight:700;color:#7c3aed;margin-bottom:10px">🤖 Asistente Comercial InDooR — Local (sin internet)</div>
+    <div id="iaChat" style="background:#0a1f44;border:1px solid #1a3a8f;border-radius:6px;min-height:120px;max-height:280px;overflow-y:auto;padding:10px;margin-bottom:10px;font-size:11px">
+      <div style="background:#0d2460;padding:6px 10px;border-radius:6px;margin-bottom:6px;color:#e8edf5">
+        ¡Hola! Consulta sobre urgentes, resumen, vencidos, ruta, procedimientos, o busca una empresa.
+      </div>
+    </div>
+    <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
+      <button class="btn btn-o" style="font-size:10px" onclick="iaQ('urgentes')">🔥 Urgentes</button>
+      <button class="btn btn-o" style="font-size:10px" onclick="iaQ('resumen')">📊 Resumen</button>
+      <button class="btn btn-o" style="font-size:10px" onclick="iaQ('vencidos')">⏰ Vencidos</button>
+      <button class="btn btn-o" style="font-size:10px" onclick="iaQ('ruta')">🗺️ Ruta hoy</button>
+      <button class="btn btn-o" style="font-size:10px" onclick="iaQ('otrovendedor')">🚫 Otro vendedor</button>
+    </div>
+    <div style="display:flex;gap:6px">
+      <input id="iaInput" type="text" placeholder="Consulta empresa, estado, procedimiento..." style="flex:1;background:#0d2460;border:1px solid #1a3a8f;color:#e8edf5;padding:7px 10px;border-radius:5px;font-size:12px;font-family:inherit" onkeydown="if(event.key==='Enter')iaEnviar()">
+      <button class="btn btn-p" onclick="iaEnviar()">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TAB: CORREO MASIVO ═══ -->
+<div id="tab-email" class="panel">
+  <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
+    <!-- Destinatarios -->
+    <div style="width:300px;background:#122a5e;border:1px solid #1a3a8f;border-radius:8px;overflow:hidden">
+      <div style="padding:9px 14px;background:#0d2460;border-bottom:1px solid #1a3a8f;font-size:11px;font-weight:700;color:#dbeafe">📋 Destinatarios</div>
+      <div style="padding:9px 12px;border-bottom:1px solid #1a3a8f;display:flex;flex-direction:column;gap:5px">
+        <select id="ef-sec" onchange="filtrarEmails()" style="background:#0a1f44;border:1px solid #1a3a8f;color:#e8edf5;padding:5px 8px;border-radius:4px;font-size:11px;width:100%">
+          <option value="">Todos los sectores</option>
+          <option value="Chillán">Chillán</option>
+          <option value="Chillán Viejo">Chillán Viejo</option>
+          <option value="Talca">Talca</option>
+          <option value="Linares">Linares</option>
+        </select>
+      </div>
+      <div style="padding:6px 12px;border-bottom:1px solid #1a3a8f;display:flex;align-items:center;justify-content:space-between">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:11px">
+          <input type="checkbox" id="selAll" onchange="selAllEmails()" style="accent-color:#3b82f6">
+          <strong>Seleccionar todos</strong>
+        </label>
+        <span id="emailCnt" style="font-size:10px;color:#3b82f6;font-weight:700">0</span>
+      </div>
+      <div id="emailList" style="max-height:380px;overflow-y:auto;padding:5px"></div>
+      <div style="padding:7px 12px;border-top:1px solid #1a3a8f;background:#0d2460">
+        <div id="emailSel" style="font-size:11px;color:#64748b">—</div>
+      </div>
+    </div>
+    <!-- Editor -->
+    <div style="flex:1;min-width:300px;background:#122a5e;border:1px solid #1a3a8f;border-radius:8px;overflow:hidden">
+      <div style="padding:9px 14px;background:#0d2460;border-bottom:1px solid #1a3a8f;font-size:11px;font-weight:700;color:#dbeafe">✏️ Redactar mensaje</div>
+      <div style="padding:14px;display:flex;flex-direction:column;gap:10px">
+        <div class="fg"><label>Asunto</label><input type="text" id="em-sub" placeholder="[InDooR] Asunto del mensaje"></div>
+        <div class="fg">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">
+            <label style="margin-bottom:0">Mensaje</label>
+            <span style="font-size:10px;color:#64748b">Variables: <code onclick="insVar('{{contacto}}')" style="cursor:pointer;color:#3b82f6">{{contacto}}</code> <code onclick="insVar('{{empresa}}')" style="cursor:pointer;color:#3b82f6">{{empresa}}</code></span>
+          </div>
+          <textarea id="em-body" rows="10" placeholder="Estimado/a {{contacto}},&#10;&#10;Le contactamos desde InDooR SpA...&#10;&#10;Saludos,&#10;Claudio Uribe&#10;Ejecutivo Comercial — InDooR SpA"></textarea>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn btn-o" style="font-size:10px" onclick="loadTpl('promo')">🎁 Promoción</button>
+          <button class="btn btn-o" style="font-size:10px" onclick="loadTpl('catalogo')">📚 Catálogo</button>
+          <button class="btn btn-o" style="font-size:10px" onclick="loadTpl('seguimiento')">🔄 Seguimiento</button>
+          <button class="btn btn-o" style="font-size:10px" onclick="loadTpl('presentacion')">🤝 Presentación</button>
+        </div>
+        <div style="display:flex;gap:7px;flex-wrap:wrap;padding-top:8px;border-top:1px solid #1a3a8f">
+          <button class="btn btn-p" onclick="previewEmail()">👁️ Vista previa</button>
+          <button class="btn" style="background:#3b82f6;color:#0d1821" onclick="copyBCC()">📋 Copiar BCC</button>
+          <button class="btn btn-g" onclick="openOutlook()">✉️ Outlook</button>
+          <span id="copyOk" style="display:none;font-size:11px;font-weight:700;color:#16a34a;align-self:center">✅ Copiado</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL REGISTRAR (nativo dialog) ═══ -->
+<dialog id="dlgReg">
+<div class="dlg-body">
+  <h2 id="dlgTit">📝 Registrar visita</h2>
+  <input type="hidden" id="dlgId">
+  <div class="fr2">
+    <div class="fg"><label>Estado</label>
+      <select id="dlgEst" onchange="document.getElementById('ovRow').style.display=this.value==='OTRO VENDEDOR'?'block':'none'">
+        <option value="VISITADA">✅ Visitada</option>
+        <option value="COTIZANDO">📄 Cotizando</option>
+        <option value="REPROGRAMAR">🔄 Reprogramar</option>
+        <option value="SIN CONTACTO">❌ Sin contacto</option>
+        <option value="OTRO VENDEDOR">🚫 Otro vendedor</option>
+        <option value="OBRA NO EXISTE">🚫 Obra no existe</option>
+      </select>
+    </div>
+    <div class="fg"><label>Fecha</label><input type="date" id="dlgFec"></div>
+  </div>
+  <div class="fr2">
+    <div class="fg"><label>Contacto</label><input type="text" id="dlgCon" placeholder="Nombre y cargo"></div>
+    <div class="fg"><label>Teléfono</label><input type="text" id="dlgTel" placeholder="+56 9..."></div>
+  </div>
+  <div class="fg"><label>Nota / resultado</label>
+    <textarea id="dlgNot" placeholder="Resultado de la visita, interés, próximo paso..."></textarea>
+  </div>
+  <div id="ovRow" style="display:none" class="fg">
+    <label>🚫 Proveedor actual y nombre vendedor</label>
+    <input type="text" id="dlgProv" placeholder="Ej: Puertas Sur SA — Juan González">
+  </div>
+  <div class="dlg-foot">
+    <button class="btn btn-o" onclick="document.getElementById('dlgReg').close()">Cancelar</button>
+    <button class="btn btn-p" onclick="saveReg()">💾 Guardar</button>
+  </div>
+</div>
+</dialog>
+
+<!-- ═══ PREVIEW EMAIL DIALOG ═══ -->
+<dialog id="dlgPreview" style="max-width:650px">
+<div class="dlg-body">
+  <h2>👁️ Vista previa email</h2>
+  <div id="prevMeta" style="background:#0d2460;border-radius:5px;padding:10px;margin-bottom:10px;font-size:11px"></div>
+  <div id="prevBody" style="background:#0a1f44;border:1px solid #1a3a8f;border-radius:5px;padding:12px;font-size:12px;white-space:pre-wrap;max-height:280px;overflow-y:auto;line-height:1.6;margin-bottom:10px"></div>
+  <div style="font-size:10px;color:#64748b;margin-bottom:6px">BCC (ocultos entre sí):</div>
+  <div id="prevBCC" style="background:#0a1f44;border:1px solid #1a3a8f;border-radius:4px;padding:8px;font-size:10px;color:#3b82f6;word-break:break-all;max-height:60px;overflow-y:auto"></div>
+  <div class="dlg-foot">
+    <button class="btn btn-o" onclick="document.getElementById('dlgPreview').close()">Cerrar</button>
+    <button class="btn" style="background:#3b82f6;color:#0d1821" onclick="copyBCC();document.getElementById('dlgPreview').close()">📋 Copiar BCC</button>
+    <button class="btn btn-g" onclick="openOutlook();document.getElementById('dlgPreview').close()">✉️ Outlook</button>
+  </div>
+</div>
+</dialog>
+
+<script>
+const semanas = [
+{tit:'Semana 3 — Nuble pendientes (2-3 Jul)',tipo:'sec',fi:'2 Jul 2026',
+ nota:'Jue 2: 5 obras originales Nuble. Vie 3: 5 obras Chillan Viejo → cierra obras originales.',
+ dias:[
+  {nom:'Jueves',fecha:'2 Jul',sec:'Norte Chillán + Chillán Viejo',nota:'🔄 Francia 320 PRIORIDAD. Parque Cordillera. San Bartolomé x2 + 28 Septiembre.',obras:[
+    {id:'o18',p:'Ed. Francia 320',e:'INMOBILIARIA DIECIOCHO LTDA',dir:'Av. Francia 320, Chillán',u:144,av:'Permisos por Construir',sec:'Norte Chillán',con:'José Luis Larenas Valiente',tel:'Por gestionar',email:''},
+    {id:'oPCIII',p:'Parque Cordillera Etapa III',e:'CONSTRUCTORA JOSÉ GARCÍA Y CÍA.',dir:'Sector Cordillera, Chillán',u:209,av:'Permisos por Construir',sec:'Norte Chillán',con:'Por gestionar',tel:'712982619 (SERVIU)',email:''},
+    {id:'o23',p:'Conj. Hab. San Bartolomé 100 casas',e:'INMOBILIARIA SOC. AGRÍCOLA LAS HIGUERAS LTDA',dir:'Av. San Bartolomé 1249, Chillán Viejo',u:100,av:'Permisos por Construir',sec:'Chillán Viejo',con:'Alfonso Bustamante Muñoz',tel:'Por gestionar',email:''},
+    {id:'o24',p:'Ed. 150 dptos San Bartolomé 1163',e:'Por confirmar',dir:'Av. San Bartolomé 1163 LT2, Chillán Viejo',u:150,av:'Permisos por Construir',sec:'Chillán Viejo',con:'Por gestionar',tel:'Por gestionar',email:''},
+    {id:'o28',p:'Conj. Hab. 28 de Septiembre',e:'INMOBILIARIA MARISELA SAN MARTÍN REYES',dir:'Av. San Bartolomé 1045, Chillán Viejo',u:110,av:'Permiso de Anteproyecto',sec:'Chillán Viejo',con:'Por gestionar',tel:'Por gestionar',email:''}
+  ]},
+  {nom:'Viernes',fecha:'3 Jul',sec:'Chillán Viejo',nota:'Chillan Viejo: Baquedano, Don Bernardo, Quinta Maipon, Los Copihues, Huambali.',obras:[
+    {id:'o25',p:'Conj. 100 viv. Av. Baquedano S/N',e:'Por confirmar',dir:'Av. Baquedano S/N, Chillán Viejo',u:100,av:'Permisos por Construir',sec:'Chillán Viejo',con:'Por gestionar',tel:'Por gestionar',email:''},
+    {id:'o29',p:'Ed. Don Bernardo',e:'INMOBILIARIA JORGE CHANDIA',dir:'Camino 20 de agosto 950, Chillán Viejo',u:120,av:'Permiso de Anteproyecto',sec:'Chillán Viejo',con:'Jorge Chandia',tel:'Por gestionar',email:''},
+    {id:'o27',p:'Conj. 121 viv. Quinta Maipon',e:'Por confirmar',dir:'Quinta Maipon LT B, Chillán Viejo',u:121,av:'Permisos por Construir',sec:'Chillán Viejo',con:'Por gestionar',tel:'Por gestionar',email:''},
+    {id:'o31',p:'Ed. Los Copihues (296 dptos)',e:'INMOBILIARIA MARCELO THIECK',dir:'Los Copihues 953, Chillán Viejo',u:296,av:'Permisos por Construir',sec:'Chillán Viejo',con:'Por gestionar',tel:'Por gestionar',email:''},
+    {id:'o21',p:'Conj. Hab. 130 viv. Sector Huambalí',e:'Por confirmar',dir:'Sector Huambalí, Chillán Viejo',u:130,av:'Permisos por Construir',sec:'Chillán Viejo',con:'Por gestionar',tel:'Por gestionar',email:''}
+  ]}
+ ]},
+{tit:'Semana 4 — 100% NUBLE nuevas obras (7-10 Jul)',tipo:'sec',fi:'7 Jul 2026',
+ nota:'27 nuevas obras Nuble. 6 visitas/dia. Viernes 10 = 100% Nuble completo.',
+ dias:[
+  {nom:'Martes',fecha:'7 Jul',sec:'Centro Chillán',nota:'NUEVAS — Centro Chillan: Aldea, Arrau, Ercilla, Nuevo18, Distrito Centro, SB2. (6 visitas)',obras:[
+    {id:'oN01',p:'Edificio Aldea',e:'CONSTRUCTORA URBANI',dir:'Itata 902, Chillán',u:0,av:'Por confirmar',sec:'Centro Chillán',con:'Baluart',tel:'',email:''},
+    {id:'oN02',p:'Edificio Arrau',e:'CONSTRUCTORA BALUART',dir:'Independencia 150, Chillán',u:0,av:'Por confirmar',sec:'Centro Chillán',con:'Baluart',tel:'',email:''},
+    {id:'oN03',p:'Condominio Alonso de Ercilla',e:'INMOBILIARIA INVERSIÓN SB',dir:'Alonso de Ercilla 570, Chillán',u:0,av:'Por confirmar',sec:'Centro Chillán',con:'SB2 Constructores',tel:'',email:''},
+    {id:'oN04',p:'Edificio Nuevo 18',e:'CONSTRUCTORA VELLATRIX',dir:'18 de Septiembre 134, Chillán',u:0,av:'Por confirmar',sec:'Centro Chillán',con:'Vellatrix',tel:'',email:''},
+    {id:'oN05',p:'Distrito Centro',e:'INMOBILIARIA MAESTRA',dir:'Av. O\'Higgins 1125, Chillán',u:0,av:'Por confirmar',sec:'Centro Chillán',con:'Maestra',tel:'',email:''},
+    {id:'oN06',p:'Alonso de Ercilla (SB2)',e:'—',dir:'Alonso de Ercilla 570, Chillán',u:0,av:'Por confirmar',sec:'Centro Chillán',con:'SB2 Constructores',tel:'',email:''}
+  ,
+    {id:'oML01',p:'Condominio Tres Rios Etapa II',e:'CONSTRUCTORA VITALIA',dir:'Avenida San Miguel 3704, Talca',u:0,av:'En construccion',sec:'Talca',con:'Por gestionar',tel:'',email:''},
+    {id:'oML02',p:'Edificio Tricahue',e:'INMOBILIARIA SB2 CONSTRUCTORES',dir:'Calle 5 Sur 1334, Talca Sur',u:0,av:'En construccion',sec:'Talca',con:'Por gestionar',tel:'',email:''},
+    {id:'oML03',p:'Townhouse Rucatremo',e:'CONSTRUCTORA RUCATEMU',dir:'Avenida Rucatremo 1024, Curico',u:0,av:'En construccion',sec:'Curicó',con:'Por gestionar',tel:'',email:''}]},
+  {nom:'Miercoles',fecha:'8 Jul',sec:'Centro Chillán + Norte Chillán',nota:'NUEVAS — Centro+Norte: Monteprado, Valdepeñas, Socovesa x2, Puerto Madero x2. (6 visitas)',obras:[
+    {id:'oN07',p:'Edificio Monteprado',e:'INMOBILIARIA INTEGRAL',dir:'Purén 315, Chillán',u:0,av:'Por confirmar',sec:'Centro Chillán',con:'—',tel:'',email:''},
+    {id:'oN08',p:'Edificio Valdepeñas',e:'CONSTRUCTORA INVERTRUST',dir:'Av. Collin esq. Av. O\'Higgins, Chillán',u:0,av:'Por confirmar',sec:'Centro Chillán',con:'Invertrust',tel:'',email:''},
+    {id:'oN09',p:'(Sin nombre) Quilamapu',e:'SOCOVESA',dir:'Av. Paul Harris 255, Chillán',u:0,av:'Por confirmar',sec:'Norte Chillán',con:'Socovesa',tel:'',email:''},
+    {id:'oN10',p:'Condominio Nueva Toledo',e:'SOCOVESA',dir:'Colonia Bernardo O\'Higgins 1702, Chillán',u:0,av:'Por confirmar',sec:'Norte Chillán',con:'Socovesa',tel:'',email:''},
+    {id:'oN11',p:'Condominio Altos de Palermo',e:'INMOBILIARIA PUERTO MADERO',dir:'Los Copihues 488, Chillán',u:0,av:'Por confirmar',sec:'Norte Chillán',con:'—',tel:'',email:''},
+    {id:'oN12',p:'Edificio Casagrande',e:'INMOBILIARIA PUERTO MADERO',dir:'Sotomayor 211, Chillán',u:0,av:'Por confirmar',sec:'Norte Chillán',con:'—',tel:'',email:''}
+  ]},
+  {nom:'Jueves',fecha:'9 Jul',sec:'Oriente Chillán',nota:'NUEVAS — Oriente Chillan: Las Toscas, Vista Cordillera, Las Delicias, Toscas, Barrio Francia, Altos Este. (6 visitas)',obras:[
+    {id:'oN13',p:'Portal Las Toscas',e:'CONSTRUCTORA HABICASA',dir:'Brisas Mediterráneas 1031, Chillán',u:0,av:'Por confirmar',sec:'Oriente Chillán',con:'Habicasa',tel:'',email:''},
+    {id:'oN14',p:'Condominio Vista Cordillera',e:'INMOBILIARIA ITRIO / EROS',dir:'Río Viejo 1123, Chillán',u:0,av:'Por confirmar',sec:'Oriente Chillán',con:'Constructora Eros',tel:'',email:''},
+    {id:'oN15',p:'Condominio Las Delicias VI',e:'CONSTRUCTORA INESPA',dir:'Av. Alonso de Ercilla 3884, Chillán',u:0,av:'Por confirmar',sec:'Oriente Chillán',con:'Inespa',tel:'',email:''},
+    {id:'oN16',p:'Condominio Las Toscas',e:'CONSTRUCTORA HABICASA',dir:'El Roble S/N, Chillán',u:0,av:'Por confirmar',sec:'Oriente Chillán',con:'Habicasa',tel:'',email:''},
+    {id:'oN17',p:'Barrio Francia',e:'CONSTRUCTORA HABICASA',dir:'Camino a San Bernardo 2042, Chillán',u:0,av:'Por confirmar',sec:'Oriente Chillán',con:'Habicasa',tel:'',email:''},
+    {id:'oN18',p:'Altos del Este II',e:'CONSTRUCTORA CVP',dir:'Cataluña 477, Chillán',u:0,av:'Por confirmar',sec:'Oriente Chillán',con:'CVP',tel:'',email:''}
+  ]},
+  {nom:'Viernes',fecha:'10 Jul',sec:'Oriente Chillán + Sur Chillán',nota:'NUEVAS — Oriente+Sur+San Carlos: Huertos, Abarca, El Naranjo, Altos Sur, Bilbao, Galilea. (6 visitas) → 100% NUBLE',obras:[
+    {id:'oN19',p:'Huertos de Chillán',e:'GALILEA',dir:'Av. Alonso de Ercilla 6843, Chillán',u:0,av:'Por confirmar',sec:'Oriente Chillán',con:'Galilea',tel:'',email:''},
+    {id:'oN20',p:'Pintor Agustín Abarca',e:'CONAVICOOP',dir:'Gral. José V. Venegas 1485, San Carlos',u:0,av:'Por confirmar',sec:'Sur Chillán',con:'Conavicoop',tel:'',email:''},
+    {id:'oN21',p:'Condominio El Naranjo',e:'INMOBILIARIA ESAM SPA',dir:'Antártica Chilena 952, Chillán',u:0,av:'Por confirmar',sec:'Sur Chillán',con:'—',tel:'',email:''},
+    {id:'oN22',p:'Conj. Resid. Altos del Sur',e:'INMOBILIARIA JC VALDEBENITO',dir:'Ramón Freire 426, San Carlos',u:0,av:'Por confirmar',sec:'Sur Chillán',con:'—',tel:'',email:''},
+    {id:'oN23',p:'Plaza Bilbao Barquín',e:'CONSTRUCTORA URBANI',dir:'Calle Bilbao 500, San Carlos',u:0,av:'Por confirmar',sec:'Sur Chillán',con:'Urbani',tel:'',email:''},
+    {id:'oN24',p:'Doña Javiera III',e:'GALILEA',dir:'Camino Viejo a Buli S/N, San Carlos',u:0,av:'Por confirmar',sec:'Sur Chillán',con:'Galilea',tel:'',email:''}
+  ]}
+ ]},
+{tit:'Semana 5 — Cierre Nuble + inicio Maule (14-17 Jul)',tipo:'sec',fi:'14 Jul 2026',
+ nota:'Mar 14: ultimas 3 Nuble + Linares/Parral. Mie-Vie: Maule completo.',
+ dias:[
+  {nom:'Martes',fecha:'14 Jul',sec:'Sur Chillán + Chillán Viejo',nota:'Ultimas 3 Nuble: San Isidro, Marchant II, Don Clemente. Inicio Maule: Linares+Parral.',obras:[
+    {id:'oN25',p:'San Isidro',e:'INMOBILIARIA JC VALDEBENITO',dir:'Freire 350, San Carlos',u:0,av:'Por confirmar',sec:'Sur Chillán',con:'—',tel:'',email:''},
+    {id:'oN26',p:'Condominio Marchant II',e:'CONSTRUCTORA GOLDBERG SPA',dir:'Calle Marchant 362, Chillán Viejo',u:0,av:'Por confirmar',sec:'Chillán Viejo',con:'Goldberg SpA',tel:'',email:''},
+    {id:'oN27',p:'Don Clemente',e:'GALILEA',dir:'Gacitúa S/N, Chillán Viejo',u:0,av:'Por confirmar',sec:'Chillán Viejo',con:'Galilea',tel:'',email:''},
+    {id:'oM01',p:'Portal Los Jardines — Inexos',e:'INMOBILIARIA INEXOS',dir:'Las Tranqueras esq. Potrero Grande, Linares',u:156,av:'En construcción',sec:'Linares',con:'Elizabeth Estanga',tel:'+569 89230179',email:'eestanga@inexos.cl'},
+    {id:'oM02',p:'Valles de Linares — Ferval',e:'INMOBILIARIA FERVAL LTDA',dir:'Huerto El Almendro S/N, camino Villa San Antonio, Linares',u:215,av:'En construcción',sec:'Linares',con:'Oficina Talca: 2 Sur, 5 Oriente N°1196',tel:'Por gestionar',email:''},
+    {id:'oM03',p:'Oficina Inexos — San Martín 762',e:'INMOBILIARIA INEXOS',dir:'San Martín 762, Linares',u:0,av:'Oficina comercial',sec:'Linares',con:'Contacto directo oficina',tel:'+569 89230179',email:'eestanga@inexos.cl'}
+  ]},
+  {nom:'Miercoles',fecha:'15 Jul',sec:'Parral + Talca',nota:'MAULE: Talca (Digua) + Curicó (Conavicoop) + DOM/SERVIU Talca.',obras:[
+    {id:'oM04',p:'Poeta Neftalí Reyes Basoalto — Conavicoop',e:'CONAVICOOP TALCA',dir:'Calle Urrutia N°1120, Parral',u:163,av:'En construcción',sec:'Parral',con:'Conavicoop Talca',tel:'Por gestionar',email:''},
+    {id:'oM05',p:'Proyecto activo — Digua',e:'CONSTRUCTORA E INMOBILIARIA DIGUA LTDA',dir:'1 Sur 690 Of.1316, Edif. Plaza Talca, Talca',u:0,av:'En ejecución (término sep-2026)',sec:'Talca',con:'Oficina central',tel:'(71) 2222268',email:''},
+    {id:'oM06',p:'Escritor Claudio Giaconi III — Conavicoop',e:'CONAVICOOP',dir:'Curicó, Región del Maule',u:0,av:'En construcción',sec:'Curicó',con:'Conavicoop',tel:'Por gestionar',email:''},
+    {id:'oDM01',p:'DOM Talca — Permisos edificación 2025-2026',e:'DIRECCIÓN DE OBRAS MUNICIPALES TALCA',dir:'1 Oriente 1150, Municipalidad de Talca',u:0,av:'Por prospectar',sec:'Talca',con:'DOM Talca — solicitar listado permisos',tel:'(71) 2650702',email:''},
+    {id:'oDM02',p:'SERVIU Maule — Proyectos DS49 activos',e:'SERVIU REGIÓN DEL MAULE',dir:'2 Norte 680, Talca',u:0,av:'Por prospectar',sec:'Talca',con:'SERVIU Maule — solicitar constructoras DS49',tel:'(71) 2641920',email:''}
+  ]},
+  {nom:'Jueves',fecha:'16 Jul',sec:'Linares + Curicó',nota:'MAULE: DOM/SERVIU Talca + DOM Linares + DOM Curicó.',obras:[
+    {id:'oDM03',p:'DOM Linares — Permisos edificación 2025-2026',e:'DIRECCIÓN DE OBRAS MUNICIPALES LINARES',dir:'Valentín Letelier 586, Linares',u:0,av:'Por prospectar',sec:'Linares',con:'DOM Linares — solicitar listado permisos activos',tel:'(73) 2643300',email:''},
+    {id:'oDM04',p:'DOM Curicó — Permisos edificación 2025-2026',e:'DIRECCIÓN DE OBRAS MUNICIPALES CURICÓ',dir:'Merced 341, Curicó',u:0,av:'Por prospectar',sec:'Curicó',con:'DOM Curicó — solicitar listado permisos activos',tel:'(75) 2564700',email:''},
+    {id:'oDM05',p:'DOM Parral — Permisos edificación 2025-2026',e:'DIRECCIÓN DE OBRAS MUNICIPALES PARRAL',dir:'Igualdad 464, Parral',u:0,av:'Por prospectar',sec:'Parral',con:'DOM Parral — solicitar listado permisos activos',tel:'(73) 2464017',email:''},
+    {id:'oDM06',p:'CChC Maule — directorio constructoras',e:'CÁMARA CHILENA DE LA CONSTRUCCIÓN MAULE',dir:'2 Norte 565 Of.203, Talca',u:0,av:'Por prospectar',sec:'Talca',con:'Directorio CChC Maule — obras activas',tel:'(71) 2232515',email:''},
+    {id:'oDM07',p:'Puertas del Sur 5 — mandante a confirmar',e:'Por confirmar en SERVIU Maule',dir:'Maule, Región del Maule',u:0,av:'Por prospectar',sec:'Talca',con:'SERVIU Maule',tel:'(71) 2641920',email:''}
+  ]},
+  {nom:'Viernes',fecha:'17 Jul',sec:'Talca + Linares',nota:'MAULE: DOM Parral + CChC Maule + prospeccion.',obras:[
+    {id:'oDM08',p:'Parque Bicentenario 3 — mandante a confirmar',e:'Por confirmar en SERVIU Maule',dir:'Talca, Región del Maule',u:0,av:'Por prospectar',sec:'Talca',con:'SERVIU Maule',tel:'(71) 2641920',email:''},
+    {id:'oDM09',p:'Abate Juan Ignacio Molina — mandante a confirmar',e:'Por confirmar en DOM Linares',dir:'Linares, Región del Maule',u:0,av:'Por prospectar',sec:'Linares',con:'DOM Linares',tel:'(73) 2643300',email:''},
+    {id:'oDM10',p:'Valles de Talca 2 — mandante a confirmar',e:'Por confirmar en SERVIU Maule',dir:'Talca, Región del Maule',u:0,av:'Por prospectar',sec:'Talca',con:'SERVIU Maule',tel:'(71) 2641920',email:''},
+    {id:'pros046',p:'Prospección — CONSTRUCTORA URBANI',e:'CONSTRUCTORA URBANI',dir:'Ñuble (Chillán — ya confirmado)',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros049',p:'Prospección — INMOBILIARIA JOSE LARRE GARCIA',e:'INMOBILIARIA JOSE LARRE GARCIA',dir:'Ñuble (familia Larrere García — ya en cartera)',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''}
+  ]}
+ ]},
+{tit:'Semana 6 — Prospeccion cartera jefatura (21-23 Jul)',tipo:'sec',fi:'21 Jul 2026',
+ nota:'Prospeccion 72 empresas cartera jefatura. 5 visitas/dia.',
+ dias:[
+  {nom:'Martes',fecha:'21 Jul',sec:'Centro Chillán',nota:'Prospeccion cartera jefatura.',obras:[
+    {id:'pros046',p:'Prospección — CONSTRUCTORA URBANI',e:'CONSTRUCTORA URBANI',dir:'Ñuble (Chillán — ya confirmado)',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros049',p:'Prospección — INMOBILIARIA JOSE LARRE GARCIA',e:'INMOBILIARIA JOSE LARRE GARCIA',dir:'Ñuble (familia Larrere García — ya en cartera)',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros081',p:'Prospección — CONSTRUCTORA VALLE DEL SUR',e:'CONSTRUCTORA VALLE DEL SUR',dir:'Ñuble/Biobío (nombre regional)',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros000',p:'Prospección — Avanti Ltda.',e:'INMOBILIARIA AVANTI LTDA.',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros001',p:'Prospección — Calan SPA.',e:'INMOBILIARIA CALAN SPA.',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''}
+  ]},
+  {nom:'Miercoles',fecha:'22 Jul',sec:'Centro Chillán',nota:'Prospeccion cartera jefatura.',obras:[
+    {id:'pros003',p:'Prospección — DEMO CONSTRUCCIONES S.A.',e:'CONSTRUCTORA DEMO CONSTRUCCIONES S.A.',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros004',p:'Prospección — Edifisa',e:'INMOBILIARIA EDIFISA',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros005',p:'Prospección — Magistral Spa',e:'INMOBILIARIA MAGISTRAL SPA',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros007',p:'Prospección — PROMET SERVICIOS SPA',e:'CONSTRUCTORA PROMET SERVICIOS SPA',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros008',p:'Prospección — CONSTRUCTORA VDZ SPA',e:'CONSTRUCTORA VDZ SPA',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''}
+  ]},
+  {nom:'Jueves',fecha:'23 Jul',sec:'Centro Chillán',nota:'Prospeccion cartera jefatura.',obras:[
+    {id:'pros011',p:'Prospección — CONSTRUCTORA CADEL LTDA.',e:'CONSTRUCTORA CADEL LTDA.',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros015',p:'Prospección — LOS CONDORES',e:'INMOBILIARIA LOS CONDORES',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros020',p:'Prospección — CONSTRUCTORA PAZ SPA',e:'CONSTRUCTORA PAZ SPA',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''}
+  ]}
+ ]},
+{tit:'Archivo — Obras gestionadas y otro vendedor',tipo:'sec',fi:'1 Ene 2026',
+ nota:'Obras visitadas anteriormente, otro vendedor o no existe. Visibles en CRM para seguimiento.',
+ dias:[
+  {nom:'Archivo',fecha:'1 Ene',sec:'Archivo',nota:'Obras pre-existentes',obras:[
+    {id:'o01',p:'Ed. Pinares (FG Mañio)',e:'INMOBILIARIA FG MAÑIO SPA',dir:'Avenida Vicente Mendez 1381, Chillán',u:94,av:'Permisos por Construir',sec:'Norte Chillán',con:'Jose Octavio Larrere Garcia',tel:'Por gestionar',email:'proveedores@fgs.cl'},
+    {id:'o02',p:'Parque Arrayanes (Viviendas 2000)',e:'INMOBILIARIA VIVIENDAS 2000 SPA',dir:'Avenida Padre Hurtado 1805, Chillán',u:290,av:'Terminaciones',sec:'Norte Chillán',con:'Francisco Larrere Garcia',tel:'Por gestionar',email:'flarrere@fgs.cl'},
+    {id:'o03',p:'Portal del Libertador (Viviendas 2000)',e:'INMOBILIARIA VIVIENDAS 2000 SPA',dir:'Avenida Portal del Libertador 795, Chillán',u:53,av:'Permiso de Anteproyecto',sec:'Norte Chillán',con:'Jorge Larrere Garcia',tel:'Por gestionar',email:''},
+    {id:'o05',p:'Bosque Oriente (Viviendas 2000)',e:'INMOBILIARIA VIVIENDAS 2000 SPA',dir:'Avenida Circunvalacion Norte 1180, Chillán',u:144,av:'Permisos por Construir',sec:'Norte Chillán',con:'Jorge Larrere Garcia',tel:'Por gestionar',email:''},
+    {id:'o07',p:'Agua Piedra III (Viviendas 2000)',e:'INMOBILIARIA VIVIENDAS 2000 SPA',dir:'Las Peñas S/N, Chillán',u:90,av:'Permiso de Anteproyecto',sec:'Norte Chillán',con:'Jose Octavio Larrere Garcia',tel:'Por gestionar',email:''},
+    {id:'o20',p:'Ed. Reserva Universitaria II (Centro Sur)',e:'INMOBILIARIA INVERSIONES CENTRO SUR S.A',dir:'Camino Interior lote 1, fundo el mono, Chillán',u:108,av:'Permisos por Construir',sec:'Sur-Oriente Chillán',con:'Alvaro Tapia Bravo',tel:'Por gestionar',email:''},
+    {id:'oSC',p:'Conj. Hab. La Union hace la Fuerza (Martinus)',e:'CONSTRUCTORA MARTINUS',dir:'San Carlos, Region del Nuble',u:490,av:'Permisos por Construir',sec:'Norte Chillán',con:'Constructora Martinus',tel:'Por gestionar',email:''},
+    {id:'o34',p:'Plaza Mayor Lantaño (Paumar)',e:'INMOBILIARIA E INVERSIONES IRAIRA LTDA',dir:'Las Rosas 590, Chillán',u:240,av:'Terminaciones',sec:'Oriente Chillán',con:'Franz Iraira Quezada',tel:'Por gestionar',email:''},
+    {id:'oJVG',p:'Jardines Van Gogh (Malpo)',e:'CONSTRUCTORA MALPO SPA',dir:'Chillán, Ñuble',u:0,av:'Por confirmar',sec:'Norte Chillán',con:'Otro vendedor InDooR',tel:'',email:''},
+    {id:'oML4',p:'Parque Puertas Sur (Malpo)',e:'CONSTRUCTORA MALPO SPA',dir:'Chillán, Ñuble',u:0,av:'Por confirmar',sec:'Sur Chillán',con:'Otro vendedor InDooR',tel:'',email:''},
+    {id:'oML9',p:'Malpo Parral',e:'CONSTRUCTORA MALPO SPA',dir:'Parral, Maule',u:0,av:'Por confirmar',sec:'Sur Chillán',con:'Otro vendedor InDooR',tel:'',email:''},
+    {id:'o26',p:'Villa Pequeun (SERVIU)',e:'SERVIU REGION DE NUBLE',dir:'Horizonte 202, Chillán Viejo',u:118,av:'Obras Preliminares',sec:'Chillán Viejo',con:'Roberto Grandon',tel:'Por gestionar',email:''},
+    {id:'o30',p:'Villa Pequeun II',e:'INMOBILIARIA ARACELLY GODOY BUSTOS',dir:'Camino Horizonte 202, Chillán Viejo',u:118,av:'Permisos por Construir',sec:'Chillán Viejo',con:'Aracelly Godoy Bustos',tel:'Por gestionar',email:''},
+    {id:'oMZ1',p:'Vision Mundial (Manzano)',e:'CONSTRUCTORA MANZANO',dir:'Chillán, Ñuble',u:0,av:'Por confirmar',sec:'Norte Chillán',con:'Otro vendedor InDooR',tel:'',email:''},
+    {id:'oMZ2',p:'Alto del Nuble (Manzano)',e:'CONSTRUCTORA MANZANO',dir:'Chillán, Ñuble',u:0,av:'Por confirmar',sec:'Norte Chillán',con:'Otro vendedor InDooR',tel:'',email:''},
+    {id:'oMZ3',p:'Plaza Mayor Lantaño (Manzano)',e:'CONSTRUCTORA MANZANO',dir:'Chillán, Ñuble',u:0,av:'Por confirmar',sec:'Oriente Chillán',con:'Otro vendedor InDooR',tel:'',email:''}
+  ,
+    {id:'o06',p:'Condominio Reserva Universitaria (Centro Sur)',e:'INMOBILIARIA INVERSIONES CENTRO SUR SPA',dir:'Luis del Villar Zarco 1860, Chillán',u:108,av:'Permisos por Construir',sec:'Sur-Oriente Chillán',con:'Alvaro Tapia Bravo',tel:'Por gestionar',email:''},
+    {id:'o08',p:'Edif. 88 dptos Peumayén',e:'COMITÉ DE VIVIENDA PEUMAYÉN',dir:'Pasaje Norte 264, Chillán',u:88,av:'Permisos por Construir',sec:'Centro Chillán',con:'Milena de Lourde Andrade Parra',tel:'Por gestionar',email:''},
+    {id:'o09',p:'Ed. 256 dptos Doña Florencia',e:'CONSTRUCTORA DOÑA FLORENCIA LTDA',dir:'Josue 1261, Chillán',u:256,av:'Permisos por Construir',sec:'Sur Chillán',con:'Juan Ignacio Ortigosa Ampuero',tel:'Por gestionar',email:''},
+    {id:'o10',p:'Condominio Huambali',e:'CONSTRUCTORA PROM INGENIERÍA LTDA',dir:'Huambali 312, Chillán',u:89,av:'Permisos por Construir',sec:'Centro Chillán',con:'Jorge Figueroa Moreno',tel:'Por gestionar',email:''},
+    {id:'o11',p:'Ed. Plaza El Roble',e:'INMOBILIARIA GESTIÓN URBANI LIMITADA',dir:'El Roble 1065, Chillán',u:90,av:'Obra Gruesa',sec:'Centro Chillán',con:'Jonathan Mendez',tel:'Por gestionar',email:''},
+    {id:'o12',p:'Ed. Manuel Montt',e:'SOCIEDAD CONSTRUCTORA I.A.R.S SPA',dir:'Manuel Montt 201, Chillán',u:32,av:'Permiso de Anteproyecto',sec:'Centro Chillán',con:'Ignacio Antonio Ruz Santana',tel:'Por gestionar',email:''},
+    {id:'o13',p:'Ed. Altos de Santa Lucia',e:'CONSTRUCTORA GARCIA LTDA',dir:'Cerro Santa Lucia 1645, Chillán',u:160,av:'Permiso de Anteproyecto',sec:'Sur Chillán',con:'Alvaro Sebastian Donoso Luer',tel:'Por gestionar',email:''},
+    {id:'o14',p:'Barrio Los Retamos',e:'INMOBILIARIA INMOVET LTDA',dir:'La Loma 320, Chillán',u:117,av:'Permisos por Construir',sec:'Sur Chillán',con:'Marcos Retamal Muñoz',tel:'Por gestionar',email:''},
+    {id:'o15',p:'Cerro Posada (241 viv.)',e:'INMOBILIARIA ALVARO SEBASTIAN DONOSO LUER',dir:'Cerro Posada 1832, Chillán',u:241,av:'Permiso de Anteproyecto',sec:'Sur Chillán',con:'Alvaro Sebastian Donoso Luer',tel:'Por gestionar',email:''},
+    {id:'o16',p:'Cuartel PDI Chillán',e:'MINISTERIO DEL INTERIOR / MOP',dir:'OHiggins esq. Santa Blanca, Chillán',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar via MOP',tel:'',email:''},
+    {id:'o17',p:'Allegados Nueva Esperanza (Camino Parque Lantaño)',e:'COMITÉ ALLEGADOS NUEVA ESPERANZA DE ISLAS DEL SUR',dir:'Camino Parque Lantaño 326, Chillán',u:200,av:'Permisos por Construir',sec:'Sur Chillán',con:'Felipe Eduardo Barra Palma',tel:'Por gestionar',email:''},
+    {id:'o19',p:'iOrigen C151',e:'INMOBILIARIA INVERSIONES EDCO LTDA',dir:'Carrera 151, Chillán',u:97,av:'Obra Gruesa',sec:'Centro Chillán',con:'Alvaro Hernandez Campos',tel:'Por gestionar',email:''},
+    {id:'o22',p:'Ed. San Bartolomé 50 dptos',e:'INMOBILIARIA SOCIEDAD AGRÍCOLA GANADERA LTDA',dir:'Avenida San Bartolomé 1385, Chillán Viejo',u:50,av:'Permisos por Construir',sec:'Chillán Viejo',con:'Alfonso Bustamante Muñoz',tel:'Por gestionar',email:''},
+    {id:'oSCb',p:'San Carlos DS49 (no existe)',e:'Por confirmar',dir:'San Carlos, Ñuble',u:0,av:'Por confirmar',sec:'Sur Chillán',con:'Por confirmar',tel:'',email:''},
+    {id:'o08',p:'Edif. 88 dptos Peumayén',e:'COMITÉ DE VIVIENDA PEUMAYÉN',dir:'Pasaje Norte 264, Chillán',u:88,av:'Permisos por Construir',sec:'Centro Chillán',con:'Milena Andrade Parra',tel:'Por gestionar',email:''},
+    {id:'o10',p:'Condominio Huambali',e:'CONSTRUCTORA PROM INGENIERÍA LTDA',dir:'Huambali 312, Chillán',u:89,av:'Permisos por Construir',sec:'Centro Chillán',con:'Jorge Figueroa Moreno',tel:'Por gestionar',email:''},
+    {id:'o12',p:'Ed. Manuel Montt',e:'CONSTRUCTORA I.A.R.S SPA',dir:'Manuel Montt 201, Chillán',u:32,av:'Permiso de Anteproyecto',sec:'Centro Chillán',con:'Ignacio Antonio Ruz Santana',tel:'Por gestionar',email:''},
+    {id:'pros025',p:'Prospección — CONSTRUCTORA AVELLANEDA LTDA.',e:'CONSTRUCTORA AVELLANEDA LTDA.',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros028',p:'Prospección — INGEPROCH',e:'CONSTRUCTORA INGEPROCH',dir:'Ñuble (nombre = Ingeniería Proyectos Chillán)',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros029',p:'Prospección — INMOVILIARIA BANDURRIAS',e:'INMOBILIARIA BANDURRIAS',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros030',p:'Prospección — CONSTRUCTORA SEREMAC',e:'CONSTRUCTORA SEREMAC',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros031',p:'Prospección — CONSTRUCTORA PANEGE',e:'CONSTRUCTORA PANEGE',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros032',p:'Prospección — CONSTRUCTORA URALES',e:'CONSTRUCTORA URALES',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros033',p:'Prospección — CONSTRUCTORA IHABITA',e:'CONSTRUCTORA IHABITA',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros034',p:'Prospección — INMOBILIARIA ALMERIA',e:'INMOBILIARIA ALMERIA',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros036',p:'Prospección — CONSTRUCTORA VILICIC',e:'CONSTRUCTORA VILICIC',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros037',p:'Prospección — CONSTRUCTORA GYL',e:'CONSTRUCTORA GYL',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros038',p:'Prospección — INMOBILIARIA MUFU',e:'INMOBILIARIA MUFU',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros039',p:'Prospección — CONSTRUCTORA HABITA',e:'CONSTRUCTORA HABITA',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros040',p:'Prospección — INMOBILIARIA LOGA',e:'INMOBILIARIA LOGA',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros041',p:'Prospección — INMOBILIARIA MAESTRA',e:'INMOBILIARIA MAESTRA',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros042',p:'Prospección — INMOBILIARIA COMPAX',e:'INMOBILIARIA COMPAX',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros043',p:'Prospección — CONSTRUCTORA EI',e:'CONSTRUCTORA EI',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros044',p:'Prospección — CONSTRUCTORA SANTOLAYA',e:'CONSTRUCTORA SANTOLAYA',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros045',p:'Prospección — CONSTRUCTORA MAP',e:'CONSTRUCTORA MAP',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros047',p:'Prospección — Constructora Cuatro Reinos SPA.',e:'CONSTRUCTORA CUATRO REINOS SPA.',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros048',p:'Prospección — Mac Construcciones SPA.',e:'CONSTRUCTORA MAC CONSTRUCCIONES SPA.',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros050',p:'Prospección — INMOBILIARIA COQUIMBO',e:'INMOBILIARIA COQUIMBO',dir:'Coquimbo (nombre geográfico, fuera de tu zona)',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros051',p:'Prospección — INMOBILIARIA FAI',e:'INMOBILIARIA FAI',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros052',p:'Prospección — CONSTRUCTORA FUENZALIDA',e:'CONSTRUCTORA FUENZALIDA',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros053',p:'Prospección — CONSTRUCTORA RGM',e:'CONSTRUCTORA RGM',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros054',p:'Prospección — CONSTRUCTORA INFACAL',e:'CONSTRUCTORA INFACAL',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros055',p:'Prospección — INMOBILIARIA LONGAVI',e:'INMOBILIARIA LONGAVI',dir:'Maule (Longaví, Linares)',u:0,av:'Permisos por Construir',sec:'Talca',con:'Por gestionar',tel:'',email:''},
+    {id:'pros056',p:'Prospección — CONSTRUCTORA COLBUN',e:'CONSTRUCTORA COLBUN',dir:'Maule (Colbún, San Clemente)',u:0,av:'Permisos por Construir',sec:'Talca',con:'Por gestionar',tel:'',email:''},
+    {id:'pros057',p:'Prospección — KAFRA CONSTRUCIONES',e:'CONSTRUCTORA KAFRA CONSTRUCCIONES',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros058',p:'Prospección — CONSTRUCTORA HECTOR ROMAN',e:'CONSTRUCTORA HECTOR ROMAN',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros059',p:'Prospección — CONSTRUCTORA DIGUA',e:'CONSTRUCTORA DIGUA',dir:'Maule (Digua, San Javier)',u:0,av:'Permisos por Construir',sec:'Talca',con:'Por gestionar',tel:'',email:''},
+    {id:'pros061',p:'Prospección — INMOBILIARIA INGENERIA LIMITADA',e:'INMOBILIARIA INGENERIA LIMITADA',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros072',p:'Prospección — JUAN LUIS PONCE',e:'INMOBILIARIA JUAN LUIS PONCE',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros073',p:'Prospección — CONSTRUCTORA ACOGE (MAURICIO MORA)',e:'CONSTRUCTORA ACOGE (MAURICIO MORA)',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros074',p:'Prospección — CONSTRUCTORA CARRASCO Y CARRASCO',e:'CONSTRUCTORA CARRASCO Y CARRASCO',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros082',p:'Prospección — INMOBILIARIA DESARROLOOS INMOVILIARIOIS',e:'INMOBILIARIA DESARROLOOS INMOVILIARIOIS',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros084',p:'Prospección — INMOBILIARIA DYM',e:'INMOBILIARIA DYM',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros088',p:'Prospección — INMOBILIARIA INEXOS',e:'INMOBILIARIA INEXOS',dir:'Dirección por confirmar en terreno',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'pros089',p:'Prospección — CONSTRUCTORA LAS ARAUCARIAS LIMITADA',e:'CONSTRUCTORA LAS ARAUCARIAS LIMITADA',dir:'Ñuble/Biobío',u:0,av:'Permisos por Construir',sec:'Centro Chillán',con:'Por gestionar',tel:'',email:''},
+    {id:'oML01',p:'Condominio Tres Rios Etapa II',e:'CONSTRUCTORA VITALIA',dir:'Avenida San Miguel 3704, Talca',u:0,av:'En construccion',sec:'Talca',con:'Por gestionar',tel:'',email:''},
+    {id:'oML02',p:'Edificio Tricahue',e:'INMOBILIARIA SB2 CONSTRUCTORES',dir:'Calle 5 Sur 1334, Talca Sur',u:0,av:'En construccion',sec:'Talca',con:'Por gestionar',tel:'',email:''},
+    {id:'oML03',p:'Townhouse Rucatremo',e:'CONSTRUCTORA RUCATEMU',dir:'Avenida Rucatremo 1024, Curico',u:0,av:'En construccion',sec:'Curicó',con:'Por gestionar',tel:'',email:''},
+    {id:'oRG01',p:'Centro Hipotecario',e:'INMOBILIARIA MONTE SAN LORENZO',dir:'Av. La Compañia 1661, Rancagua',u:0,av:'En construccion',sec:'Rancagua',con:'Por gestionar',tel:'',email:''}]}
+ ]}
+];
+
+
+
+
+
+
+// ═══ ESTADO ═══
+var LS_KEY = 'indoor_nuble_2026';
+var oEst={}, oCon={}, oTel={}, oNot={}, oFecha={}, oOV={}, oEmp={}, oTam={};
+var nubleCompleta=false;
+function getE(id){ return oEst[id]||'PENDIENTE'; }
+function setE(id,e,c,t,n,f,ov){
+  if(e) oEst[id]=e; if(c) oCon[id]=c; if(t) oTel[id]=t;
+  if(n) oNot[id]=n; if(f) oFecha[id]=f; if(ov) oOV[id]=ov;
+  lsSave(); updateStats();
+}
+
+// ═══ LOCALSTORAGE ═══
+function lsLoad(){
+  try{
+    var d=JSON.parse(localStorage.getItem(LS_KEY)||'{}');
+    for(var id in d){
+      if(d[id].e&&d[id].e!=='PENDIENTE') oEst[id]=d[id].e;
+      if(d[id].c) oCon[id]=d[id].c;
+      if(d[id].t) oTel[id]=d[id].t;
+      if(d[id].n) oNot[id]=d[id].n;
+      if(d[id].f) oFecha[id]=d[id].f;
+      if(d[id].ov) oOV[id]=d[id].ov;
+      if(d[id].emp) oEmp[id]=d[id].emp;
+      if(d[id].tam) oTam[id]=d[id].tam;
+    }
+  }catch(e){}
+}
+function lsSave(){
+  try{
+    var d={};
+    getAllObras().forEach(function(o){
+      var e=getE(o.id);
+      if(e!=='PENDIENTE'||oCon[o.id]||oTel[o.id]||oNot[o.id]||oEmp[o.id]||oTam[o.id]){
+        d[o.id]={e:e,c:oCon[o.id]||'',t:oTel[o.id]||'',n:oNot[o.id]||'',f:oFecha[o.id]||'',ov:oOV[o.id]||'',emp:oEmp[o.id]||'',tam:oTam[o.id]||''};
+      }
+    });
+    localStorage.setItem(LS_KEY,JSON.stringify(d));
+    showSync('💾 Guardado');
+  }catch(ex){}
+}
+function showSync(msg){
+  var el=document.getElementById('syncBadge');
+  if(!el)return; el.textContent=msg; el.style.display='inline-block';
+  setTimeout(function(){el.style.display='none';},2500);
+}
+
+// ═══ HELPERS ═══
+var SC={'Centro Chillán':'#e8a020','Norte Chillán':'#2a9fd8','Sur Chillán':'#27c97a',
+  'Sur-Oriente Chillán':'#9b6cf7','Oriente Chillán':'#e8c820','Chillán Viejo':'#e85555',
+  'Talca':'#2a9fd8','Linares':'#27c97a','Parral':'#e8a020','Curicó':'#9b6cf7'};
+
+function avTag(av){
+  if(av.indexOf('Anteproyecto')>=0||av.indexOf('Permisos por')>=0)
+    return '<span class="tag av-nuevo">🆕 Nuevo</span>';
+  if(av.indexOf('Preliminar')>=0) return '<span class="tag av-prel">🆕 Obras Prel.</span>';
+  if(av.indexOf('Obra Gruesa')>=0) return '<span class="tag av-og">🏗️ Obra Gruesa</span>';
+  if(av.indexOf('Terminac')>=0) return '<span class="tag av-term">Terminaciones</span>';
+  return '<span class="tag av-nuevo">📋 Permiso</span>';
+}
+function estTag(e){
+  var visLabel = nubleCompleta ? 'est-vis 🔁 Seguimiento' : 'est-vis ✅ Visitada';
+  var m={'PENDIENTE':'est-pend ⏳ Pendiente','VISITADA':visLabel,
+    'COTIZANDO':'est-cot 📄 Cotizando','REPROGRAMAR':'est-rep 🔄 Reprogramar',
+    'SIN CONTACTO':'est-sc ❌ Sin contacto','OTRO VENDEDOR':'est-ov 🚫 Otro vendedor',
+    'OBRA NO EXISTE':'est-ov 🚫 Obra no existe'};
+  var v=m[e]||m['PENDIENTE']; var parts=v.split(' '); var cls=parts.shift();
+  return '<span class="badge '+cls+'">'+parts.join(' ')+'</span>';
+}
+function getAllObras(){
+  var all=[],seen={};
+  semanas.forEach(function(s,si){
+    s.dias.forEach(function(d){
+      d.obras.forEach(function(o){
+        if(!seen[o.id]){seen[o.id]=1;all.push(o);}
+      });
+    });
+  });
+  return all;
+}
+
+
+// ═══ EMPRESA / TAMAÑO override ═══
+function getEmp(o){ return oEmp[o.id] || o.e; }
+function fmtEmp(e){
+  if(!e) return '';
+  var u=e.toUpperCase().trim();
+  if(u.indexOf('CONSTRUCTORA')===0||u.indexOf('INMOBILIARIA')===0||
+     u.indexOf('SOCIEDAD CONSTRUCTORA')===0||u.indexOf('SOCIEDAD INMOBILIARIA')===0) return u;
+  return 'INMOBILIARIA '+u;
+}
+function getTam(id){ return oTam[id] || ''; }
+function diasSinActividad(id){
+  var f=oFecha[id]; if(!f) return 999;
+  var p=f.split('-'); if(p.length<3) return 999;
+  return Math.floor((new Date()-new Date(+p[0],+p[1]-1,+p[2]))/(864e5));
+}
+function alertaColor(id){
+  var e=getE(id);
+  if(e==='VISITADA'||e==='COTIZANDO'||e==='OTRO VENDEDOR'||e==='OBRA NO EXISTE') return '';
+  var d=diasSinActividad(id);
+  if(d>=30) return '#dc2626';
+  if(d>=15) return '#f59e0b';
+  return '';
+}
+function tamBadge(t){
+  if(t==='Grande') return '<span style="background:rgba(220,38,38,.15);color:#dc2626;border:1px solid rgba(220,38,38,.3);padding:1px 7px;border-radius:7px;font-size:9px;font-weight:700">🔴 Grande</span>';
+  if(t==='Mediana') return '<span style="background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3);padding:1px 7px;border-radius:7px;font-size:9px;font-weight:700">🟡 Mediana</span>';
+  if(t==='Pequeña') return '<span style="background:rgba(59,130,246,.15);color:#3b82f6;border:1px solid rgba(59,130,246,.3);padding:1px 7px;border-radius:7px;font-size:9px;font-weight:700">🔵 Pequeña</span>';
+  return '<span style="color:#64748b;font-size:9px">— Sin clasificar</span>';
+}
+
+// ═══ ESTADO ACTUAL ═══
+var curWeek=0;
+var extraObras=[];
+
+// ═══ WEEK NAV ═══
+function buildNav(){
+  var nav=document.getElementById('weekNav');
+  var html='<span class="wlbl">🔥 Urgente</span>';
+  semanas.forEach(function(s,i){
+    var isM=s.tit.indexOf('MAULE')>=0||s.tit.indexOf('🚗')>=0;
+    var cls='wbtn'+(s.tipo==='urg'?' urg':'')+(isM?' maule':'')+(i===0?' on':'');
+    html+='<button class="'+cls+'" onclick="switchWeek('+i+',this)">S'+(i+1)+' · '+s.fi.split(' ').slice(0,2).join(' ')+(isM?' 🚗':'')+'</button>';
+    if(i===0) html+='<span class="wlbl">📍 Sector</span>';
+    if(i===7) html+='<span class="wlbl">🚗 Maule</span>';
+  });
+  nav.innerHTML=html;
+}
+
+function switchWeek(idx,btn){
+  curWeek=idx;
+  document.querySelectorAll('.wbtn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  renderWeek();
+}
+
+// ═══ RENDER WEEK ═══
+function renderWeek(){
+  var s=semanas[curWeek];
+  var busq=(document.getElementById('fBusq').value||'').toLowerCase();
+  var fEst=document.getElementById('fEst').value;
+  var fSec=document.getElementById('fSec').value;
+  var html='';
+  if(s.nota) html+='<div class="wnota">'+s.nota+'</div>';
+  html+='<div class="dgrid">';
+  s.dias.forEach(function(d){
+    var sc=SC[d.sec]||'#e8a020';
+    var obras=d.obras.filter(function(o){
+      var e=getE(o.id);
+      if(!fEst && (e==='VISITADA'||e==='COTIZANDO')) return false;
+      if(e==='OTRO VENDEDOR'||e==='OBRA NO EXISTE') return false;
+      if(busq&&[o.p,o.e,o.dir,o.sec].join(' ').toLowerCase().indexOf(busq)<0) return false;
+      if(fEst&&e!==fEst) return false;
+      if(fSec&&o.sec!==fSec) return false;
+      return true;
+    });
+    // REPROGRAMAR / SIN CONTACTO = maxima prioridad (ya se invirtio tiempo en llegar)
+    obras.sort(function(a,b){
+      var ea=getE(a.id), eb=getE(b.id);
+      var pa=(ea==='REPROGRAMAR'||ea==='SIN CONTACTO')?0:avPri(a.av);
+      var pb=(eb==='REPROGRAMAR'||eb==='SIN CONTACTO')?0:avPri(b.av);
+      return pa-pb;
+    });
+    html+='<div class="dcol">';
+    html+='<div class="dhead" style="border-bottom-color:'+sc+'">';
+    html+='<div><div class="dname">'+d.nom+'</div><div class="dfecha">'+d.fecha+'</div><div class="dsec" style="color:'+sc+'">'+d.sec+'</div></div>';
+    if(obras.length) html+='<div class="dcnt" style="background:'+sc+'">'+obras.length+'</div>';
+    html+='</div>';
+    if(d.nota) html+='<div class="dnota">'+d.nota+'</div>';
+    html+='<div class="dbody">';
+    if(!obras.length){
+      html+='<div style="padding:12px;text-align:center;color:#5a7a96;font-size:11px">📋 Sin visitas</div>';
+    } else {
+      obras.forEach(function(o,i){
+        var e=getE(o.id);
+        var sc2=SC[o.sec]||'#5a7a96';
+        var con=oCon[o.id]||o.con||'Por gestionar';
+        var tel=oTel[o.id]||o.tel||'';
+        var nota=oNot[o.id]||'';
+        html+='<div class="oc">';
+        html+='<div class="oc-top">';
+        html+='<div class="oc-num" style="background:'+sc2+';color:#0d1821">'+(i+1)+'</div>';
+        html+='<div class="oc-info">';
+        html+='<div class="oc-p">'+o.p+(o.fuente?'<span style="font-size:9px;background:rgba(155,108,247,.2);color:#9b6cf7;padding:1px 5px;border-radius:3px;margin-left:4px">🆕</span>':'')+'</div>';
+        html+='<div class="oc-e">'+getEmp(o)+(oEmp[o.id]?' <span style="color:#16a34a;font-size:9px">✓</span>':'')+'</div>';
+        html+='<div class="oc-d">📍 <strong style="color:#ffffff">'+o.dir+'</strong></div>';
+        html+='</div></div>';
+        html+='<div class="oc-meta"><span style="font-size:10px;color:#2a9fd8;font-weight:700">'+(o.u?o.u+' uds':' ')+'</span>'+avTag(o.av)+'</div>';
+        html+='<div style="padding:5px 9px;font-size:10px;color:#5a7a96">'+con+(tel&&tel.indexOf('Por')<0?' · '+tel.substring(0,25):'')+'</div>';
+        if(nota) html+='<div style="padding:3px 9px;font-size:10px;color:#e8c820;font-style:italic">'+nota.substring(0,60)+'</div>';
+        html+='<div class="oc-foot">'+estTag(e)+'<button class="rbtn" onclick="openReg(\''+o.id+'\',\''+o.p.replace(/'/g,'&#39;').replace(/"/g,'&quot;')+'\')" >📝 Registrar</button></div>';
+        html+='</div>';
+      });
+    }
+    html+='</div></div>';
+  });
+  html+='</div>';
+  document.getElementById('weekContent').innerHTML=html;
+}
+
+// ═══ MODAL REGISTRAR ═══
+function openReg(id, nom){
+  var est=getE(id);
+  // 7-day cooldown warning
+  if(est==='VISITADA' && oFecha[id]){
+    var dias=Math.floor((new Date()-new Date(oFecha[id]))/86400000);
+    if(dias<7){
+      var confirmar=confirm('⚠️ Esta obra fue visitada hace '+dias+' dia(s) ('+oFecha[id]+').\n\nSegun la regla de 7 dias minimos entre visitas, NO deberia reasignarse todavia.\n\nDeseas continuar de todas formas?');
+      if(!confirmar) return;
+    }
+  }
+  document.getElementById('dlgId').value=id;
+  document.getElementById('dlgTit').textContent='📝 '+(nom||'').substring(0,40);
+  document.getElementById('dlgEst').value=est||'VISITADA';
+  document.getElementById('dlgFec').value=oFecha[id]||new Date().toISOString().split('T')[0];
+  document.getElementById('dlgCon').value=oCon[id]||'';
+  document.getElementById('dlgTel').value=oTel[id]||'';
+  document.getElementById('dlgNot').value=oNot[id]||'';
+  document.getElementById('dlgProv').value=oOV[id]||'';
+  document.getElementById('ovRow').style.display=est==='OTRO VENDEDOR'?'block':'none';
+  document.getElementById('dlgReg').showModal();
+}
+function saveReg(){
+  var id=document.getElementById('dlgId').value;
+  setE(id,
+    document.getElementById('dlgEst').value,
+    document.getElementById('dlgCon').value,
+    document.getElementById('dlgTel').value,
+    document.getElementById('dlgNot').value,
+    document.getElementById('dlgFec').value,
+    document.getElementById('dlgProv').value
+  );
+  document.getElementById('dlgReg').close();
+  renderWeek();
+  if(document.getElementById('tab-crm').classList.contains('on')) renderCRM();
+}
+
+// ═══ TABS ═══
+function showTab(name,btn){
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('on');});
+  document.getElementById('tab-'+name).classList.add('on');
+  btn.classList.add('on');
+  if(name==='crm'){lsLoad();renderCRM();}
+  if(name==='email') renderEmailList();
+  if(name==='informe') initInforme();
+}
+
+// ═══ FILTERS ═══
+function clearFilters(){
+  document.getElementById('fBusq').value='';
+  document.getElementById('fEst').value='';
+  document.getElementById('fSec').value='';
+  renderWeek();
+}
+
+// ═══ ADD OBRA ═══
+function toggleAddPanel(){
+  var p=document.getElementById('addPanel');
+  p.style.display=p.style.display==='none'?'block':'none';
+}
+function addObra(){
+  var o={id:'x'+Date.now(),p:document.getElementById('np').value||'Sin nombre',
+    e:document.getElementById('ne').value||'Por confirmar',dir:document.getElementById('nd').value||'',
+    sec:document.getElementById('nsec').value,u:parseInt(document.getElementById('nu').value)||0,
+    av:document.getElementById('nav').value,con:document.getElementById('nc').value||'Por gestionar',
+    tel:document.getElementById('ntel').value||'',email:'',notas:''};
+  semanas[0].dias[0].obras.unshift(o);
+  renderWeek(); toggleAddPanel(); updateStats();
+}
+
+// ═══ CRM ═══
+function avPri(av){
+  if(av.indexOf('Anteproyecto')>=0||av.indexOf('Permisos por')>=0) return 1;
+  if(av.indexOf('Preliminar')>=0) return 2;
+  if(av.indexOf('Obra Gruesa')>=0) return 3;
+  if(av.indexOf('Terminac')>=0) return 4;
+  return 5;
+}
+function renderCRM(){
+  var busq=(document.getElementById('cBusq').value||'').toLowerCase();
+  var fEst=document.getElementById('cEst').value;
+  var fSec=document.getElementById('cSec').value;
+  var fTam=document.getElementById('cTam')?document.getElementById('cTam').value:'';
+  var sort=document.getElementById('cSort').value;
+  var data=getAllObras().filter(function(o){
+    var emp=getEmp(o);
+    if(busq&&[o.p,emp,o.dir,o.sec,oCon[o.id]||o.con||''].join(' ').toLowerCase().indexOf(busq)<0) return false;
+    if(fEst&&getE(o.id)!==fEst) return false;
+    if(fSec&&o.sec!==fSec) return false;
+    if(fTam&&getTam(o.id)!==fTam) return false;
+    return true;
+  });
+  data.sort(function(a,b){
+    if(sort==='pri') return avPri(a.av)-avPri(b.av);
+    if(sort==='emp') return fmtEmp(getEmp(a)).localeCompare(fmtEmp(getEmp(b)));
+    var eo={'COTIZANDO':0,'VISITADA':1,'REPROGRAMAR':2,'PENDIENTE':3,'SIN CONTACTO':4,'OTRO VENDEDOR':5};
+    var diff=(eo[getE(a.id)]||9)-(eo[getE(b.id)]||9);
+    if(diff!==0) return diff;
+    return (alertaColor(b.id)?1:0)-(alertaColor(a.id)?1:0);
+  });
+  // KPIs
+  var all=getAllObras();
+  var vis=all.filter(function(o){return getE(o.id)==='VISITADA';}).length;
+  var cot=all.filter(function(o){return getE(o.id)==='COTIZANDO';}).length;
+  var pend=all.filter(function(o){return getE(o.id)==='PENDIENTE';}).length;
+  var sc=all.filter(function(o){return getE(o.id)==='SIN CONTACTO';}).length;
+  var gr=all.filter(function(o){return getTam(o.id)==='Grande';}).length;
+  var me=all.filter(function(o){return getTam(o.id)==='Mediana';}).length;
+  var pe=all.filter(function(o){return getTam(o.id)==='Pequeña';}).length;
+  document.getElementById('crmKpis').innerHTML=
+    ['<span style="background:#122a5e;border:1px solid #1a3a8f;border-radius:6px;padding:7px 14px;text-align:center"><div style="font-size:18px;font-weight:900;color:#3b82f6">'+all.length+'</div><div style="font-size:9px;color:#64748b;text-transform:uppercase">Total</div></span>',
+     '<span style="background:#122a5e;border:1px solid #1a3a8f;border-radius:6px;padding:7px 14px;text-align:center"><div style="font-size:18px;font-weight:900;color:#16a34a">'+vis+'</div><div style="font-size:9px;color:#64748b;text-transform:uppercase">Visitadas</div></span>',
+     '<span style="background:#122a5e;border:1px solid #1a3a8f;border-radius:6px;padding:7px 14px;text-align:center"><div style="font-size:18px;font-weight:900;color:#60a5fa">'+cot+'</div><div style="font-size:9px;color:#64748b;text-transform:uppercase">Cotizando</div></span>',
+     '<span style="background:#122a5e;border:1px solid #1a3a8f;border-radius:6px;padding:7px 14px;text-align:center"><div style="font-size:18px;font-weight:900;color:#fbbf24">'+pend+'</div><div style="font-size:9px;color:#64748b;text-transform:uppercase">Pendientes</div></span>',
+     '<span style="background:#122a5e;border:1px solid #1a3a8f;border-radius:6px;padding:7px 14px;text-align:center"><div style="font-size:18px;font-weight:900;color:#dc2626">'+sc+'</div><div style="font-size:9px;color:#64748b;text-transform:uppercase">Sin contacto</div></span>',
+     '<span style="background:#122a5e;border:1px solid #f59e0b;border-radius:6px;padding:7px 14px;text-align:center"><div style="font-size:18px;font-weight:900;color:#f59e0b">'+all.filter(function(o){return alertaColor(o.id)!=='';}).length+'</div><div style="font-size:9px;color:#64748b;text-transform:uppercase">⚠️ Sin actividad</div></span>',
+     '<span style="background:#122a5e;border:1px solid #dc2626;border-radius:6px;padding:7px 14px;text-align:center"><div style="font-size:18px;font-weight:900;color:#dc2626">'+gr+'</div><div style="font-size:9px;color:#64748b;text-transform:uppercase">🔴 Grandes</div></span>',
+     '<span style="background:#122a5e;border:1px solid #fbbf24;border-radius:6px;padding:7px 14px;text-align:center"><div style="font-size:18px;font-weight:900;color:#fbbf24">'+me+'</div><div style="font-size:9px;color:#64748b;text-transform:uppercase">🟡 Medianas</div></span>',
+     '<span style="background:#122a5e;border:1px solid #3b82f6;border-radius:6px;padding:7px 14px;text-align:center"><div style="font-size:18px;font-weight:900;color:#3b82f6">'+pe+'</div><div style="font-size:9px;color:#64748b;text-transform:uppercase">🔵 Pequeñas</div></span>',
+    ].join('');
+  // Table
+  var tbody=document.getElementById('crmBody');
+  if(!data.length){tbody.innerHTML='<tr><td colspan="13" style="padding:20px;text-align:center;color:#64748b">Sin resultados</td></tr>';return;}
+  tbody.innerHTML=data.map(function(o,i){
+    var e=getE(o.id);
+    var sc2=SC[o.sec]||'#64748b';
+    var semCls={'VISITADA':'sem-g','COTIZANDO':'sem-b','REPROGRAMAR':'sem-y','SIN CONTACTO':'sem-r','OTRO VENDEDOR':'sem-m'}[e]||'sem-y';
+    var con=oCon[o.id]||o.con||'—';
+    var tel=oTel[o.id]||o.tel||'—';
+    var nota=oNot[o.id]||'';
+    var prov=oOV[o.id]||'';
+    var emp=getEmp(o);
+    var empEdited=!!oEmp[o.id];
+    var tam=getTam(o.id);
+    return '<tr>'+
+      '<td style="color:#64748b;font-size:10px;text-align:center">'+(i+1)+'</td>'+
+      '<td><span class="sem '+semCls+'"></span>'+estTag(e)+'</td>'+
+      '<td style="font-weight:700;color:#3b82f6">'+fmtEmp(emp)+(empEdited?' <span title="Nombre corregido manualmente" style="font-size:9px;color:#16a34a">✓</span>':'')+'</td>'+
+      '<td style="color:#ffffff;font-weight:600">'+o.p+'</td>'+
+      '<td>'+tamBadge(tam)+(alertaColor(o.id)?' <span title="Sin actividad '+diasSinActividad(o.id)+' dias" style="background:'+alertaColor(o.id)+'22;color:'+alertaColor(o.id)+';border:1px solid '+alertaColor(o.id)+'44;padding:1px 5px;border-radius:4px;font-size:9px;font-weight:700">⚠️ '+diasSinActividad(o.id)+'d</span>':'')+'</td>'+
+      '<td><span style="font-size:9px;padding:1px 6px;border-radius:5px;background:'+sc2+'22;color:'+sc2+';border:1px solid '+sc2+'44">'+o.sec+'</span></td>'+
+      '<td style="font-size:10px;color:#ffffff;font-weight:600">'+o.dir+'</td>'+
+      '<td style="font-size:11px">'+con+'</td>'+
+      '<td style="font-size:10px;color:#ffffff;font-weight:700">'+(tel.indexOf('Por')<0?tel:'—')+(o.email&&o.email.indexOf('@')>0?'<br>'+o.email:'')+'</td>'+
+      '<td style="text-align:center;font-weight:900;color:#ffffff;font-size:13px">'+(o.u||'—')+'</td>'+
+      '<td>'+avTag(o.av)+'</td>'+
+      '<td style="font-size:10px;color:#64748b;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+nota+(prov?' | Proveedor: '+prov:'')+'">'+nota.substring(0,40)+(prov?'<br><span style="color:#7c3aed">Prov: '+prov+'</span>':'')+'</td>'+
+      '<td style="display:flex;gap:4px"><button class="rbtn" onclick="openReg(\''+o.id+'\',\''+o.p.replace(/'/g,'&#39;').replace(/"/g,'&quot;')+'\')" title="Registrar visita">✏️</button>'+
+      '<button class="rbtn" onclick="openEditCliente(\''+o.id+'\')" title="Editar cliente / clasificar tamaño" style="border-color:#3b82f6;color:#3b82f6">🏢</button></td>'+
+    '</tr>';
+  }).join('');
+  document.getElementById('crmCount').textContent='Mostrando '+data.length+' de '+all.length+' registros';
+}
+
+// ═══ EDITAR CLIENTE (Empresa Mandante + Tamaño) ═══
+function openEditCliente(id){
+  var o=getAllObras().filter(function(x){return x.id===id;})[0];
+  if(!o) return;
+  document.getElementById('ecId').value=id;
+  document.getElementById('ecTit').textContent='🏢 '+o.p.substring(0,40);
+  document.getElementById('ecOriginal').textContent='Nombre original: '+o.e;
+  document.getElementById('ecEmpresa').value=getEmp(o);
+  document.getElementById('ecTam').value=getTam(id)||'';
+  document.getElementById('dlgEditCliente').showModal();
+}
+function saveEditCliente(){
+  var id=document.getElementById('ecId').value;
+  var emp=document.getElementById('ecEmpresa').value.trim();
+  var tam=document.getElementById('ecTam').value;
+  var o=getAllObras().filter(function(x){return x.id===id;})[0];
+  if(emp && emp!==o.e) oEmp[id]=emp; else delete oEmp[id];
+  if(tam) oTam[id]=tam; else delete oTam[id];
+  lsSave();
+  document.getElementById('dlgEditCliente').close();
+  renderCRM();
+  if(document.getElementById('tab-cal').classList.contains('on')) renderWeek();
+}
+
+function exportPDF(){
+  window.print();
+}
+
+// ═══ ASISTENTE IA LOCAL ═══
+function iaQ(cmd){
+  document.getElementById('iaInput').value=cmd;
+  iaEnviar();
+}
+function iaEnviar(){
+  var input=document.getElementById('iaInput');
+  var chat=document.getElementById('iaChat');
+  var msg=input.value.trim(); if(!msg) return;
+  input.value='';
+  chat.innerHTML+='<div style="background:rgba(232,160,32,.12);color:#e8a020;padding:5px 9px;border-radius:6px;margin-bottom:5px;font-size:11px;text-align:right">'+msg+'</div>';
+  var resp=iaResponder(msg);
+  chat.innerHTML+='<div style="background:#192d3e;color:#cde0f0;padding:6px 10px;border-radius:6px;margin-bottom:5px;font-size:11px;line-height:1.5">'+resp+'</div>';
+  chat.scrollTop=chat.scrollHeight;
+}
+function iaResponder(q){
+  var lq=q.toLowerCase();
+  var todas=getAllObras();
+  if(lq.indexOf('urgent')>=0||lq.indexOf('nuevo')>=0||lq.indexOf('priorid')>=0){
+    var nv=todas.filter(function(o){return (o.av.indexOf('Anteproyecto')>=0||o.av.indexOf('Permisos por')>=0||o.av.indexOf('Preliminar')>=0)&&!['VISITADA','COTIZANDO'].includes(getE(o.id));});
+    var og=todas.filter(function(o){return o.av.indexOf('Obra Gruesa')>=0&&!['VISITADA','COTIZANDO'].includes(getE(o.id));});
+    var r='<strong>PRIORIDAD DE VISITA:</strong><br>';
+    if(nv.length) r+='🆕 Proyectos nuevos ('+nv.length+'): '+nv.slice(0,3).map(function(o){return o.p.substring(0,25);}).join(', ')+'<br>';
+    if(og.length) r+='🏗️ Obra Gruesa ('+og.length+'): '+og.slice(0,3).map(function(o){return o.p.substring(0,25);}).join(', ')+'<br>';
+    return r||'✅ Sin obras urgentes pendientes';
+  }
+  if(lq.indexOf('resumen')>=0||lq.indexOf('kpi')>=0){
+    var vis=todas.filter(function(o){return getE(o.id)==='VISITADA';}).length;
+    var cot=todas.filter(function(o){return getE(o.id)==='COTIZANDO';}).length;
+    var pend=todas.filter(function(o){return getE(o.id)==='PENDIENTE';}).length;
+    return '<strong>RESUMEN CRM:</strong><br>Total: '+todas.length+' obras<br>✅ Visitadas: '+vis+'<br>📄 Cotizando: '+cot+'<br>⏳ Pendientes: '+pend+'<br>Avance: '+Math.round((vis+cot)/todas.length*100)+'%';
+  }
+  if(lq.indexOf('vencid')>=0||lq.indexOf('seguim')>=0){
+    var hoy=new Date();
+    var venc=todas.filter(function(o){
+      if(getE(o.id)!=='COTIZANDO') return false;
+      if(!oFecha[o.id]) return false;
+      return Math.floor((hoy-new Date(oFecha[o.id]))/86400000)>=5;
+    });
+    return venc.length?'⏰ Cotizaciones +5 días sin respuesta ('+venc.length+'):<br>'+venc.map(function(o){return '• '+o.p.substring(0,30);}).join('<br>'):'✅ Sin seguimientos vencidos';
+  }
+  if(lq.indexOf('otro')>=0&&(lq.indexOf('vendor')>=0||lq.indexOf('proveedor')>=0)){
+    var ovs=todas.filter(function(o){return getE(o.id)==='OTRO VENDEDOR';});
+    return ovs.length?'🚫 Con otro proveedor ('+ovs.length+'):<br>'+ovs.map(function(o){return '• '+o.p.substring(0,30)+(oOV[o.id]?' → '+oOV[o.id]:'');}).join('<br>'):'Sin empresas con otro proveedor registrado.';
+  }
+  // Buscar empresa
+  var matches=todas.filter(function(o){
+    return [o.p,o.e,o.dir,o.sec].join(' ').toLowerCase().indexOf(lq)>=0;
+  });
+  if(matches.length){
+    return '🔍 '+matches.length+' resultado(s) para "'+q+'":<br>'+matches.slice(0,4).map(function(o){
+      return '• <strong>'+o.p.substring(0,30)+'</strong> — '+estTag(getE(o.id));
+    }).join('<br>');
+  }
+  return 'Puedo ayudarte con: urgentes, resumen, vencidos, otro vendedor, o busca por nombre de empresa.';
+}
+
+// ═══ STATS ═══
+function updateStats(){
+  var all=getAllObras();
+  var vis=all.filter(function(o){return ['VISITADA','COTIZANDO'].includes(getE(o.id));}).length;
+  document.getElementById('s-tot').textContent=all.length;
+  document.getElementById('s-vis').textContent=vis;
+  document.getElementById('s-pct').textContent=all.length?Math.round(vis/all.length*100)+'%':'0%';
+  updateProgress();
+}
+
+// ═══ CORREO MASIVO ═══
+var CONTACTOS=[
+  {n:'Francisco Larrere',e:'flarrere@fgs.cl',z:'Chillán'},{n:'Proveedores FGS',e:'proveedores@fgs.cl',z:'Chillán'},
+  {n:'Sebastián Varas',e:'svaras@fgs.cl',z:'Chillán'},{n:'Felix Troncoso',e:'ftroncoso@terracon.cl',z:'Chillán'},
+  {n:'Claudia Leiva',e:'cleiva@terracon.cl',z:'Chillán'},{n:'Antonio Tejo (IHV)',e:'atejo@ihv.cl',z:'Chillán Viejo'},
+  {n:'Sergio Cabas (IHV)',e:'scabas@ihv.cl',z:'Chillán Viejo'},{n:'ECOTEM',e:'contacto@ecotem.cl',z:'Chillán Viejo'},
+  {n:'INESPA Las Delicias',e:'lasdelicias@inespa.cl',z:'Chillán'},{n:'Luis Medina (Paumar)',e:'l.mlagos95@gmail.com',z:'Chillán'},
+  {n:'Camila Missene (Paumar)',e:'camila.missene@paumar.cl',z:'Chillán'},{n:'Juan Rubio (Paumar)',e:'jrubio@paumar.cl',z:'Chillán'},
+  {n:'SERVIU Ñuble',e:'serviunuble@minvu.gob.cl',z:'Chillán'},{n:'SERVIU Maule',e:'serviumaule@minvu.gob.cl',z:'Talca'},
+  {n:'Ventas Malpo',e:'ventas@malpo.cl',z:'Talca'},
+];
+var emailSel=new Set();
+function renderEmailList(){
+  var sec=(document.getElementById('ef-sec')||{value:''}).value;
+  var filtered=CONTACTOS.filter(function(c){return !sec||c.z.indexOf(sec)>=0;});
+  var html=filtered.map(function(c,i){
+    var sel=emailSel.has(c.e);
+    return '<div style="display:flex;align-items:flex-start;gap:7px;padding:6px 8px;border-radius:4px;margin-bottom:2px;cursor:pointer;background:'+(sel?'rgba(232,160,32,.07)':'transparent')+'" onclick="toggleEmail(\''+c.e+'\','+i+')" id="ci'+i+'">'
+      +'<input type="checkbox" '+(sel?'checked':'')+" onclick=\"event.stopPropagation();toggleEmail('"+c.e+"',"+i+")\" id=\"ck"+i+"\" style=\"accent-color:#e8a020;flex-shrink:0;margin-top:2px\">"
+      +'<div style="min-width:0"><div style="font-size:11px;font-weight:700;color:#eaf4ff">'+c.n+'</div><div style="font-size:10px;color:#2a9fd8">'+c.e+'</div><div style="font-size:9px;color:#5a7a96">'+c.z+'</div></div></div>';
+  }).join('');
+  document.getElementById('emailList').innerHTML=html||'<div style="padding:16px;text-align:center;color:#5a7a96;font-size:11px">Sin contactos</div>';
+  updateEmailCount();
+}
+function toggleEmail(email,i){
+  if(emailSel.has(email)) emailSel.delete(email); else emailSel.add(email);
+  renderEmailList();
+}
+function selAllEmails(){
+  var checked=document.getElementById('selAll').checked;
+  CONTACTOS.forEach(function(c){checked?emailSel.add(c.e):emailSel.delete(c.e);});
+  renderEmailList();
+}
+function updateEmailCount(){
+  var n=emailSel.size;
+  document.getElementById('emailCnt').textContent=n;
+  document.getElementById('emailSel').innerHTML=n?'<strong style="color:#e8a020">'+n+'</strong> destinatarios en BCC':'Ningún destinatario';
+}
+function getBCC(){return [...emailSel].join('; ');}
+function insVar(v){var ta=document.getElementById('em-body');var p=ta.selectionStart;ta.value=ta.value.substring(0,p)+v+ta.value.substring(p);ta.focus();}
+var TPLS={
+  promo:{s:'[InDooR] Oferta especial puertas MDF y metálicas',b:'Estimado/a {{contacto}},\n\nLe contactamos desde InDooR SpA con nuestra oferta especial en puertas MDF y metálicas para proyectos habitacionales.\n\n🚪 Puertas MDF desde $XX.XXX + IVA\n🚪 Puertas metálicas desde $XX.XXX + IVA\n\nFabricación propia · Plazos garantizados · Garantía de fabricante\n\nSaludos,\nClaudio Uribe\nEjecutivo Comercial — InDooR SpA'},
+  catalogo:{s:'[InDooR] Catálogo de productos 2026',b:'Estimado/a {{contacto}},\n\nAdjunto encontrará nuestro catálogo actualizado 2026 con:\n• Puertas MDF (lisa, ranurada, con vidrio)\n• Puertas metálicas (simple, doble hoja, cortafuego F30/F60)\n• Puertas fibra de vidrio\n• Marcos y accesorios\n\nSaludos,\nClaudio Uribe\nEjecutivo Comercial — InDooR SpA'},
+  seguimiento:{s:'[InDooR] Seguimiento a nuestra cotización',b:'Estimado/a {{contacto}},\n\nMe pongo en contacto para hacer seguimiento a nuestra cotización enviada para {{empresa}}.\n\n¿Tuvieron oportunidad de revisarla? Quedo disponible para cualquier consulta.\n\nSaludos,\nClaudio Uribe\nEjecutivo Comercial — InDooR SpA'},
+  presentacion:{s:'[InDooR SpA] Presentación de servicios',b:'Estimado/a {{contacto}},\n\nMe dirijo a usted en representación de InDooR SpA, fabricante de puertas con planta propia en Cabrero, Biobío.\n\nEspecialistas en proyectos habitacionales DS19/DS49.\n\n¿Podríamos coordinar una reunión?\n\nSaludos,\nClaudio Uribe\nEjecutivo Comercial — InDooR SpA'}
+};
+function loadTpl(k){var t=TPLS[k];if(!t)return;document.getElementById('em-sub').value=t.s;document.getElementById('em-body').value=t.b;}
+function previewEmail(){
+  var sel=[...emailSel]; if(!sel.length){alert('Selecciona al menos un destinatario');return;}
+  var first=CONTACTOS.find(function(c){return c.e===sel[0];})||{n:'Contacto',e:sel[0]};
+  var subj=document.getElementById('em-sub').value||'(sin asunto)';
+  var body=(document.getElementById('em-body').value||'').replace(/\{\{contacto\}\}/g,first.n).replace(/\{\{empresa\}\}/g,first.n);
+  document.getElementById('prevMeta').innerHTML='<div><strong>Para:</strong> BCC — '+sel.length+' destinatarios (no se ven entre sí)</div><div><strong>Asunto:</strong> '+subj+'</div>';
+  document.getElementById('prevBody').textContent=body;
+  document.getElementById('prevBCC').textContent=getBCC();
+  document.getElementById('dlgPreview').showModal();
+}
+function copyBCC(){
+  var bcc=getBCC(); if(!bcc){alert('Sin destinatarios');return;}
+  var btn=document.getElementById('copyOk');
+  navigator.clipboard.writeText(bcc).then(function(){btn.style.display='inline';setTimeout(function(){btn.style.display='none';},2500);}).catch(function(){
+    var ta=document.createElement('textarea');ta.value=bcc;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    btn.style.display='inline';setTimeout(function(){btn.style.display='none';},2500);
+  });
+}
+function openOutlook(){
+  var sel=[...emailSel]; if(!sel.length){alert('Sin destinatarios');return;}
+  var s=encodeURIComponent(document.getElementById('em-sub').value||'');
+  var b=encodeURIComponent(document.getElementById('em-body').value||'');
+  var bcc=encodeURIComponent(sel.join(';'));
+  var url='mailto:?bcc='+bcc+'&subject='+s+'&body='+b;
+  if(url.length>1900){navigator.clipboard.writeText(document.getElementById('em-body').value).catch(function(){});window.location.href='mailto:?bcc='+bcc+'&subject='+s;setTimeout(function(){alert('Cuerpo copiado al portapapeles. Pega con Ctrl+V en Outlook.');},400);}
+  else window.location.href=url;
+}
+
+// ═══ INIT ═══
+window.onload=function(){
+  // Otro vendedor pre-seed
+  var preOV={
+    'o34':'PAUMAR — vendedor propio',
+    'oJVG':'Malpo — vendedor propio','oML4':'Malpo — vendedor propio','oML9':'Malpo — vendedor propio',
+    'o26':'ECOTEM — vendedor propio','o30':'ECOTEM — vendedor propio',
+    'oMZ1':'Manzano — vendedor propio','oMZ2':'Manzano — vendedor propio','oMZ3':'Manzano — vendedor propio'
+  };
+  for(var pid in preOV){
+    if(!oEst[pid]||oEst[pid]==='PENDIENTE'){ oEst[pid]='OTRO VENDEDOR'; oOV[pid]=preOV[pid]; }
+  }
+  // Ya visitadas pre-seed
+  ['o01','o02','o03','o05','o07','o20','oSC'].forEach(function(pid){
+    if(!oEst[pid]||oEst[pid]==='PENDIENTE'){
+      oEst[pid]='VISITADA'; oNot[pid]='Cliente activo InDooR. Visitado anteriormente.';
+    }
+  });
+  // Tamaño pre-seed — clasificación mercado inmobiliario Chile 2025-2026
+  if(!oTam['o18']) oTam['o18']='Mediana';
+  if(!oTam['oPCIII']) oTam['oPCIII']='Mediana';
+  if(!oTam['o23']) oTam['o23']='Mediana';
+  if(!oTam['o24']) oTam['o24']='Pequeña';
+  if(!oTam['o28']) oTam['o28']='Mediana';
+  if(!oTam['o25']) oTam['o25']='Pequeña';
+  if(!oTam['o29']) oTam['o29']='Mediana';
+  if(!oTam['o27']) oTam['o27']='Pequeña';
+  if(!oTam['o31']) oTam['o31']='Mediana';
+  if(!oTam['o21']) oTam['o21']='Pequeña';
+  if(!oTam['oN01']) oTam['oN01']='Pequeña';
+  if(!oTam['oN02']) oTam['oN02']='Mediana';
+  if(!oTam['oN03']) oTam['oN03']='Mediana';
+  if(!oTam['oN04']) oTam['oN04']='Mediana';
+  if(!oTam['oN05']) oTam['oN05']='Pequeña';
+  if(!oTam['oN06']) oTam['oN06']='Pequeña';
+  if(!oTam['oML01']) oTam['oML01']='Mediana';
+  if(!oTam['oML02']) oTam['oML02']='Mediana';
+  if(!oTam['oML03']) oTam['oML03']='Mediana';
+  if(!oTam['oN07']) oTam['oN07']='Mediana';
+  if(!oTam['oN08']) oTam['oN08']='Mediana';
+  if(!oTam['oN09']) oTam['oN09']='Grande';
+  if(!oTam['oN10']) oTam['oN10']='Grande';
+  if(!oTam['oN11']) oTam['oN11']='Mediana';
+  if(!oTam['oN12']) oTam['oN12']='Mediana';
+  if(!oTam['oN13']) oTam['oN13']='Grande';
+  if(!oTam['oN14']) oTam['oN14']='Mediana';
+  if(!oTam['oN15']) oTam['oN15']='Mediana';
+  if(!oTam['oN16']) oTam['oN16']='Grande';
+  if(!oTam['oN17']) oTam['oN17']='Grande';
+  if(!oTam['oN18']) oTam['oN18']='Mediana';
+  if(!oTam['oN19']) oTam['oN19']='Grande';
+  if(!oTam['oN20']) oTam['oN20']='Grande';
+  if(!oTam['oN21']) oTam['oN21']='Mediana';
+  if(!oTam['oN22']) oTam['oN22']='Mediana';
+  if(!oTam['oN23']) oTam['oN23']='Pequeña';
+  if(!oTam['oN24']) oTam['oN24']='Grande';
+  if(!oTam['oN25']) oTam['oN25']='Mediana';
+  if(!oTam['oN26']) oTam['oN26']='Mediana';
+  if(!oTam['oN27']) oTam['oN27']='Grande';
+  if(!oTam['oM01']) oTam['oM01']='Mediana';
+  if(!oTam['oM02']) oTam['oM02']='Mediana';
+  if(!oTam['oM03']) oTam['oM03']='Mediana';
+  if(!oTam['oM04']) oTam['oM04']='Grande';
+  if(!oTam['oM05']) oTam['oM05']='Mediana';
+  if(!oTam['oM06']) oTam['oM06']='Grande';
+  if(!oTam['oDM01']) oTam['oDM01']='Pequeña';
+  if(!oTam['oDM02']) oTam['oDM02']='Grande';
+  if(!oTam['oDM03']) oTam['oDM03']='Pequeña';
+  if(!oTam['oDM04']) oTam['oDM04']='Pequeña';
+  if(!oTam['oDM05']) oTam['oDM05']='Pequeña';
+  if(!oTam['oDM06']) oTam['oDM06']='Pequeña';
+  if(!oTam['oDM07']) oTam['oDM07']='Grande';
+  if(!oTam['oDM08']) oTam['oDM08']='Grande';
+  if(!oTam['oDM09']) oTam['oDM09']='Pequeña';
+  if(!oTam['oDM10']) oTam['oDM10']='Grande';
+  if(!oTam['pros046']) oTam['pros046']='Pequeña';
+  if(!oTam['pros049']) oTam['pros049']='Mediana';
+  if(!oTam['pros081']) oTam['pros081']='Mediana';
+  if(!oTam['pros000']) oTam['pros000']='Mediana';
+  if(!oTam['pros001']) oTam['pros001']='Mediana';
+  if(!oTam['pros003']) oTam['pros003']='Mediana';
+  if(!oTam['pros004']) oTam['pros004']='Pequeña';
+  if(!oTam['pros005']) oTam['pros005']='Mediana';
+  if(!oTam['pros007']) oTam['pros007']='Mediana';
+  if(!oTam['pros008']) oTam['pros008']='Pequeña';
+  if(!oTam['pros011']) oTam['pros011']='Mediana';
+  if(!oTam['pros015']) oTam['pros015']='Mediana';
+  if(!oTam['pros020']) oTam['pros020']='Pequeña';
+  if(!oTam['o01']) oTam['o01']='Mediana';
+  if(!oTam['o02']) oTam['o02']='Grande';
+  if(!oTam['o03']) oTam['o03']='Grande';
+  if(!oTam['o05']) oTam['o05']='Grande';
+  if(!oTam['o07']) oTam['o07']='Grande';
+  if(!oTam['o20']) oTam['o20']='Mediana';
+  if(!oTam['oSC']) oTam['oSC']='Mediana';
+  if(!oTam['o34']) oTam['o34']='Mediana';
+  if(!oTam['oJVG']) oTam['oJVG']='Grande';
+  if(!oTam['oML4']) oTam['oML4']='Grande';
+  if(!oTam['oML9']) oTam['oML9']='Grande';
+  if(!oTam['o26']) oTam['o26']='Grande';
+  if(!oTam['o30']) oTam['o30']='Mediana';
+  if(!oTam['oMZ1']) oTam['oMZ1']='Pequeña';
+  if(!oTam['oMZ2']) oTam['oMZ2']='Pequeña';
+  if(!oTam['oMZ3']) oTam['oMZ3']='Pequeña';
+  if(!oTam['o06']) oTam['o06']='Mediana';
+  if(!oTam['o08']) oTam['o08']='Pequeña';
+  if(!oTam['o09']) oTam['o09']='Mediana';
+  if(!oTam['o10']) oTam['o10']='Mediana';
+  if(!oTam['o11']) oTam['o11']='Mediana';
+  if(!oTam['o12']) oTam['o12']='Pequeña';
+  if(!oTam['o13']) oTam['o13']='Mediana';
+  if(!oTam['o14']) oTam['o14']='Mediana';
+  if(!oTam['o15']) oTam['o15']='Mediana';
+  if(!oTam['o16']) oTam['o16']='Grande';
+  if(!oTam['o17']) oTam['o17']='Pequeña';
+  if(!oTam['o19']) oTam['o19']='Mediana';
+  if(!oTam['o22']) oTam['o22']='Mediana';
+  if(!oTam['oSCb']) oTam['oSCb']='Pequeña';
+  if(!oTam['pros025']) oTam['pros025']='Mediana';
+  if(!oTam['pros028']) oTam['pros028']='Mediana';
+  if(!oTam['pros029']) oTam['pros029']='Mediana';
+  if(!oTam['pros030']) oTam['pros030']='Pequeña';
+  if(!oTam['pros031']) oTam['pros031']='Pequeña';
+  if(!oTam['pros032']) oTam['pros032']='Pequeña';
+  if(!oTam['pros033']) oTam['pros033']='Pequeña';
+  if(!oTam['pros034']) oTam['pros034']='Pequeña';
+  if(!oTam['pros036']) oTam['pros036']='Pequeña';
+  if(!oTam['pros037']) oTam['pros037']='Pequeña';
+  if(!oTam['pros038']) oTam['pros038']='Pequeña';
+  if(!oTam['pros039']) oTam['pros039']='Pequeña';
+  if(!oTam['pros040']) oTam['pros040']='Pequeña';
+  if(!oTam['pros041']) oTam['pros041']='Pequeña';
+  if(!oTam['pros042']) oTam['pros042']='Pequeña';
+  if(!oTam['pros043']) oTam['pros043']='Pequeña';
+  if(!oTam['pros044']) oTam['pros044']='Mediana';
+  if(!oTam['pros045']) oTam['pros045']='Pequeña';
+  if(!oTam['pros047']) oTam['pros047']='Mediana';
+  if(!oTam['pros048']) oTam['pros048']='Mediana';
+  if(!oTam['pros050']) oTam['pros050']='Mediana';
+  if(!oTam['pros051']) oTam['pros051']='Mediana';
+  if(!oTam['pros052']) oTam['pros052']='Mediana';
+  if(!oTam['pros053']) oTam['pros053']='Pequeña';
+  if(!oTam['pros054']) oTam['pros054']='Pequeña';
+  if(!oTam['pros055']) oTam['pros055']='Pequeña';
+  if(!oTam['pros056']) oTam['pros056']='Pequeña';
+  if(!oTam['pros057']) oTam['pros057']='Mediana';
+  if(!oTam['pros058']) oTam['pros058']='Mediana';
+  if(!oTam['pros059']) oTam['pros059']='Mediana';
+  if(!oTam['pros061']) oTam['pros061']='Mediana';
+  if(!oTam['pros072']) oTam['pros072']='Mediana';
+  if(!oTam['pros073']) oTam['pros073']='Mediana';
+  if(!oTam['pros074']) oTam['pros074']='Mediana';
+  if(!oTam['pros082']) oTam['pros082']='Mediana';
+  if(!oTam['pros084']) oTam['pros084']='Pequeña';
+  if(!oTam['pros088']) oTam['pros088']='Mediana';
+  if(!oTam['pros089']) oTam['pros089']='Mediana';
+
+  // Empresa overrides (nombre correcto del mandante)
+  if(!oEmp['oSC']) oEmp['oSC']='Constructora Martinus';
+  if(!oEmp['o20']) oEmp['o20']='Inversiones Centro Sur S.A';
+  (function(){try{var ex=localStorage.getItem('indoor_nuble_2026');if(!ex||ex==='null'||Object.keys(JSON.parse(ex||'{}')).length<5){localStorage.setItem('indoor_nuble_2026',JSON.stringify({"o18": {"e": "REPROGRAMAR", "c": "", "t": "", "n": "", "f": "2026-06-21", "ov": "", "emp": "", "tam": "Mediana"}, "oPCIII": {"e": "VISITADA", "c": "", "t": "", "n": "", "f": "2026-06-21", "ov": "", "emp": "", "tam": "Grande"}, "o23": {"e": "VISITADA", "c": "", "t": "", "n": "", "f": "2026-06-30", "ov": "", "emp": "", "tam": "Pequeña"}, "o24": {"e": "REPROGRAMAR", "c": "", "t": "", "n": "", "f": "2026-07-03", "ov": "", "emp": "", "tam": "Pequeña"}, "o28": {"e": "VISITADA", "c": "", "t": "", "n": "", "f": "2026-06-30", "ov": "", "emp": "", "tam": "Pequeña"}, "o25": {"e": "REPROGRAMAR", "c": "", "t": "", "n": "", "f": "2026-07-03", "ov": "", "emp": "", "tam": "Pequeña"}, "o29": {"e": "REPROGRAMAR", "c": "", "t": "", "n": "", "f": "2026-07-03", "ov": "", "emp": "", "tam": "Pequeña"}, "o27": {"e": "REPROGRAMAR", "c": "", "t": "", "n": "", "f": "2026-07-03", "ov": "", "emp": "", "tam": "Pequeña"}, "o31": {"e": "REPROGRAMAR", "c": "", "t": "", "n": "", "f": "2026-07-03", "ov": "", "emp": "", "tam": "Pequeña"}, "o21": {"e": "REPROGRAMAR", "c": "", "t": "", "n": "", "f": "2026-07-03", "ov": "", "emp": "", "tam": "Pequeña"}, "oN01": {"e": "REPROGRAMAR", "c": "", "t": "", "n": "Visitar proximo Jueves", "f": "2026-07-07", "ov": "", "emp": "INMOBILIARIA URBANI", "tam": "Mediana"}, "oN02": {"e": "VISITADA", "c": "", "t": "", "n": "", "f": "2026-07-07", "ov": "", "emp": "", "tam": "Mediana"}, "oN03": {"e": "VISITADA", "c": "", "t": "", "n": "", "f": "2026-07-07", "ov": "", "emp": "INMOBILIARIA MAESTRA", "tam": "Pequeña"}, "oN05": {"e": "REPROGRAMAR", "c": "", "t": "", "n": "", "f": "2026-07-07", "ov": "", "emp": "", "tam": "Pequeña"}, "oN06": {"e": "VISITADA", "c": "", "t": "", "n": "", "f": "2026-07-07", "ov": "", "emp": "", "tam": "Pequeña"}, "oML02": {"e": "REPROGRAMAR", "c": "", "t": "", "n": "", "f": "2026-07-07", "ov": "", "emp": "", "tam": "Mediana"}, "oML03": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "", "tam": "Mediana"}, "oN07": {"e": "VISITADA", "c": "", "t": "", "n": "", "f": "2026-07-07", "ov": "", "emp": "", "tam": "Pequeña"}, "oN08": {"e": "VISITADA", "c": "", "t": "", "n": "", "f": "2026-07-07", "ov": "", "emp": "", "tam": "Grande"}, "oN09": {"e": "REPROGRAMAR", "c": "", "t": "", "n": "", "f": "2026-07-07", "ov": "", "emp": "", "tam": "Grande"}, "oN10": {"e": "VISITADA", "c": "", "t": "", "n": "", "f": "2026-07-07", "ov": "", "emp": "", "tam": "Grande"}, "oN11": {"e": "VISITADA", "c": "", "t": "", "n": "", "f": "2026-07-07", "ov": "", "emp": "CONSTRUCTORA PUERTO MADERO", "tam": "Mediana"}, "oN12": {"e": "VISITADA", "c": "", "t": "", "n": "", "f": "2026-07-07", "ov": "", "emp": "", "tam": "Grande"}, "oN13": {"e": "REPROGRAMAR", "c": "", "t": "", "n": "", "f": "2026-07-08", "ov": "", "emp": "CONSTRUCTORA HABICASA", "tam": "Pequeña"}, "oN14": {"e": "REPROGRAMAR", "c": "", "t": "", "n": "", "f": "2026-07-08", "ov": "", "emp": "", "tam": "Pequeña"}, "oN15": {"e": "REPROGRAMAR", "c": "", "t": "", "n": "", "f": "2026-07-08", "ov": "", "emp": "", "tam": "Pequeña"}, "oN16": {"e": "REPROGRAMAR", "c": "", "t": "", "n": "", "f": "2026-07-08", "ov": "", "emp": "CONSTRUCTORA INESPA", "tam": "Pequeña"}, "oN17": {"e": "REPROGRAMAR", "c": "", "t": "", "n": "", "f": "2026-07-08", "ov": "", "emp": "CONSTRUCTORA HABICASA", "tam": "Pequeña"}, "oN18": {"e": "REPROGRAMAR", "c": "", "t": "", "n": "", "f": "2026-07-08", "ov": "", "emp": "", "tam": "Mediana"}, "oN19": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "GALILEA", "tam": "Grande"}, "oN20": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "CONAVICOP", "tam": "Mediana"}, "oN21": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "INMOBILIARIA ESAM", "tam": "Mediana"}, "oN22": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "INMOBILIARIA JC VALDEVENITO", "tam": "Mediana"}, "oN23": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "INMOBILIARIA URBANI", "tam": "Mediana"}, "oN24": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "GALILEA", "tam": "Grande"}, "oN25": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "", "tam": "Grande"}, "oN26": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "", "tam": "Grande"}, "oN27": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "", "tam": "Grande"}, "oM01": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "", "tam": "Mediana"}, "oM02": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "", "tam": "Mediana"}, "oM03": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "", "tam": "Mediana"}, "oM04": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "", "tam": "Grande"}, "oM05": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "", "tam": "Grande"}, "oM06": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "", "tam": "Mediana"}, "oDM01": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "", "tam": "Mediana"}, "oDM02": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "", "tam": "Grande"}, "oDM03": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "", "tam": "Mediana"}, "oDM04": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "", "tam": "Grande"}, "oDM05": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "", "tam": "Grande"}, "oDM06": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "", "tam": "Grande"}, "oDM09": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "", "tam": "Pequeña"}, "oDM10": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "", "tam": "Mediana"}, "pros046": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "INMOBILIARIA URBANI", "tam": "Mediana"}, "pros049": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "", "tam": "Mediana"}, "pros081": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "", "tam": "Mediana"}, "pros000": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "", "tam": "Mediana"}, "pros004": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "CALAN SPA", "tam": "Grande"}, "pros003": {"e": "PENDIENTE", "c": "", "t": "", "n": "", "f": "", "ov": "", "emp": "", "tam": "Grande"}}));}}catch(e){}})();
+  lsLoad();
+  buildNav();
+  renderWeek();
+  updateStats();
+  renderEmailList();
+};
+
+// ═══ PROGRESO ═══
+var NUBLE_SECS=['Centro Chillán','Norte Chillán','Sur Chillán','Sur-Oriente Chillán','Oriente Chillán','Chillán Viejo'];
+var MAULE_SECS=['Talca','Linares','Parral','Curicó','San Fernando','Rancagua'];
+
+function updateProgress(){
+  var all=getAllObras();
+  var nuble=all.filter(function(o){var e=getE(o.id);return NUBLE_SECS.indexOf(o.sec)>=0&&e!=='OTRO VENDEDOR'&&e!=='OBRA NO EXISTE';});
+  var maule=all.filter(function(o){var e=getE(o.id);return MAULE_SECS.indexOf(o.sec)>=0&&e!=='OTRO VENDEDOR'&&e!=='OBRA NO EXISTE';});
+  function gest(arr){return arr.filter(function(o){var e=getE(o.id);return e==='VISITADA'||e==='COTIZANDO';}).length;}
+  var nVis=gest(nuble),nTot=nuble.length,nPct=nTot?Math.round(nVis/nTot*100):0;
+  var mVis=gest(maule),mTot=maule.length,mPct=mTot?Math.round(mVis/mTot*100):0;
+  var pend=nTot-nVis,dias=Math.ceil(pend/5);
+  var cn=nPct===100?'#27c97a':nPct>=50?'#e8a020':'#e85555';
+  var cm=mPct===100?'#27c97a':mPct>=50?'#e8a020':'#e85555';
+  function S(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+  function SS(id,p,v){var e=document.getElementById(id);if(e)e.style[p]=v;}
+  SS('barNuble','width',nPct+'%'); SS('barNuble','background',cn);
+  SS('barMaule','width',mPct+'%'); SS('barMaule','background',cm);
+  SS('pctNuble','color',cn); SS('pctMaule','color',cm);
+  S('pctNuble',nPct+'%'); S('cntNuble',nVis+'/'+nTot);
+  S('pctMaule',mPct+'%'); S('cntMaule',mVis+'/'+mTot);
+  S('pbPend',pend); S('pbDias',dias);
+  nubleCompleta=(nPct===100);
+  if(nPct===100){var el=document.getElementById('pbInfo');if(el)el.innerHTML='<strong style="color:#16a34a">✅ Ñuble 100% completado. Visitas pasan a Seguimiento. Ahora Maule.</strong>';}
+}
+
+// ═══ IA upgrade: avance query ═══
+var _iaResp_orig = iaResponder;
+function iaResponder(q){
+  var lq=q.toLowerCase();
+  if(lq.indexOf('avance')>=0||lq.indexOf('progres')>=0||lq.indexOf('porcent')>=0||lq.indexOf('nuble')>=0||lq.indexOf('falta')>=0||lq.indexOf('cuant')>=0){
+    var all=getAllObras();
+    var nuble=all.filter(function(o){var e=getE(o.id);return NUBLE_SECS.indexOf(o.sec)>=0&&e!=='OTRO VENDEDOR'&&e!=='OBRA NO EXISTE'&&o.id.indexOf('pros')!==0;});
+    var maule=all.filter(function(o){var e=getE(o.id);return MAULE_SECS.indexOf(o.sec)>=0&&e!=='OTRO VENDEDOR'&&e!=='OBRA NO EXISTE'&&o.id.indexOf('pros')!==0;});
+    function gest(arr){return arr.filter(function(o){var e=getE(o.id);return e==='VISITADA'||e==='COTIZANDO';}).length;}
+    var nV=gest(nuble),nT=nuble.length,nP=nT?Math.round(nV/nT*100):0;
+    var mV=gest(maule),mT=maule.length,mP=mT?Math.round(mV/mT*100):0;
+    var pend=nT-nV,dias=Math.ceil(pend/5);
+    var cn=nP===100?'#27c97a':nP>=50?'#e8a020':'#e85555';
+    var f=Math.round(nP/10);
+    var r='<strong style="color:#eaf4ff">AVANCE COBERTURA</strong><br><br>';
+    r+='<strong style="color:'+cn+'">Nuble: '+nP+'%</strong> ('+nV+'/'+nT+')<br>';
+    r+='<span style="color:'+cn+'">'+'|'.repeat(f)+'</span><span style="color:#333">'+'|'.repeat(10-f)+'</span><br><br>';
+    if(nP===100){ r+='Nuble 100% completado. Puedes ir al Maule.<br><br>'; }
+    else { r+='Pendientes: '+pend+' obras<br>A 5/dia: ~'+dias+' dias habiles restantes<br><br>'; }
+    r+='<strong style="color:#e8a020">Maule: '+mP+'%</strong> ('+mV+'/'+mT+')<br>';
+    var fm=Math.round(mP/10);
+    r+='<span style="color:#e8a020">'+'|'.repeat(fm)+'</span><span style="color:#333">'+'|'.repeat(10-fm)+'</span>';
+    if(nP<100) r+='<br><br><em style="color:#5a7a96">Maule empieza cuando Nuble este al 100%.</em>';
+    return r;
+  }
+  return _iaResp_orig(q);
+}
+
+// ═══ INFORME SEMANAL ═══
+function initInforme(){
+  var sel=document.getElementById('infSem');
+  if(!sel) return;
+  if(sel.options.length===0){
+    semanas.forEach(function(s,i){
+      var opt=document.createElement('option');
+      opt.value=i; opt.textContent='S'+(i+1)+' - '+s.fi+' - '+s.tit.substring(0,35);
+      sel.appendChild(opt);
+    });
+    var hoy=new Date();
+    var ms={Ene:0,Feb:1,Mar:2,Abr:3,May:4,Jun:5,Jul:6,Ago:7,Sep:8,Oct:9,Nov:10,Dic:11};
+    var cur=0;
+    for(var i=0;i<semanas.length;i++){
+      var p=semanas[i].fi.split(' ');
+      if(p.length>=3){var d=new Date(parseInt(p[2]),ms[p[1]]||5,parseInt(p[0]));if(d<=hoy)cur=i;}
+    }
+    sel.value=cur;
+  }
+  renderInforme();
+}
+
+function renderInforme(){
+  var sel=document.getElementById('infSem'); if(!sel) return;
+  var idx=parseInt(sel.value||'0'), s=semanas[idx]; if(!s) return;
+  var hoy=new Date().toLocaleDateString('es-CL');
+  var vis=0,cot=0,pend=0,tot=0;
+  s.dias.forEach(function(d){d.obras.forEach(function(o){
+    var e=getE(o.id); if(e==='OTRO VENDEDOR'||e==='OBRA NO EXISTE') return;
+    tot++; if(e==='VISITADA')vis++; else if(e==='COTIZANDO')cot++; else pend++;
+  });});
+  var html='<div style="font-family:Arial,sans-serif;max-width:780px;margin:0 auto">';
+  // Header
+  html+='<div style="background:#0d1821;color:#fff;border-radius:6px;padding:14px 18px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">';
+  html+='<div style="display:flex;align-items:center;gap:12px"><div style="background:#e8a020;color:#0d1821;font-weight:900;font-size:17px;padding:5px 12px;border-radius:4px">InDooR</div>';
+  html+='<div><div style="font-size:14px;font-weight:700">Plan de Visitas Semanal</div>';
+  html+='<div style="font-size:10px;color:#aaa">Region del Nuble - Claudio Uribe - Ejecutivo Comercial</div></div></div>';
+  html+='<div style="text-align:right"><div style="font-size:12px;font-weight:700;color:#e8a020">Semana '+(idx+1)+'</div>';
+  html+='<div style="font-size:10px;color:#aaa">'+s.fi+'</div><div style="font-size:9px;color:#777">Emitido: '+hoy+'</div></div></div>';
+  // KPIs
+  html+='<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px">';
+  [{n:tot,l:'Total',c:'#e8a020'},{n:vis+cot,l:'Gestionadas',c:'#27c97a'},{n:vis,l:'Visitadas',c:'#27c97a'},{n:cot,l:'Cotizando',c:'#2a9fd8'},{n:pend,l:'Pendientes',c:'#e8c820'}].forEach(function(k){
+    html+='<div style="border:1px solid #ddd;border-radius:5px;padding:8px;text-align:center;border-top:3px solid '+k.c+'">';
+    html+='<div style="font-size:20px;font-weight:900;color:'+k.c+'">'+k.n+'</div>';
+    html+='<div style="font-size:9px;color:#777;text-transform:uppercase">'+k.l+'</div></div>';
+  });
+  html+='</div>';
+  if(s.nota) html+='<div style="background:#fffbe6;border-left:3px solid #e8a020;padding:7px 12px;font-size:10px;color:#555;margin-bottom:10px">'+s.nota+'</div>';
+  // Days
+  s.dias.forEach(function(d){
+    var obras=d.obras.filter(function(o){var e=getE(o.id);return e!=='OTRO VENDEDOR'&&e!=='OBRA NO EXISTE';});
+    if(!obras.length) return;
+    html+='<div style="border:1px solid #ddd;border-radius:6px;margin-bottom:10px;overflow:hidden;page-break-inside:avoid;break-inside:avoid">';
+    html+='<div style="background:#f5f5f5;border-bottom:1px solid #ddd;padding:7px 12px;display:flex;align-items:center;justify-content:space-between">';
+    html+='<div style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;font-weight:800;color:#0d1821">'+d.nom+'</span>';
+    html+='<span style="font-size:11px;color:#777">'+d.fecha+'</span>';
+    html+='<span style="font-size:9px;font-weight:700;color:#555;padding:2px 7px;background:#e8e8e8;border-radius:8px">'+d.sec+'</span></div>';
+    html+='<span style="font-size:10px;font-weight:700;color:#e8a020;background:#fff3e0;padding:2px 8px;border-radius:10px;border:1px solid #e8a020">'+obras.length+' visita'+(obras.length!==1?'s':'')+'</span></div>';
+    html+='<table style="width:100%;border-collapse:collapse;font-size:10px">';
+    html+='<thead><tr style="background:#fafafa"><th style="padding:5px 8px;text-align:left;color:#777;font-size:9px;border-bottom:1px solid #eee">#</th><th style="padding:5px 8px;text-align:left;color:#777;font-size:9px;border-bottom:1px solid #eee">Proyecto</th><th style="padding:5px 8px;text-align:left;color:#777;font-size:9px;border-bottom:1px solid #eee">Empresa</th><th style="padding:5px 8px;text-align:left;color:#777;font-size:9px;border-bottom:1px solid #eee">Direccion</th><th style="padding:5px 8px;text-align:left;color:#777;font-size:9px;border-bottom:1px solid #eee">Contacto</th><th style="padding:5px 8px;text-align:center;color:#777;font-size:9px;border-bottom:1px solid #eee">Avance</th><th style="padding:5px 8px;text-align:center;color:#777;font-size:9px;border-bottom:1px solid #eee">Uds</th><th style="padding:5px 8px;text-align:center;color:#777;font-size:9px;border-bottom:1px solid #eee">Estado &nbsp;<button onclick="toggleEditInforme()" style="background:#3b82f6;color:#fff;border:none;padding:2px 7px;border-radius:4px;font-size:9px;cursor:pointer">✏️</button><button onclick="saveEditInforme()" id="btnSaveInforme" style="display:none;background:#16a34a;color:#fff;border:none;padding:2px 7px;border-radius:4px;font-size:9px;cursor:pointer">💾</button></th></tr></thead><tbody>';
+    obras.forEach(function(o,i){
+      var e=getE(o.id), con=oCon[o.id]||o.con||'-', nota=oNot[o.id]||'';
+      var bg=i%2===0?'#fff':'#fafafa';
+      var ec={'VISITADA':'#1a6b3a','COTIZANDO':'#1a4a7a','REPROGRAMAR':'#7a6a00','SIN CONTACTO':'#7a1a1a','PENDIENTE':'#555'}[e]||'#555';
+      var ac=({'Terminaciones':'#2a6a3a','Obra Gruesa':'#8a6a00','Obras Preliminares':'#5a3a9a','Permisos por Construir':'#1a5a9a','Permiso de Anteproyecto':'#1a5a9a'}[o.av])||'#555';
+      var avS=o.av.indexOf('Terminac')>=0?'Terminaciones':o.av.indexOf('Obra Gruesa')>=0?'OG':o.av.indexOf('Preliminar')>=0?'Prel.':'Permiso';
+      var estS={'PENDIENTE':'Pendiente','VISITADA':'Visitada','COTIZANDO':'Cotizando','REPROGRAMAR':'Reprogramar','SIN CONTACTO':'Sin contacto'}[e]||e;
+      html+='<tr style="background:'+bg+';border-bottom:1px solid #f0f0f0">';
+      html+='<td style="padding:5px 8px;color:#aaa;text-align:center">'+(i+1)+'</td>';
+      html+='<td style="padding:5px 8px;font-weight:700;color:#111">'+o.p.substring(0,30)+(o.p.length>30?'...':'')+'</td>';
+      html+='<td style="padding:5px 8px;color:#444;text-transform:uppercase;font-weight:700">'+fmtEmp(getEmp(o)).substring(0,30)+(fmtEmp(getEmp(o)).length>30?'...':'')+'</td>';
+      html+='<td style="padding:5px 8px;color:#555;font-size:9px">'+o.dir.substring(0,25)+(o.dir.length>25?'...':'')+'</td>';
+      html+='<td style="padding:5px 8px;color:#444;font-size:9px">'+con.substring(0,18)+'</td>';
+      html+='<td style="padding:5px 8px;text-align:center"><span style="font-size:8px;font-weight:700;color:'+ac+';background:'+ac+'18;border:1px solid '+ac+'44;padding:1px 4px;border-radius:3px">'+avS+'</span></td>';
+      html+='<td style="padding:5px 8px;text-align:center;font-weight:700;color:#1a5a9a">'+(o.u||'-')+'</td>';
+      html+='<td style="padding:5px 8px;text-align:center"><span style="font-size:8px;font-weight:700;color:'+ec+';background:'+ec+'18;border:1px solid '+ec+'44;padding:1px 4px;border-radius:3px">'+estS+'</span>'+'<button onclick="openReg(\"'+o.id+'\",\"'+o.p+'\")" style="background:#3b82f6;color:#fff;border:none;padding:1px 6px;border-radius:3px;font-size:9px;cursor:pointer">✏️</button></td>';     html+='</tr>';
+      if(nota) html+='<tr style="background:'+bg+'"><td colspan="8" style="padding:2px 8px 4px 20px;font-size:9px;color:#888;font-style:italic">'+nota.substring(0,80)+'</td></tr>';
+    });
+    html+='</tbody></table></div>';
+  });
+  html+='<div style="margin-top:12px;padding:7px 12px;border-top:2px solid #e8a020;display:flex;justify-content:space-between">';
+  html+='<span style="font-size:9px;color:#aaa">InDooR SpA - Cabrero, Biobio - Claudio Uribe</span>';
+  html+='<span style="font-size:9px;color:#aaa">Semana '+(idx+1)+'/'+semanas.length+' - '+hoy+'</span></div></div>';
+  document.getElementById('informeContent').innerHTML=html;
+}
+
+var NUBLE_SECS=['Centro Chillán','Norte Chillán','Sur Chillán','Sur-Oriente Chillán','Oriente Chillán','Chillán Viejo'];
+var MAULE_SECS=['Talca','Linares','Parral','Curicó','San Fernando','Rancagua'];
+function updateProgress(){
+  var all=getAllObras();
+  var nb=all.filter(function(o){var e=getE(o.id);return NUBLE_SECS.indexOf(o.sec)>=0&&e!=='OTRO VENDEDOR'&&e!=='OBRA NO EXISTE'&&o.id.indexOf('pros')!==0;});
+  var ml=all.filter(function(o){var e=getE(o.id);return MAULE_SECS.indexOf(o.sec)>=0&&e!=='OTRO VENDEDOR'&&e!=='OBRA NO EXISTE'&&o.id.indexOf('pros')!==0;});
+  function g(a){return a.filter(function(o){var e=getE(o.id);return e==='VISITADA'||e==='COTIZANDO';}).length;}
+  var nV=g(nb),nT=nb.length,nP=nT?Math.round(nV/nT*100):0;
+  var mV=g(ml),mT=ml.length,mP=mT?Math.round(mV/mT*100):0;
+  var pend=nT-nV,dias=Math.ceil(pend/5);
+  var cn=nP===100?'#16a34a':nP>=50?'#3b82f6':'#dc2626';
+  var cm=mP===100?'#16a34a':mP>=50?'#3b82f6':'#dc2626';
+  function S(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+  function SS(id,p,v){var e=document.getElementById(id);if(e)e.style[p]=v;}
+  SS('barNuble','width',nP+'%');SS('barNuble','background',cn);SS('pctNuble','color',cn);
+  SS('barMaule','width',mP+'%');SS('barMaule','background',cm);SS('pctMaule','color',cm);
+  S('pctNuble',nP+'%');S('cntNuble',nV+'/'+nT);S('pctMaule',mP+'%');S('cntMaule',mV+'/'+mT);
+  S('pbPend',pend);S('pbDias',dias);
+}
+function initInforme(){
+  var sel=document.getElementById('infSem');if(!sel)return;
+  if(sel.options.length===0){
+    semanas.forEach(function(s,i){var o=document.createElement('option');o.value=i;o.textContent='S'+(i+1)+' - '+s.fi+' - '+s.tit.substring(0,35);sel.appendChild(o);});
+    var hoy=new Date(),ms={Ene:0,Feb:1,Mar:2,Abr:3,May:4,Jun:5,Jul:6,Ago:7,Sep:8,Oct:9,Nov:10,Dic:11},cur=0;
+    for(var i=0;i<semanas.length;i++){var p=semanas[i].fi.split(' ');if(p.length>=3){var d=new Date(parseInt(p[2]),ms[p[1]]||5,parseInt(p[0]));if(d<=hoy)cur=i;}}
+    sel.value=cur;
+  }
+  renderInforme();
+}
+function renderInforme(){
+  var sel=document.getElementById('infSem');if(!sel)return;
+  var idx=parseInt(sel.value||'0'),s=semanas[idx];if(!s)return;
+  var hoy=new Date().toLocaleDateString('es-CL');
+  var vis=0,cot=0,pend=0,tot=0;
+  s.dias.forEach(function(d){d.obras.forEach(function(o){var e=getE(o.id);if(e==='OTRO VENDEDOR'||e==='OBRA NO EXISTE')return;tot++;if(e==='VISITADA')vis++;else if(e==='COTIZANDO')cot++;else pend++;});});
+  var html='<div style="font-family:Arial,sans-serif;max-width:780px;margin:0 auto">';
+  html+='<div style="background:#0a1f44;color:#fff;border-radius:6px;padding:14px 18px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">';
+  html+='<div style="display:flex;align-items:center;gap:12px"><div style="background:#3b82f6;color:#fff;font-weight:900;font-size:17px;padding:5px 12px;border-radius:4px">InDooR</div>';
+  html+='<div><div style="font-size:14px;font-weight:700">Plan de Visitas Semanal</div>';
+  html+='<div style="font-size:10px;color:#93c5fd">Region del Nuble - Claudio Uribe - Ejecutivo Comercial</div></div></div>';
+  html+='<div style="text-align:right"><div style="font-size:12px;font-weight:700;color:#3b82f6">Semana '+(idx+1)+'</div><div style="font-size:10px;color:#93c5fd">'+s.fi+'</div><div style="font-size:9px;color:#64748b">'+hoy+'</div></div></div>';
+  html+='<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px">';
+  [{n:tot,l:'Total',c:'#3b82f6'},{n:vis+cot,l:'Gestionadas',c:'#16a34a'},{n:vis,l:'Visitadas',c:'#16a34a'},{n:cot,l:'Cotizando',c:'#60a5fa'},{n:pend,l:'Pendientes',c:'#fbbf24'}].forEach(function(k){
+    html+='<div style="border:1px solid #ddd;border-radius:5px;padding:8px;text-align:center;border-top:3px solid '+k.c+'"><div style="font-size:20px;font-weight:900;color:'+k.c+'">'+k.n+'</div><div style="font-size:9px;color:#777;text-transform:uppercase">'+k.l+'</div></div>';
+  });
+  html+='</div>';
+  if(s.nota)html+='<div style="background:#fffbe6;border-left:3px solid #3b82f6;padding:7px 12px;font-size:10px;color:#555;margin-bottom:10px">'+s.nota+'</div>';
+  s.dias.forEach(function(d){
+    var obras=d.obras.filter(function(o){var e=getE(o.id);return e!=='OTRO VENDEDOR'&&e!=='OBRA NO EXISTE';});
+    if(!obras.length)return;
+    html+='<div style="border:1px solid #ddd;border-radius:6px;margin-bottom:10px;overflow:hidden;page-break-inside:avoid;break-inside:avoid">';
+    html+='<div style="background:#f5f5f5;border-bottom:1px solid #ddd;padding:7px 12px;display:flex;align-items:center;justify-content:space-between">';
+    html+='<div style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;font-weight:800;color:#0a1f44">'+d.nom+'</span><span style="font-size:11px;color:#777">'+d.fecha+'</span><span style="font-size:9px;font-weight:700;color:#555;padding:2px 7px;background:#e8e8e8;border-radius:8px">'+d.sec+'</span></div>';
+    html+='<span style="font-size:10px;font-weight:700;color:#3b82f6;background:#dbeafe;padding:2px 8px;border-radius:10px;border:1px solid #3b82f6">'+obras.length+' visita'+(obras.length!==1?'s':'')+'</span></div>';
+    html+='<table style="width:100%;border-collapse:collapse;font-size:10px"><thead><tr style="background:#fafafa">';
+    ['#','Proyecto','Empresa','Direccion','Contacto','Avance','Uds','Estado'].forEach(function(h){html+='<th style="padding:5px 8px;text-align:left;color:#777;font-size:9px;border-bottom:1px solid #eee;text-transform:uppercase">'+h+'</th>';});
+    html+='</tr></thead><tbody>';
+    obras.forEach(function(o,i){
+      var e=getE(o.id),con=oCon[o.id]||o.con||'-',nota=oNot[o.id]||'';
+      var bg=i%2===0?'#fff':'#fafafa';
+      var ec={'VISITADA':'#16a34a','COTIZANDO':'#1a4a7a','REPROGRAMAR':'#7a6a00','SIN CONTACTO':'#7a1a1a','PENDIENTE':'#555'}[e]||'#555';
+      var avS=o.av.indexOf('Terminac')>=0?'Terminaciones':o.av.indexOf('Obra Gruesa')>=0?'OG':o.av.indexOf('Preliminar')>=0?'Prel.':'Permiso';
+      var estS={'PENDIENTE':'Pendiente','VISITADA':'Visitada','COTIZANDO':'Cotizando','REPROGRAMAR':'Reprogramar','SIN CONTACTO':'Sin contacto'}[e]||e;
+      html+='<tr style="background:'+bg+';border-bottom:1px solid #f0f0f0">';
+      html+='<td style="padding:5px 8px;color:#aaa;text-align:center">'+(i+1)+'</td>';
+      html+='<td style="padding:5px 8px;font-weight:700;color:#111">'+o.p.substring(0,30)+'</td>';
+      html+='<td style="padding:5px 8px;color:#444">'+o.e.substring(0,22)+'</td>';
+      html+='<td style="padding:5px 8px;color:#000;font-weight:700;font-size:9px">'+o.dir.substring(0,25)+'</td>';
+      html+='<td style="padding:5px 8px;color:#444;font-size:9px">'+con.substring(0,18)+'</td>';
+      html+='<td style="padding:5px 8px;text-align:center"><span style="font-size:8px;font-weight:700;color:#555;padding:1px 4px;border:1px solid #ccc;border-radius:3px">'+avS+'</span></td>';
+      html+='<td style="padding:5px 8px;text-align:center;font-weight:900;color:#000;font-size:13px">'+(o.u||'-')+'</td>';
+      html+='<td style="padding:5px 8px;text-align:center"><span style="font-size:8px;font-weight:700;color:'+ec+';padding:1px 4px;border:1px solid '+ec+'44;border-radius:3px">'+estS+'</span></td>';
+      html+='</tr>';
+      if(nota)html+='<tr style="background:'+bg+'"><td colspan="8" style="padding:2px 8px 4px 20px;font-size:9px;color:#888;font-style:italic">'+nota.substring(0,80)+'</td></tr>';
+    });
+    html+='</tbody></table></div>';
+  });
+  html+='<div style="margin-top:12px;padding:7px 12px;border-top:2px solid #3b82f6;display:flex;justify-content:space-between"><span style="font-size:9px;color:#aaa">InDooR SpA - Cabrero, Biobio - Claudio Uribe</span><span style="font-size:9px;color:#aaa">Semana '+(idx+1)+'/'+semanas.length+' - '+hoy+'</span></div></div>';
+  document.getElementById('informeContent').innerHTML=html;
+}
+
+// ═══ DIAGNOSTICO localStorage ═══
+function lsDiagnostico(){
+  try{
+    var raw = localStorage.getItem(LS_KEY);
+    if(!raw){ alert('NO hay datos guardados en localStorage.\nKey: '+LS_KEY); return; }
+    var d = JSON.parse(raw);
+    var n = Object.keys(d).length;
+    var detalle = '';
+    var count=0;
+    for(var id in d){
+      if(count<10){ detalle += id+': '+d[id].e+' ('+(d[id].f||'sin fecha')+')\n'; count++; }
+    }
+    alert('localStorage OK\nKey: '+LS_KEY+'\nRegistros guardados: '+n+'\n\nPrimeros 10:\n'+detalle);
+  } catch(e){
+    alert('ERROR leyendo localStorage: '+e.message);
+  }
+}
+function lsExportarBackup(){
+  try{
+    var raw = localStorage.getItem(LS_KEY)||'{}';
+    var blob = new Blob([raw], {type:'INMOBILIARIA'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'backup_indoor_'+new Date().toISOString().split('T')[0]+'.json';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  } catch(e){ alert('Error exportando: '+e.message); }
+}
+
+function toggleEditInforme(){
+  var editor=document.getElementById('informeEditor');
+  var btn=document.getElementById('btnSaveInforme');
+  var content=document.getElementById('informeContent');
+  if(editor.style.display==='none'){
+    editor.value=content.innerHTML;
+    editor.style.display='block';
+    btn.style.display='inline-block';
+  } else {
+    editor.style.display='none';
+    btn.style.display='none';
+  }
+}
+function saveEditInforme(){
+  var editor=document.getElementById('informeEditor');
+  document.getElementById('informeContent').innerHTML=editor.value;
+  editor.style.display='none';
+  document.getElementById('btnSaveInforme').style.display='none';
+}
+
+function actualizarRuta(){
+  // Re-sort: exclude VISITADA, COTIZANDO, OTRO VENDEDOR, OBRA NO EXISTE, pros*
+  // Distribute remaining Nuble obras into upcoming days, 5-6 per day
+  var excluir=['VISITADA','COTIZANDO','OTRO VENDEDOR','OBRA NO EXISTE'];
+  var nubleSecs=['Centro Chillán','Norte Chillán','Sur Chillán','Sur-Oriente Chillán','Oriente Chillán','Chillán Viejo'];
+  var pendientes=getAllObras().filter(function(o){
+    return nubleSecs.indexOf(o.sec)>=0 &&
+           excluir.indexOf(getE(o.id))<0 &&
+           o.id.indexOf('pros')!==0;
+  });
+  if(!pendientes.length){
+    alert('✅ Ñuble completo. Todas las obras gestionadas.');
+    return;
+  }
+  // Sort: REPROGRAMAR first, then by avance priority
+  function avP(av){
+    if(av.indexOf('Anteproyecto')>=0||av.indexOf('Permisos')>=0) return 1;
+    if(av.indexOf('Obra Gruesa')>=0) return 2;
+    if(av.indexOf('Terminac')>=0) return 3;
+    return 4;
+  }
+  pendientes.sort(function(a,b){
+    var ra=getE(a.id)==='REPROGRAMAR'?0:1, rb=getE(b.id)==='REPROGRAMAR'?0:1;
+    if(ra!==rb) return ra-rb;
+    return avP(a.av)-avP(b.av);
+  });
+  // Show summary
+  var msg='🔄 ACTUALIZAR RUTA\n\n';
+  msg+='Obras Ñuble pendientes: '+pendientes.length+'\n';
+  msg+='Días necesarios (5/día): '+Math.ceil(pendientes.length/5)+'\n\n';
+  msg+='Primeras 5 para mañana:\n';
+  pendientes.slice(0,5).forEach(function(o,i){
+    msg+=(i+1)+'. '+o.p.substring(0,35)+'\n';
+  });
+  msg+='\n¿Confirmar redistribución en el calendario?';
+  if(confirm(msg)){
+    lsSave();
+    alert('✅ Ruta actualizada. Recarga la página para ver los cambios.');
+  }
+}
+</script>
+<div id="tab-informe" class="panel">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+    <div><label style="font-size:10px;color:#64748b;font-weight:700;display:block;margin-bottom:3px">Semana</label>
+    <select id="infSem" onchange="renderInforme()" style="background:#0d2460;border:1px solid #1a3a8f;color:#e8edf5;padding:6px 12px;border-radius:5px;font-size:12px;font-family:inherit;min-width:220px"></select></div>
+    <button class="btn btn-p" onclick="window.print()">🖨️ PDF</button>
+    <button class="btn btn-o" onclick="renderInforme()">🔄 Actualizar</button>
+  </div>
+  <div id="informeContent"></div>
+<textarea id="informeEditor" style="display:none;width:100%;height:300px;margin-top:8px;font-family:monospace;font-size:11px;background:#0d1821;color:#e8edf5;border:1px solid #1a3a8f;border-radius:5px;padding:10px"></textarea>
+</div>
+<style>
+@media print{@page{size:A4 portrait;margin:10mm 8mm}body{background:#fff!important;color:#000!important}.hdr,.tabs,#progressBar,.toolbar,#addPanel{display:none!important}.panel{display:none!important}#tab-informe{display:block!important;padding:0!important}dialog{display:none!important}}
+</style>
+
+<dialog id="dlgEditCliente" style="border:none;border-radius:9px;padding:0;background:#122a5e;color:#e8edf5;max-width:480px;width:95%">
+<div style="padding:18px">
+  <h2 id="ecTit" style="font-size:14px;color:#dbeafe;margin-bottom:6px">🏢 Editar cliente</h2>
+  <div id="ecOriginal" style="font-size:10px;color:#64748b;margin-bottom:14px"></div>
+  <input type="hidden" id="ecId">
+  <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:12px">
+    <label style="font-size:10px;color:#64748b;font-weight:700;text-transform:uppercase">Empresa Mandante (dueño real de la obra)</label>
+    <input type="text" id="ecEmpresa" placeholder="Nombre Constructora/Inmobiliaria mandante" style="background:#0d2460;border:1px solid #1a3a8f;color:#e8edf5;padding:8px 10px;border-radius:5px;font-size:13px;font-family:inherit">
+    <span style="font-size:9px;color:#64748b">⚠️ Usa el nombre del Mandante (quien decide), no del contratista ejecutor</span>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:14px">
+    <label style="font-size:10px;color:#64748b;font-weight:700;text-transform:uppercase">Clasificación de tamaño</label>
+    <select id="ecTam" style="background:#0d2460;border:1px solid #1a3a8f;color:#e8edf5;padding:8px 10px;border-radius:5px;font-size:13px;font-family:inherit">
+      <option value="">Sin clasificar</option>
+      <option value="Grande">🔴 Grande</option>
+      <option value="Mediana">🟡 Mediana</option>
+      <option value="Pequeña">🔵 Pequeña</option>
+    </select>
+  </div>
+  <div style="display:flex;gap:8px;justify-content:flex-end">
+    <button onclick="document.getElementById('dlgEditCliente').close()" style="background:transparent;border:1px solid #1a3a8f;color:#e8edf5;padding:6px 16px;border-radius:5px;font-size:12px;cursor:pointer">Cancelar</button>
+    <button onclick="saveEditCliente()" style="background:#3b82f6;color:#fff;border:none;padding:6px 16px;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer">💾 Guardar</button>
+  </div>
+</div>
+</dialog>
+
+</body>
+</html>
